@@ -1,0 +1,60 @@
+body {
+    color: black;
+    font-size: 16px;
+    margin: 0px auto 0px auto;
+    width: 600px;
+    font-family: Tahoma, "Geneva", sans-serif;
+    background: #efe6d4;
+}
+
+
+div#header {
+    border-bottom: 2px solid #765106;
+    margin-bottom: 30px;
+    padding: 12px 0px 12px 0px;
+    color:#765106;
+}
+
+div#logo a {
+    color: #765106;
+    /*float: left;*/
+    font-size: 36px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div#header #navigation {
+    text-align: right;
+}
+
+div#header #navigation a {
+    color: #765106;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 12px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+div#footer {
+    border-top: solid 2px #765106;
+    color: #555;
+    font-size: 12px;
+    margin-top: 30px;
+    padding: 12px 0px 12px 0px;
+    text-align: right;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+div.info {
+    color: #555;
+    font-size: 14px;
+    font-style: italic;
+}
