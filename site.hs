@@ -11,9 +11,13 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/*" $ do
+    match "css/default.css" $ do
         route   idRoute
         compile compressCssCompiler
+
+    match "css/font-awesome/**/*" $ do
+        route idRoute
+        compile copyFileCompiler
 
     match "index.md" $ do
         route $ setExtension "html"
