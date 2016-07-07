@@ -1,3 +1,22 @@
+a:link {
+    color: #765106;
+}  /* unvisited links */
+a:visited {
+    color: #765106;
+}  /* visited links   */
+a:hover   {
+    color: black;
+}  /* user hovers     */
+a:active  {
+    color: #ccc
+}  /* active links    */
+
+a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 body {
     color: black;
     font-size: 16px;
@@ -17,7 +36,6 @@ div#header {
 
 div#logo a {
     color: #765106;
-    /*float: left;*/
     font-size: 36px;
     font-weight: bold;
     text-decoration: none;
