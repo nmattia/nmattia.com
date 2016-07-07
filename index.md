@@ -5,9 +5,6 @@ title: home
 
 I'm an engineer, currently brexiting my way back to Zurich.
 
-You can check out my [github](http://github.com/nmattia) to
-see what I am up to.
-
 For a condensed version of my experience, have a look at my <a
                         href="cv.pdf">CV</a>.<br/>
 
