@@ -1,8 +1,9 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
-import           Hakyll
 
+import Data.Monoid (mappend)
+import Control.Monad (forM_)
+import Hakyll
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -26,7 +27,15 @@ main = hakyll $ do
             >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
-    match "cv.pdf" (route idRoute >> compile copyFileCompiler)
+
+    forM_ [ "cv.pdf"
+          , "parallel-dna.pdf"
+          , "regular-strands.pdf"
+          , "schroedinger.pdf"
+          , "stone-age.pdf" ]
+          (\f -> match f (route idRoute >> compile copyFileCompiler))
+    -- match "cv.pdf" (route idRoute >> compile copyFileCompiler)
+    -- match "cv.pdf" (route idRoute >> compile copyFileCompiler)
 
 
 --------------------------------------------------------------------------------
