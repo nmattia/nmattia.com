@@ -222,10 +222,6 @@ Nothing
 posts/2016-07-31-bfs-tree 1 10000000000  1.49s user 0.62s system 99% cpu 2.111 total
 ```
 
-To get it to on larger inputs, I suspect one would need to find a better
+To get it to run on larger inputs, I suspect one would need to find a better
 algorithm. It would maybe even allow replacing `Int`s with `Integer`s. Once
 again, if you do find something, please get in touch : )
-
-
-
-
