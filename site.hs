@@ -29,7 +29,7 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateBodyCompiler
 
-    match "posts/*.md" $ do
+    match ("posts/*.md" .||. "posts/*.lhs") $ do
         route $ setExtension "html"
         compile $ pandocCompiler
               >>= loadAndApplyTemplate "templates/default.html" defaultContext
