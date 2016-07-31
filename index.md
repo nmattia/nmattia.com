@@ -19,3 +19,8 @@ Here are some of the projects I played with lately:
    [docs](http://docs.nmattia.com/mask).
 
 I've got a few other things going on on [github](http://github.com/nmattia).
+
+Here are some posts from something that's not quite a blog yet:
+
+ * [Puzzle solving in Haskell](posts/2016-07-31-bfs-tree.html)
+ * [Parallel computing with DNA](posts/2015-04-20-parallel-dna.html)

@@ -76,7 +76,8 @@ which each node holds some data. The data we will record is the node's depth
 We keep the links to the children lazy so that we can build an infinite tree.
 Whenever we create a node it is very likely that we will need the data it
 contains, so we keep the data strict. This is a typical lazy spine/strict
-leaves structure.
+leaves structure, and has the added bonus of easily allowing GHC to unpack the
+`Int`s.
 
 Now, let's build that tree:
 
@@ -189,7 +190,8 @@ hit either $x_f$ or a number that we know is too large:
 >
 
 
-*Et voilà!* We can go a bit fancy and add a CLI:
+*Et voilà!* We can go a bit fancy and add a cli (that will happily crash on you
+on bad input):
 
 > main :: IO ()
 > main = do
@@ -204,8 +206,25 @@ $ ghc --make -O2 -funbox-strict-fields bfs-tree.lhs
 ```
 
 the program runs to up to 10,000,000,000 under two seconds, which is not too
-bad. To get it to run faster, I suspect one would need to find a better
-algorithm. Once again, if you do, please get in touch : )
+bad.
+
+```
+$ time posts/2016-07-31-bfs-tree 1 3000000000
+Nothing
+posts/2016-07-31-bfs-tree 1 3000000000  0.57s user 0.13s system 99% cpu 0.708 total
+
+$time posts/2016-07-31-bfs-tree 1 6000000000
+Nothing
+posts/2016-07-31-bfs-tree 1 6000000000  1.04s user 0.19s system 99% cpu 1.230 total
+
+$ time posts/2016-07-31-bfs-tree 1 10000000000
+Nothing
+posts/2016-07-31-bfs-tree 1 10000000000  1.49s user 0.62s system 99% cpu 2.111 total
+```
+
+To get it to on larger inputs, I suspect one would need to find a better
+algorithm. It would maybe even allow replacing `Int`s with `Integer`s. Once
+again, if you do find something, please get in touch : )
 
 
 
