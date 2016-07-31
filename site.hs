@@ -4,6 +4,7 @@
 import Data.Monoid (mappend)
 import Control.Monad (forM_)
 import Hakyll
+import Hakyll.Web.Pandoc (pandocCompiler)
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -28,14 +29,18 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateBodyCompiler
 
+    match "posts/*.md" $ do
+        route $ setExtension "html"
+        compile $ pandocCompiler
+              >>= loadAndApplyTemplate "templates/default.html" defaultContext
+              >>= relativizeUrls
+
     forM_ [ "cv.pdf"
           , "parallel-dna.pdf"
           , "regular-strands.pdf"
           , "schroedinger.pdf"
           , "stone-age.pdf" ]
           (\f -> match f (route idRoute >> compile copyFileCompiler))
-    -- match "cv.pdf" (route idRoute >> compile copyFileCompiler)
-    -- match "cv.pdf" (route idRoute >> compile copyFileCompiler)
 
 
 --------------------------------------------------------------------------------
