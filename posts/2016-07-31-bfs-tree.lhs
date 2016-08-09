@@ -132,16 +132,17 @@ Data Structures](https://www.cs.cmu.edu/~rwh/theses/okasaki.pdf) for a good
 overview).
 
 ====The search
+
 Easy enough. Now we just need a `State Queue` monad, traverse the tree, and
 update our queue every time, discarding the old one. Also, we'll need a `Writer
 [Tree]` to output the nodes. Right? Well, in our case we can do much simpler.
 We will simply use a list and take advantage of the language's laziness. We'll
-have a recursive function `bfsList` which will take a list of nodes and return
-a list of their children. It will extract the left and right children and
-"return" them before calling itself again on the remaining nodes.
+take a list of nodes and return a list of their children. It will extract the
+left and right children of a node, then move to the next node, repeat the
+process and concat the result.
 
 ``` haskell
-bfsList (t : ts) = l t : r t : bfsList ts
+children = concatMap (\t -> [l t, r t]) nodes
 ```
 
 All good. Now we just need to bootstrap it:
@@ -150,8 +151,7 @@ All good. Now we just need to bootstrap it:
 > bfs root =
 >   let
 >     nodes = root : children
->     children = bfsList nodes
->     bfsList (t : ts) = l t : r t : bfsList ts
+>     children = concatMap (\t -> [l t, r t]) nodes
 >   in nodes
 
 Let's check it out on our binary tree in `ghci`:
@@ -161,13 +161,13 @@ Let's check it out on our binary tree in `ghci`:
 [1,2,3,4,5,6,7,8,9,10]
 ```
 
-Sweet! When `bfsList` is called the first time, it'll split the root into its
+Sweet! When `concatMap` is called the first time, it'll split the root into its
 left and right children. This means that the root's left child is now the
-second element in `nodes`. When `bfsList` has to work again, it'll spit out
-first the left child's own children, then the right child's own children, etc.
-Looks like we have a breadth-first search using a list instead of a queue! And
-added bonus, we got rid of `Queue`'s `O(n)` worst case, since we never even
-`tail`!
+second element in `nodes`. When `concatMap` has to work again, it'll spit out
+first the left child's own children, then the right child's own children, etc,
+concating the children lists every time.  Looks like we have a breadth-first
+search using a list instead of a queue! And added bonus, we got rid of
+`Queue`'s `O(n)` worst case, since we never even `tail`!
 
 <img src="/images/queue-moving-window.jpg" style="width:512px;padding:15px" />
 
@@ -195,9 +195,8 @@ on bad input):
 
 > main :: IO ()
 > main = do
->   xf <- (read . (!! 0)) <$> getArgs
->   x0 <- (read . (!! 1)) <$> getArgs
->   print $ distance xf x0
+>   [x0, xf] <- (read <$>) <$> getArgs
+>   print $ distance x0 xf
 
 Compiled with
 
@@ -206,7 +205,7 @@ $ ghc --make -O2 -funbox-strict-fields bfs-tree.lhs
 ```
 
 the program runs to up to 10,000,000,000 under two seconds, which is not too
-bad.
+bad. (Dell XPS 13, 2015)
 
 ```
 $ time posts/2016-07-31-bfs-tree 1 3000000000
