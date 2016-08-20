@@ -22,5 +22,6 @@ I've got a few other things going on on [github](http://github.com/nmattia).
 
 Here are some posts from something that's not quite a blog yet:
 
+ * [Lens and Linear: 2048's logic in 22 lines](posts/2016-08-19-lens-linear-2048.html)
  * [Puzzle solving in Haskell](posts/2016-07-31-bfs-tree.html)
  * [Parallel computing with DNA](posts/2015-04-20-parallel-dna.html)
