@@ -9,6 +9,7 @@ in
     src = if stdenv.lib.inNixShell then null else ./.;
 
     buildPhase = ''
+      export LANG=en_US.UTF-8 # fixes charset issues
       ${siteBuilder}/bin/site build
     '';
 
