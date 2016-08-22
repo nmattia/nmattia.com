@@ -8,7 +8,7 @@ a:hover   {
     color: black;
 }  /* user hovers     */
 a:active  {
-    color: #ccc
+    color: #ccc;
 }  /* active links    */
 
 a {
@@ -34,7 +34,7 @@ div#header {
     color:#765106;
 }
 
-div#logo a {
+div#logo a.home {
     color: #765106;
     font-size: 36px;
     font-weight: bold;

@@ -3,7 +3,8 @@ title: home
 ---
 
 
-I'm an engineer, currently brexiting my way back to Zurich.
+I'm an engineer living in Switzerland.
+
 
 For a condensed version of my experience, have a look at my <a
                         href="cv.pdf">CV</a>.<br/>
