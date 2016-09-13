@@ -3,11 +3,10 @@ title: home
 ---
 
 
-I'm an engineer living in Switzerland.
+I'm an engineer living in Switzerland. I currently work with [Tweag
+I/O](http://tweag.io). We do cool stuff, have a look!
 
-
-For a condensed version of my experience, have a look at my <a
-                        href="cv.pdf">CV</a>.<br/>
+For a condensed version of my experience, have a look at my <a href="cv.pdf">CV</a>.<br/>
 
 Here are some of the projects I played with lately:
 
