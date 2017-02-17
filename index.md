@@ -12,11 +12,11 @@ Here are some of the projects I played with lately:
 
  * [*Halytics* <i class="fa fa-github"></i>](http://github.com/nmattia/halytics)
    is a small Haskell project making it easy to work with stats and analytics.
-   Have a look at the [docs](http://docs.nmattia.com/halytics).
+   Have a look at the [docs](http://nmattia.github.io/halytics/).
 
  * [*mask* <i class="fa fa-github"></i>](http://github.com/nmattia/mask) is a
    basic Makefile parser for Haskell. Have a look at the
-   [docs](http://docs.nmattia.com/mask).
+   [docs](http://nmattia.github.io/mask/).
 
 I've got a few other things going on on [github](http://github.com/nmattia).
 
