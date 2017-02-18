@@ -6,7 +6,15 @@ import Control.Monad (forM_)
 import Hakyll
 import Hakyll.Web.Pandoc (pandocCompiler)
 
---------------------------------------------------------------------------------
+myFeedConfiguration :: FeedConfiguration
+myFeedConfiguration = FeedConfiguration
+    { feedTitle       = "nmattia's blog"
+    , feedDescription = "Experiments with software"
+    , feedAuthorName  = "Nicolas Mattia"
+    , feedAuthorEmail = "nicolas@nmattia.com"
+    , feedRoot        = "http://www.nmattia.com"
+    }
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
@@ -32,8 +40,26 @@ main = hakyll $ do
     match ("posts/*.md" .||. "posts/*.lhs") $ do
         route $ setExtension "html"
         compile $ pandocCompiler
+              >>= saveSnapshot "content"
               >>= loadAndApplyTemplate "templates/default.html" defaultContext
               >>= relativizeUrls
+
+    create ["atom.xml"] $ do
+      route idRoute
+      compile $ do
+          let feedCtx = postCtx `mappend` bodyField "description"
+          posts <- fmap (take 10) . recentFirst =<<
+                   loadAllSnapshots "posts/*" "content"
+          renderAtom myFeedConfiguration feedCtx posts
+
+    create ["rss.xml"] $ do
+      route idRoute
+      compile $ do
+        let feedCtx = postCtx `mappend` bodyField "description"
+        posts <- fmap (take 10) . recentFirst =<<
+                 loadAllSnapshots "posts/*" "content"
+        renderAtom myFeedConfiguration feedCtx posts
+
 
     forM_ [ "cv.pdf"
           , "parallel-dna.pdf"

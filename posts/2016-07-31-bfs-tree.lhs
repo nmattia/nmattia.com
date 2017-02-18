@@ -1,5 +1,5 @@
 ---
-title: something
+title: Puzzle solving in Haskell
 ---
 
 *This is a literate Haskell file. You can find this code on
