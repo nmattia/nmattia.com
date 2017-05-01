@@ -40,7 +40,7 @@ foo
 ```
 
 Though `stutter` will go further, and allow you to define the output strings in
-various ways. For instance, you might want either `foo` _or_ `bar`. You can you
+various ways. For instance, you might want either `foo` _or_ `bar`. You can use
 the sum operator `|` as in the following snippet:
 
 ``` sh
