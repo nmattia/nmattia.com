@@ -22,6 +22,7 @@ I've got a few other things going on on [github](http://github.com/nmattia).
 
 Here are some posts from something that's not quite a blog yet:
 
+ * [Introducing stutter, the anti-grep](posts/2017-05-01-release-stutter.html)
  * [Haskell makefile library release](posts/2017-04-29-haskell-makefile-release.html)
  * [Recovering forgotten passwords with stutter and GNU parallel](posts/2017-03-05-crack-luks-stutter-gnu-parallel.html)
  * [Lens and Linear: 2048's logic in 22 lines](posts/2016-08-19-lens-linear-2048.html)
