@@ -1,7 +1,7 @@
 { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc801" , stdenv ? nixpkgs.stdenv}:
 
 let
-  siteBuilder = nixpkgs.pkgs.haskell.packages.${compiler}.callPackage ./foo.nix { };
+  siteBuilder = nixpkgs.pkgs.haskellPackages.callPackage ./foo.nix { };
 in
   stdenv.mkDerivation rec {
     name = "nmattia-com-builder";
