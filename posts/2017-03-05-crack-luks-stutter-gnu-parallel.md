@@ -94,7 +94,7 @@ match some definition. In comparison you feed
 [`stutter`](https://github.com/nmattia/stutter) a definition and ask to produce
 the strings that match that definition. Let's start with a simple example:
 
-``` shell
+``` sh
 $ stutter 'correct-zebra-batery-stable'
 correct-zebra-batery-stable
 ```
@@ -103,7 +103,7 @@ When given a simple string, stutter will simply echo it back to `stdout`. Now,
 what did we say? How many `t`s did we give `<word3>`? One, two? We'll let
 stutter potentially omit the second `t`:
 
-``` shell
+``` sh
 $ stutter 'correct-zebra-bat(t)?ery-stable'
 correct-zebra-batery-stable
 correct-zebra-battery-stable
@@ -113,7 +113,7 @@ Then, what did we say `<word4>` was? It couldn't possibly be "stable", it must
 have been "staple". Though I'm pretty sure something had to do with horses.
 Let's keep "stable" around just in case:
 
-``` shell
+``` sh
 $ stutter 'correct-zebra-bat(t)?ery-sta(b|p)le'
 correct-zebra-batery-stable
 correct-zebra-batery-staple
@@ -124,7 +124,7 @@ correct-zebra-battery-staple
 What else do we know about the passphrase? Right, `<word2>` is some animal.
 Let's first compile a list of animals...
 
-``` shell
+``` sh
 $ cat animals.txt
 aardvark
 albatross
@@ -141,7 +141,7 @@ ass
 
 ... and tell stutter to use it for generating the strings:
 
-``` shell
+``` sh
 $ stutter 'correct-(@animals.txt)-bat(t)?ery-sta(p|b)le'
 correct-aardvark-batery-staple
 correct-aardvark-batery-stable
@@ -215,13 +215,13 @@ It turns out that `cryptsetup` won't work unless it's got 1,049,600 bytes (or
 about $2^{20}$ bytes) of data to work with, which is plenty for us, so let's
 just copy that (assuming that the actual encrypted partition is `/dev/sdb1`):
 
-``` shell
+``` sh
 $ dd if=/dev/sdb1 bs=1 count=1049600 of=./encrypted-file
 ```
 
 Let's see what this looks like:
 
-``` shell
+``` sh
 $ cat encrypted-file | head -c 1024
 LUKS...esxts-plain64sha1...
 ```
@@ -237,7 +237,7 @@ parameters:
 Looking at the table above we see that the first `LUKS` field is located
 between the bytes `0` and `6`:
 
-``` shell
+``` sh
 $ hd encrypted-file -n 6
 00000000  4c 55 4b 53 ba be                                 |LUKS..|
 00000006
@@ -249,7 +249,7 @@ once again, have a look at the [`LUKS`
 specification](http://tomb.dyne.org/Luks_on_disk_format.pdf)). Next come the
 `LUKS` version (which seems to start at `01`) and the cipher name:
 
-``` shell
+``` sh
 $ hd encrypted-file -s 6 -n 2
 00000006  00 01                                             |..|
 00000008
@@ -262,7 +262,7 @@ $ hd encrypted-file -s 8 -n 32
 Actually, it shouldn't come as a surprise that most of what's stored in the
 partition header has to do with _how_ your stuff is encrypted:
 
-``` shell
+``` sh
 $ hd encrypted-file -s 8 -n 96
 00000008  61 65 73 00 00 00 00 00  00 00 00 00 00 00 00 00  |aes.............|
 00000018  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
@@ -276,7 +276,7 @@ $ hd encrypted-file -s 8 -n 96
 We'll look at one last thing, which is the `key-slots`. As you can see in the
 table above, information about the first `key-slot` can be found at byte `208`:
 
-``` shell
+``` sh
 $ hd encrypted-file -s 208 -n 4
 000000d0  00 ac 71 f3                                       |..q.|
 000000d4
@@ -287,7 +287,7 @@ header). Rather, it's information about a key. What those four bytes tell us is
 that the key is *active*, or `ac71fe`. If like me you only have one key, the
 second key (or the last seven keys for that matter) should be marked as `dead`:
 
-``` shell
+``` sh
 $ hd encrypted-file -s 256 -n 4
 00000100  00 00 de ad                                       |....|
 00000104
@@ -306,7 +306,7 @@ end of the day we just want to know what `cryptsetup`'s return code is. If it's
 `2`, then we stop and inspect the result (be it the passphrase we were looking
 for or some error). Here it goes:
 
-``` shell
+``` sh
 crack_maybe=$(cat <<'EOF'
     echo PASS | cryptsetup open --test-passphrase ./encrypted-file
     rc=$?
@@ -321,7 +321,7 @@ EOF
 We're storing the procedure in some shell variable so that we can pass it to
 `xargs`, for instance:
 
-``` shell
+``` sh
 $ stutter 'correct-(@animals.txt)-bat(t)?ery-sta(p|b)le' \
     | xargs -L 1 -I PASS sh -c '$crack_maybe'
 ```
@@ -338,7 +338,7 @@ on bad input (if your input contains a single-quote character for instance,
 
 Not bad, but not parallel either:
 
-``` shell
+``` sh
 $ stutter 'correct-(@animals.txt)-bat(t)?ery-sta(p|b)le' \
     | parallel --pipe --halt now,fail=1 \
     " xargs -n 1 -I PASS sh -c '$crack_maybe'"
@@ -357,7 +357,7 @@ If you're interested in reproducing this, I've wrapped that in a script
 [gist](https://gist.github.com/nmattia/8d3bca0540bf0ffca8c26669051965e4) as
 well):
 
-``` shell
+``` sh
 #!/usr/bin/env bash
 # crack.sh
 
@@ -398,7 +398,7 @@ and a [`nix`](https://nixos.org/nix/) file (available as a
 [gist](https://gist.github.com/nmattia/3752d1b678ca5b54fa68102c17964558) as
 well):
 
-```
+``` nix
 # shell.nix
 {anyPkgs ? import <nixpkgs> { }}:
 let
@@ -449,7 +449,7 @@ pkgs.stdenv.mkDerivation {
 
 This way, if you have `nix` installed you can call `nix-shell` and run
 
-``` shell
+``` sh
 $ ./crack.sh <some-pattern> <some-partition>
 ```
 
@@ -457,7 +457,7 @@ and your computer will use as many cores at it can to crack the `LUKS`
 passphrase of `<some-partition>` using `<some-pattern>`. Even better, you could
 rent a big AWS machine for a few hours and ship the job there:
 
-``` shell
+``` sh
 rsync ~/local/crack/shell.nix user@remote:/home/crack/
 rsync ~/local/crack/crack.sh user@remote:/home/crack/
 rsync ~/local/crack/encrypted-file user@remote:/home/crack/

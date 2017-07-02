@@ -162,10 +162,12 @@ three seconds with `echo` while it only takes half a second with `stutter`:
 ``` sh
 $ time (stutter 'a+' | head -n 1000000 | wc -l)
 1000000
-( stutter 'a+' | head -n 1000000 | wc -l; )  0.62s user 0.13s system 145% cpu 0.515 total
+( stutter 'a+' | head -n 1000000 | wc -l; ) ⤶
+        0.62s user 0.13s system 145% cpu 0.515 total
 $ time (while true; do echo 'a'; done | head -n 1000000 | wc -l)
 1000000
-( while true; do; echo 'a'; done | head -n 1000000 | wc -l; )  2.32s user 3.32s system 154% cpu 3.658 total
+( while true; do; echo 'a'; done | head -n 1000000 | wc -l; ) ⤶
+        2.32s user 3.32s system 154% cpu 3.658 total
 ```
 
 

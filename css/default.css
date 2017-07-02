@@ -1,64 +1,125 @@
 a:link {
-    color: #765106;
+    color: #4e718f;
 }  /* unvisited links */
+
 a:visited {
-    color: #765106;
+    color: #4e718f;
 }  /* visited links   */
+
 a:hover   {
-    color: black;
+    color: #8ba0b4;
 }  /* user hovers     */
+
 a:active  {
-    color: #ccc;
+    color: #4e718f;
 }  /* active links    */
 
 a {
-    color: #FFFFFF;
     text-decoration: none;
     font-weight: bold;
 }
+
+.sourceCode {
+    background-color: #e6eaef;
+    border-radius: 3px;
+    padding: 0.2em;
+    margin: 0;
+    border: 1px solid #5b7a96;
+}
+
+.sourceCode > .sourceCode {
+    border: unset;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+html { height: 100%; }
 
 body {
-    color: black;
     font-size: 16px;
+    background-color: #3b6484;
+    height: 100%;
+    margin: 0;
+}
+
+div.main {
+    max-width: 70em;
+    background-color: #f2f5f7;
     margin: 0px auto 0px auto;
-    width: 800px;
-    font-family: Tahoma, "Geneva", sans-serif;
-    background: #efe6d4;
+    border: 2px solid #4e718f;
+    min-height: 80%;
 }
 
-
-div#header {
-    border-bottom: 2px solid #765106;
-    margin-bottom: 30px;
-    padding: 12px 0px 12px 0px;
-    color:#765106;
+div.content {
+    font-family: 'Varela Round', sans-serif;
+    color: #3b6484;
+    margin: 50px auto 0px auto;
+    padding: 20px;
+    width: 80%;
 }
 
-div#logo a.home {
-    color: #765106;
-    font-size: 36px;
+div.header {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #5b7a96;
+    color:#E8F1FE;
+    text-align: center;
+}
+
+div.header .logo {
+    font-size: 24px;
     font-weight: bold;
     text-decoration: none;
+    padding: 0.5em;
 }
 
-div#header #navigation {
-    text-align: right;
+div.header a {
+    color:#E8F1FE;
+}
+div.header a:visited {
+    color:#E8F1FE;
 }
 
-div#header #navigation a {
-    color: #765106;
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 12px;
-    text-decoration: none;
+div.header a:hover   {
+    color: #8ba0b4;
+}
+
+div.header a:active  {
+    color: #4e718f;
+}
+
+div.header .logo a.home:visited {
+    color:#E8F1FE;
+}
+
+.header .logo a + a {
+    margin-left: 0.3em;
+}
+
+.header li + li {
+    margin-left: 2em;
+}
+
+.header a {
+
+    cursor: pointer;
+}
+
+
+div.header ul {
+    list-style-type: none;
+    padding: 0;
+    overflow: hidden;
+    margin: 0;
+}
+
+div.header ul li {
+    display: inline-block;
     text-transform: uppercase;
 }
 
 div#footer {
-    border-top: solid 2px #765106;
     color: #555;
     font-size: 12px;
-    margin-top: 30px;
     padding: 12px 0px 12px 0px;
     text-align: right;
 }
