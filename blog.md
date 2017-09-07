@@ -1,3 +1,4 @@
+ * [A Fully Functional, Fully Functional Webapp](posts/2017-09-07-fully-functional-webapp.html)
  * [Introducing stutter, the anti-grep](posts/2017-05-01-release-stutter.html)
  * [Haskell makefile library release](posts/2017-04-29-haskell-makefile-release.html)
  * [Recovering forgotten passwords with stutter and GNU parallel](posts/2017-03-05-crack-luks-stutter-gnu-parallel.html)
