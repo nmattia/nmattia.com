@@ -31,7 +31,7 @@
 5. Wait 1mn
 
 6. Server setup
-    - Server Details -> Copy ID Address
+    - Server Details -> Copy IP Address
     - Termux: ssh root@ip-addr
     - yes, passphrase key
     - https://robots.thoughtbot.com/remote-development-machine
@@ -39,7 +39,7 @@
     - Copy ssh keys from root to user
         `mkdir /home/USER_NAME/.ssh && cat ~/.ssh/authorized_keys >> /home/USER_NAME/.ssh/authorized_keys`
         `chown -R USER_NAME:USER_NAME /home/USER_NAME/.ssh`
-        
+
     - disable password auth
         `vi /etc/ssh/sshd_config`
         "PasswordAuthentication no"
@@ -48,7 +48,7 @@
     - Add `nicolas` to sudoers (copy `root ALL=(ALL:ALL) ALL` to `nicolas ALL=(ALL:ALL) ALL` in `/etc/sudoers` with `:wq!`
 
     - try login out and back in with `ssh nicolas@ip-addr`
-    - `git` already installed, tmux, 
+    - `git` already installed, tmux,
 ``` shell
 $ alias dotfiles='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 $ git clone --bare git@github.com:nmattia/dotfiles $HOME/.cfg
@@ -59,7 +59,7 @@ $ dotfiles checkout
     - sudo apt-get install htop build-essential cmake
     - `curl https://nixos.org/nix/install | sh`
     - `sudo apt-get remove --purge vim`
-    - `nix-env -i make` 
+    - `nix-env -i make`
     - `nix-env -i vim_configurable`
 
 
