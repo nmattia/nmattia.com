@@ -1,5 +1,6 @@
 _site/
 result/
+gh-pages/
 result
 _cache/
 *.hi

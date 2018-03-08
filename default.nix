@@ -1,12 +1,19 @@
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc801" , stdenv ? nixpkgs.stdenv}:
+{ pkgs ? import <nixpkgs> {} }:
 
 let
-  siteBuilder = nixpkgs.pkgs.haskellPackages.callPackage ./foo.nix { };
+  siteBuilder = pkgs.haskellPackages.callPackage ./foo.nix { };
 in
-  stdenv.mkDerivation rec {
+  pkgs.stdenv.mkDerivation rec {
     name = "nmattia-com-builder";
 
-    src = if stdenv.lib.inNixShell then null else ./.;
+    src = pkgs.lib.cleanSourceWith 
+      { filter = name: type:
+          let baseName = baseNameOf (toString name);
+          # filter out gh-pages build output
+          in ! (  type == "directory" && baseName == "gh-pages"
+              ||  type == "file" && baseName == ".gitignore") ;
+        src = pkgs.lib.cleanSource ./.;
+      };
 
     buildPhase = ''
       export LANG=en_US.UTF-8 # fixes charset issues
@@ -15,6 +22,7 @@ in
 
     installPhase = ''
       mkdir -p $out
-      ${nixpkgs.pkgs.rsync}/bin/rsync -rts _site/ $out
+      ${pkgs.rsync}/bin/rsync -rts _site/ $out
+      touch $out/.nojekyll
     '';
   }

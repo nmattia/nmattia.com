@@ -2,7 +2,7 @@
 mkDerivation {
   pname = "nmattia-site-builder";
   version = "0.1.0.0";
-  src = ./.;
+  src = ./builder;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [ base hakyll ];
