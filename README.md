@@ -1,4 +1,16 @@
-# Deploy
+## Build
+
+``` shell
+$ nix-build
+```
+
+## Watch
+
+``` shell
+$ nix-shell -p 'haskellPackages.wai-app-static' --run 'warp -d result'
+```
+
+## Deploy
 
 ``` shell
 $ git worktree add gh-pages gh-pages

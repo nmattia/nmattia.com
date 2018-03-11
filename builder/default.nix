@@ -1,8 +1,8 @@
-{ mkDerivation, base, hakyll, stdenv }:
+{ lib, mkDerivation, base, hakyll, stdenv }:
 mkDerivation {
   pname = "nmattia-site-builder";
   version = "0.1.0.0";
-  src = ./builder;
+  src = lib.cleanSource ./.;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [ base hakyll ];

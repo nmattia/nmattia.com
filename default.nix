@@ -1,12 +1,12 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  siteBuilder = pkgs.haskellPackages.callPackage ./foo.nix { };
+  siteBuilder = pkgs.haskellPackages.callPackage ./builder { inherit (pkgs) lib; };
 in
   pkgs.stdenv.mkDerivation rec {
     name = "nmattia-com-builder";
 
-    src = pkgs.lib.cleanSourceWith 
+    src = pkgs.lib.cleanSourceWith
       { filter = name: type:
           let baseName = baseNameOf (toString name);
           # filter out gh-pages build output
