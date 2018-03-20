@@ -1,60 +1,62 @@
 ---
-title: A reproducible setup for Linux and macOS
+title: A Reproducible Setup for Linux and macOS
 ---
 
-# A reproducible setup for Linux and macOS
+# A Reproducible Setup for Linux and macOS
 
 This post describes how I set up a reproducible development environment in a
 few seconds on any Linux distribution (and potentially macOS as well). This
-includes [simple executables](#homies) (curl, git), programs with custom
-configurations and dotiles ([vim](#vim), [tmux](#homies)) and even databases.
-The Nix language is used to describe the system configuration, which you can
-find [on github](https://github.com/nmattia/homies) (I call those packages my
-"homies").
+setup includes simple executables (curl, git) but also programs with custom
+configurations and dotfiles (`vim`, `tmux`). The Nix language is used to
+describe the system configuration, which you can find [on github][homies] and
+follow along.
 
 ---
 
-Developers have access to wonderful tools that allow them to build wonderful
-things and feel productive. Some tools, like vim and emacs, can be customized
-to the point that working with them becomes a second nature and some people
-will put a lot of effort into making sure that those tools are tailored for
-them; others might fight endlessly with programs like `rvm`, `pip` and `npm` to
-.. and juggle with incoherent versions of Ruby, Python and JavaScript. Only to
-wake up the next day and realize that your daily update broke everything. Well,
-I've given up on all that pain! I'm using a few text files that describe my
-entire setup, store them on GitHub, and don't fear upgrading my system, losing
-my laptop or spawning development instances anymore. Let me show you how.
+Developers have access to wonderful tools, which, when leveraged appropriately,
+allow them to build wonderful things in no time. Some of these tools, like vim
+and Emacs, can be customized to the point that working with them becomes a
+second nature, and some people will put a lot of effort into making sure that
+their setup is tailored for their workflows. This sometimes involves spending
+hours fighting with dependencies, plugins, language syntax highlighters… only
+to wake up the next day and realize that their daily update broke everything.
 
+I've used [GNU stow][stow]. I've stored my dotfiles [in a Git
+repository][dotfiles].  I've written scripts to extract and load sets of
+packages with `aptitude`.  It never worked reliably. Now I have a solution that
+actually works. I'm using a few text files that describe my entire setup, store
+them on GitHub, and don't anymore fear upgrading my system, losing my laptop or
+spawning short-lived development instances. Let me show you how.
 
-If you've never heard of Nix, worry not, the next section will present its main
-concepts. If you've used Nix before, feel free to [skip ahead](#nixos). The
-sections are mostly independent, pick any one that is most relevant to you:
+_If you've never heard of Nix, worry not, the next section will present its
+main concepts. If you've used Nix before, feel free to [skip ahead](#nixos).
+The sections are mostly independent, pick any one that is most relevant to
+you:_
 
 * [Introduction to Nix and NixOS](#nix-and-nixos)
 * [Descriptive package management](#package-management)
 * [Packaging dotfiles](#packaging-up-the-dotfiles-tmux-and-vim)
 * [The nix-shell](#cowsay-the-nix-shell)
-* [Databases](#dealing-with-databases)
 
 ## Nix and NixOS
 
-[Nix](...) is a programming language with unconventional properties, which was
+[Nix][nix] is a programming language with unconventional properties, which was
 developed mostly to work as a package manager. Today we are not going to focus
 much on the language itself, but on the package management model and how it
-fits in unix systems. Check out Jim Fisher's
-[post](https://medium.com/@MrJamesFisher/nix-by-example-a0063a1a4c55) for a
-good introduction to the language. From now on I may use "Nix" for both the
-language and the package manager interchangeably.
+fits in Unix systems. Check out Jim Fisher's
+[post][nix-by-example] for a
+good introduction to the language itself. From now on I may use "Nix"
+interchangeably for both the language and the package manager.
 
-Here's a quote for the [Nix manual](https://nixos.org/nix/manual/):
+Here's a quote from the [Nix manual][nix-manual]:
 
 > In Nix, packages are stored in unique locations in the Nix store (typically,
 > /nix/store). For instance, a particular version of the Subversion package
 > might be stored in a directory
-> /nix/store/dpmvp969yhdqs7lm2r1a3gng7pyq6vy4-subversion-1.1.3/, while another
-> version might be stored in
-> /nix/store/5mq2jcn36ldlmh93yj1n8s9c95pj7c5s-subversion-1.1.2. The long
-> strings prefixed to the directory names are cryptographic hashes[1] of all
+> `/nix/store/dpmvp969yhdqs7lm2r1a3gng7pyq6vy4-subversion-1.1.3/`, while
+> another version might be stored in
+> `/nix/store/5mq2jcn36ldlmh93yj1n8s9c95pj7c5s-subversion-1.1.2`. The long
+> strings prefixed to the directory names are cryptographic hashes of all
 > inputs involved in building the package — sources, dependencies, compiler
 > flags, and so on. So if two packages differ in any way, they end up in
 > different locations in the file system, so they don’t interfere with each
@@ -63,10 +65,11 @@ Here's a quote for the [Nix manual](https://nixos.org/nix/manual/):
 
 This captures the essence of Nix. All this package building is described
 through a set of Nix files (with a `.nix` extension). Nix does _not_ actually
-have a package repository: all it has is a package repository _description_,
-[`nixpkgs`](...), which is a set of Nix files! Most of it, however, was already
-built and cached, so after installing Nix you should be able to download any
-package from `nixpkgs`' cache:
+have a package archive: all it has is a package repository _description_,
+[`nixpkgs`][nixpkgs], which is nothing but a bunch of Nix files! Nix downloads
+those files and prepares the packages on your machine. Most of it, however, was
+already built and cached, so after installing Nix you should be able to
+download any package from `nixpkgs`' cache:
 
 ``` shell
 $ curl https://nixos.org/nix/install | sh # install Nix
@@ -82,23 +85,26 @@ these paths will be fetched (65.18 MiB download, 302.81 MiB unpacked):
 $ blender # have some fun with Blender
 ```
 
-Check out the Nix manual and the Nix pills for a deeper introduction.
+Check out the [Nix manual][nix-manual] and the [Nix Pills][nix-pills] for a
+deeper introduction.
 
 ### NixOS
 
-There actually is an entire operating system based on Nix: NixOS. Everything,
-from your packages to the services and users, is described with Nix. Using
-NixOS is a great solution if you can afford it. Using the Nix package manager
-is much more lightweight, as you can always piggy back on your distribution's
-package manager if you _need_ to, and you can always entirely rid of Nix by
-wiping `/nix`. Moreover, I only need a single user on my system, and no
-services besides the ones provided by Ubuntu by default.
+There actually is an entire operating system based on Nix: [NixOS][nixos].
+Everything, from your packages to the services and users, is described with
+Nix. Using NixOS is a great solution if you can afford it. Using the Nix
+package manager alone is much more lightweight, as you can always piggy back on
+your distribution's package manager if you _need_ to, and you can always get
+rid of Nix entirely (including everything it's ever installed) by wiping
+`/nix`. I, personally, only need a single user on my system, and no services
+besides the ones provided by Ubuntu by default, so the setup I describe below
+is perfect.
 
 ## Package management
 
-
-Let's have a look at the main `homies` Nix file,
-[`default.nix`](https://github.com/nmattia/homies/blob/master/default.nix):
+I'll start by showing you how I curate the set of packages installed on my
+system at all times: my [homies][homies]. Let's have a look at the main
+`homies` Nix file, [`default.nix`][homies-default]:
 
 ``` nix
 # default.nix
@@ -130,19 +136,20 @@ let
 in … homies
 ```
 
-The `let ... in ...` is a typical functional programming construct: it defines
-some values after the `let` and brings them into scope after the `in`. A few
-values are defined:
+The `let … in …` is a typical functional programming construct: it defines some
+values after the `let` and brings them into scope after the `in`. A few values
+are defined:
 
-* `pkgs`: where we'll draw our packages from. Nothing forces you to use Nixpkgs!
+* `pkgs`: where we'll draw our packages from -- you don't _have_ to use
+  `nixpkgs`!
 * `bashrc`, `git`, `tmux`, `vim`: some packages I customized for my needs,
   we'll get to what exactly that means in the next sections.
-* `homies`: a list of packages that I want to be installed on my system.
+* `homies`: the list of packages that I want to be installed on my system.
 
 If you've never had any exposure to functional programming, the code above
 might look somewhat strange: that's fine. You should nevertheless be able to
-tailor to your needs by adding some packages sourced from Nixpkgs (e.g.
-`pkgs.blender`) to the `homies` list.
+tailor it to your needs by adding some packages sourced from `nixpkgs` (e.g.
+`pkgs.blender` or `pkgs.firefox`) to the `homies` list.
 
 The following command removes all your (Nix-) installed packages and replaces
 them with the ones defined in `default.nix`:
@@ -155,11 +162,11 @@ created 289 symlinks in user environment
 
 Let's deconstruct what's happening:
 
-* `nix-env`: this is the command that deals with installing and removing
-  packages on your system.
-* `-f default.nix`: by default `nix-env` will look for packages in Nixpkgs; by
-  specifying `default.nix` we actually instruct it not to install the _whole_
-  set of packages defined in Nixpkgs...
+* `nix-env`: this is the command that deals with installing packages on and
+  removing packages from your system.
+* `-f default.nix`: by default `nix-env` will look for packages in `nixpkgs`;
+  by specifying `default.nix` we actually instruct it not to install the
+  _whole_ set of packages defined in `nixpkgs`…
 * `-i`: "install".
 * `--remove-all`: instruct `nix-env` to remove all the packages previously
   installed.
@@ -186,7 +193,7 @@ above) Nix will build the packages in a temporary directory, store them in a
 `/nix/store/XXXXXXX-foo`-style location (a so-called entry in the Nix store),
 and create a symlink in `$HOME/.nix-profile/bin/` to the newly created entry in
 the Nix store. This is very powerful because Nix can perform atomic updates,
-without ever erasing packages: it only creates the symlinks if the whole build
+without ever erasing packages: it only updates the symlinks if the whole build
 was successful. This enables very interesting operations, like rolling back to
 a previous "generation" (a generation is created on every successful `nix-env
 -i` call):
@@ -213,22 +220,23 @@ switching from generation 41 to 42
 You might start to wonder how this is possible, since built packages take up
 space and that space is limited. You can run garbage collection runs whenever
 you feel like it, which you can read more about
-[here](https://nixos.org/nixos/nix-pills/garbage-collector.html).
+[here][nix-gc].
 
 You now know how to perform basic package installs from a `.nix` file.
 Congratulations! Next, let's see how to manage dotfiles.
 
 ## Packaging up the dotfiles: tmux and vim
 
-As mentioned above, part of the `homies` are sourced directly from Nixpkgs
-(`curl`, `htop`, ...) while others are _customized_ (in particular `tmux` and
-`vim`). The reason is I use the former ones directly, while the latter ones I
-want to use with a dotfile, like `.tmux.conf` and `.vimrc`. We'll start with
-packaging your beloved `.tmux.conf` with Nix (you can find `vim` in the [next
-section](#vim)).
+As mentioned above, part of the `homies` are sourced directly from `nixpkgs`
+(`curl`, `htop`, …) while others are _customized_ (in particular `tmux` and
+`vim`). The reason is that I use the former ones directly, while the latter
+ones I want to use with a dotfile, like `.tmux.conf` and `.vimrc`. We'll start
+with packaging your beloved `.tmux.conf` with Nix (you can find `vim` in the
+[next section](#vim)).
 
-My `homies` have a [special directory](..) dedicated to tmux, which you might
-call "module" (although [modules in Nix](...) are something else):
+My `homies` have a [special directory dedicated to `tmux`][homies-tmux], which
+you might think of as a "module" (although [modules in Nix][nixos-modules] are
+something else):
 
 ``` shell
 $ tree tmux/
@@ -246,13 +254,13 @@ Let's look at `tmux/default.nix` instead!
 # Tmux with ./tmux.conf baked in
 { tmux, writeText, symlinkJoin, makeWrapper }:
 symlinkJoin {
+  name = "tmux";
+  buildInputs = [makeWrapper];
   paths = [ tmux ];
   postBuild = ''
     wrapProgram "$out/bin/tmux" \
     --add-flags "-f ${./tmux.conf}"
   '';
-  name = "tmux";
-  buildInputs = [makeWrapper];
 }
 ```
 
@@ -269,19 +277,21 @@ First, the double (single-)quotes `''`: that's a string. What's inside the
 string is mostly bash. What's not bash is the `${./tmux.conf}` part: that's a
 way of referencing Nix values inside a bash statement -- and inside any string,
 actually. To Nix, this snippet is just a string, it will just happen to be run
-as a bash script at some point. So `${ foo }` interpolates the _Nix_ `foo`
-value to a string. The next question is: what kind of value is `./tmux.conf`?
+as a bash script at some point. So `${ foo }` interpolates the _Nix_ value
+`./tmux.conf` to a string. The next question is: what kind of value is
+`./tmux.conf`?
 
 Wanna have a guess?
 
 Well, it looks like a path, doesn't it. And as it turns out there is a file
-`tmux.conf` in the directory. A Nix value that starts with `./` is Nix' quick
-way of creating an entry in the Nix store: by interpolating it in the snippet
-above, Nix will replace `${ ./tmux.conf }` with a
+[`tmux.conf`][homies-tmux-conf] in the directory. A Nix value that starts with
+`./` is Nix' quick way of creating an entry in the Nix store: by interpolating
+it in the snippet above, Nix will replace `${ ./tmux.conf }` with a
 `/nix/store/XXXXXXX-foo`-style path. Sweet! The rest of the obscure incantation
-is just a way of telling Nix to wrap `tmux` and bake in the `-f` flag which
-specifies the location of the `.tmux.conf` file to use, which you can see if
-you squint long enough at the actual `tmux` that's located on my `$PATH`:
+is just a way of telling Nix to wrap `tmux` (some `tmux` that was built by Nix
+and lives in `/nix/store`) and bake in the `-f` flag which specifies the
+location of the `.tmux.conf` file to use. You can convince yourself of it by
+squinting long enough at the actual `tmux` that's located on my `$PATH`:
 
 ``` shell
 $ cat $(which tmux)
@@ -300,22 +310,23 @@ vim and `vimrc`!
 
 ## vim
 
-You might expect the `vim` setup to be a bit more complex, mostly because of
-plugins, but in practice it is fairly easy. Because the [Nix packages](...) are
-hosted on GitHub, anybody is free to submit a pull request, and a bit of
-infrastructure was merged in for vim plugin support.
-
-Maybe you've had this experience with vim plugins:
+Let's now bundle `vim` with a `vimrc` and some plugins. Maybe you've had this
+experience:
 
 * Plugin A needs python 2.7,
 * Plugin B needs python 3.0,
 * Plugin C needs python 2.8, which is a special flavor of python 2.7.8 that can
   only be compiled during full moon.
 
-Those kinds of problems are completely alleviated with Nix, because the plugins
-themselves can specify their system dependencies, and different versions of
-Python/what-have-you can happily cohabit with one another. Here's my full vim
-setup:
+You might expect the `vim` setup to be a bit more complex, mostly because of
+plugins, but in practice it is fairly easy. Because the [`nixpkgs`][nixpkgs]
+are hosted on GitHub, anybody is free to submit a pull request, and a bit of
+infrastructure was merged in for `vim` plugin support.
+
+The python version (_versionssss_) issue mentioned above is completely
+alleviated with Nix, because the plugins themselves can specify their system
+dependencies, and different versions of Python/what-have-you can happily
+cohabit with one another. Here's my complete vim setup:
 
 ``` nix
 # vim/default.nix
@@ -341,24 +352,24 @@ let
       vimproc
       youcompleteme
     ];
-  customRC = builtins.readFile ./vimrc ;
+  customRC = vimUtils.vimrcFile
+    { customRC = builtins.readFile ./vimrc;
+      packages.mvc.start = extraPackages;
+    };
 in
 symlinkJoin {
-  paths = [ vim_configurable ];
-  postBuild = ''
-    wrapProgram "$out/bin/vim" \
-    --add-flags "-u ${vimUtils.vimrcFile {
-      packages.mvc.start = pluginDictionaries;
-      inherit customRC;
-    }}" \
-      --prefix PATH : ${haskellPackages.hasktags}/bin
-  '';
   name = "vim";
   buildInputs = [makeWrapper];
+  postBuild = ''
+    wrapProgram "$out/bin/vim" \
+        --add-flags "-u ${customRC}" \
+        --prefix PATH : ${haskellPackages.hasktags}/bin
+  '';
+  paths = [ vim_configurable ];
 }
 ```
 
-(and the `./vimrc` file:)
+(and the [`./vimrc`][homies-vimrc] file:)
 
 
 ``` vim
@@ -383,12 +394,12 @@ set backspace=indent,eol,start
 …
 ```
 
-The `vimrc` file itself is sourced from the file in my `homies` repo (although
-in a different way than the `.tmux.conf` file from the previous section) and
-lists _zero_ plugins. Those are magically handled by the `vimUtils.vimrcFile`
-function.
+The `vimrc` file itself is sourced from the file in my [homies
+repository][homies] (although in a different way than the `.tmux.conf` file
+from the previous section) and lists _zero_ plugins. Those are magically
+handled by the `vimUtils.vimrcFile` function.
 
-You might recognize the obscure `wrapProgram` incantation that we used we
+You might recognize the obscure `wrapProgram` incantation that we used with
 `tmux` earlier, which this time instructs `vim` to start with `-u …`.  This is
 how we tell `vim` to use the Nix generated `vimrc`. But now, we pass a second
 argument to `wrapProgram`:
@@ -398,9 +409,10 @@ argument to `wrapProgram`:
 ```
 
 The reason for that is that I trigger `hasktags` -- a Haskell ctags generator
--- upon a Haskell file save. This used to be a pain to deal with, as I had to
-remember to also install the `hasktags` program after setting up my `dotfiles`
-on a new machine. Now the dependency is stored with my `homies`!
+-- upon a Haskell file save, and `--prefix PATH …` will ensure that `hasktags`
+is in `$PATH` when `vim` is invoked. This used to be a pain to deal with, as I
+had to remember to also install the `hasktags` program after setting up my
+`dotfiles` on a new machine. Now the dependency is stored with my `homies`!
 
 **Take home message**: `vim` configuration does **not** have to be a pain. And
 you should **not** have to log in into your development boxes with a stripped
@@ -411,9 +423,9 @@ easy.
 
 Alright, buckle up now, we're getting real. I've talked about my so-called
 "homies" -- the packages that I like having around -- for a while now, and you
-might have wondered how I survive with those sad 10 packages (I counted). Here's
-my answer: I don't. Does that make sense? No? Then
-let me introduce the 8th Wonder of the World, the `nix-shell`:
+might have wondered how I survive with those sad 10 packages (I counted).
+Here's my answer: I don't. Does that make sense? No? Then let me introduce the
+8th Wonder of the World, the `nix-shell`:
 
 ``` shell
 $ cowsay the nix-shell
@@ -440,9 +452,10 @@ The program 'cowsay' is currently not installed. You can install it by typing:
 sudo apt install cowsay
 ```
 
-The `nix-shell` is the Nix equivalent of a One-night stand. It will bring
-packages in scope for the lifetime of a shell. The simplest usage is the one
-showcased above -- `nix-shell -p package1 -p package2 …` -- which brings makes
+The `nix-shell` is the Nix equivalent of a one-night stand. It will bring
+packages in scope for the lifetime of a shell (this time not through symlinks:
+it crafts a special `$PATH` for the new shell). The simplest usage is the one
+showcased above -- `nix-shell -p package1 -p package2 …` -- which makes
 `package1`, `package2`, … available in your current shell session. After you've
 exited the shell, they're gone.
 
@@ -488,20 +501,19 @@ And that's how you install Python and tensorflow. Sweet, heh?
 Another way to use the `nix-shell` is to write a `shell.nix` file, which is
 evaluated when you call `nix-shell`.  As it turns out, my homies are simply the
 packages that I regularly use _outside of code repositories_ (by the way if you
-haven't tried the `homies`, the easiest way is to copy the repository and run
-`nix-shell` inside it). The `nix-shell` is amazing when working on code with
-others; just drop a `shell.nix` with **all** (and I mean **all**) the system
-dependencies for building and running the project in a `shell.nix`, and the
-rest of your team will thank you for it. For more info, check out
-[zimbatm](...)'s talk on [Sneaking Nix at
-$work](https://www.youtube.com/watch?v=ycjlpg296iI).
+haven't tried the [homies][homies], the easiest way is to copy the repository
+and run `nix-shell` inside it). The `nix-shell` is amazing when working on code
+with others; just drop a `shell.nix` with **all** (and I mean **all**) the
+system dependencies for building and running the project in a `shell.nix`, and
+the rest of your team will thank you for it. For more info, check out
+[zimbatm][zimbatm]'s talk on [Sneaking Nix at $work][sneaking-nix-at-work].
 
 This was a quick introduction to the `nix-shell`, or how to install packages
 for a very short lifetime or project-local scope. The concept is simple but the
 potential is huge. Go ahead and try it out!
 
 **Pro-tip**: Add the following to your `bashrc` for Haskell one-offs (or copy
-[mine](...)):
+[mine][homies-bashrc]):
 
 ``` bash
 ghc-shell() {
@@ -515,66 +527,38 @@ ghci-with() {
 }
 ```
 
-## Dealing with databases
+## Conclusion
 
-One thing that we haven't touched upon is services, like databases that are
-started when you boot your machine. This is something I've often struggled
-with, with and without Nix, and this is the main problem: how can I set up a
-single database on my machine that will work for across all the projects that I
-am working on? The answer is: you don't. Let me explain.
+That's it for today. We went through the underlying concepts of the Nix package
+manager, learned how to package tools with customized configuration in a
+declarative and reproducible way and finally went through a few example use
+cases of the `nix-shell`. I'd like to thank [zimbatm][zimbatm] and [Graham
+Christensen][grahamc] for proofreading this text and suggesting improvements.
+Thanks, guys!
 
-The idea, which I originally got from [Graham Christensen](http://grahamc.com),
-is to have shell-local databases, much like the `nix-shell`. To that effect I
-wrote [`pg-shell`](https://github.com/nmattia/pg-shell), which is bash script
-that allows you to create short lived PostgreSQL instances that are destroyed
-when you exit your current shell. You can try it out by cloning the repository
-and firing up the `nix-shell`:
+**P.S.**: Nix is not an all-or-nothing package manager, you can install
+it today, write some configuration, wipe it entirely tomorrow and start where
+you left it next week -- your configuration will still work. You might want to
+start by installing a few packages on your machine, or drop a `shell.nix` in a
+project that has a few system dependencies that are tricky to install; it's up
+to you!
 
-``` shell
-$ git clone https://github.com/nmattia/pg-shell
-$ cd pg-shell
-$ nix-shell
-
-[nix-shell]$ start_pg
-…
-Postgres started
-Logs are written to /path-to/pg-shell/.pg/calm-australian-day/pglog.
-
-   name:  calm-australian-day
-   pid:   4702
-   port:  5432
-
-[nix-shell:]$ psql postgres
-psql (9.6.7)
-Type "help" for help.
-
-postgres=# SELECT 1 + 2;
- ?column?
-----------
-        3
-(1 row)
-
-postgres=# \q
-
-[nix-shell]$ exit
-stopping calm-australian-day
-killing 4702
-removing /path-to/pg-shell/.pg/calm-australian-day
-$ start_pg
-start_pg: command not found
-$ psql
-The program 'psql' is currently not installed. You can install it by typing:
-sudo apt install postgresql-client-common
-```
-
-The `nix-shell` does two things:
-
-1. Make sure that the required PostgreSQL commands are available
-1. Load the [`pg-shell`
-   script](https://github.com/nmattia/pg-shell/blob/master/pg-shell).
-
-The script creates a function `start_pg` in your environment which can be used
-to start PostgreSQL instances. Some traps are triggered when you exit the shell
-and the database(s) are shut down and destroyed. Effectively, there is nothing
-PostgreSQL related on your system _before_ you have entered the shell and
-_after_ you've exited it.
+[dotfiles]: https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
+[grahamc]: http://grahamc.com
+[homies-bashrc]: https://github.com/nmattia/homies/blob/7a6c82aa7c7b41e915b79ff0de9f8e4c185c1622/bashrc/bashrc
+[homies-default]: https://github.com/nmattia/homies/blob/7a6c82aa7c7b41e915b79ff0de9f8e4c185c1622/default.nix
+[homies-tmux]: https://github.com/nmattia/homies/tree/7a6c82aa7c7b41e915b79ff0de9f8e4c185c1622/tmux
+[homies-tmux-conf]: https://github.com/nmattia/homies/blob/7a6c82aa7c7b41e915b79ff0de9f8e4c185c1622/tmux/tmux.conf
+[homies-vimrc]: https://github.com/nmattia/homies/blob/7a6c82aa7c7b41e915b79ff0de9f8e4c185c1622/vim/vimrc
+[homies]: https://github.com/nmattia/homies
+[nix-by-example]: https://medium.com/@MrJamesFisher/nix-by-example-a0063a1a4c55
+[nix-gc]: https://nixos.org/nixos/nix-pills/garbage-collector.html
+[nix-manual]: https://nixos.org/nix/manual/
+[nix-pills]: https://nixos.org/nixos/nix-pills/
+[nix]: https://nixos.org/nix/
+[nixos-modules]: https://nixos.org/nixos/manual/index.html#sec-writing-modules
+[nixos]: https://nixos.org/
+[nixpkgs]: https://github.com/NixOS/nixpkgs
+[sneaking-nix-at-work]: https://www.youtube.com/watch?v=ycjlpg296iI
+[stow]: https://www.gnu.org/software/stow/
+[zimbatm]: http://zimbatm.com
