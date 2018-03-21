@@ -61,7 +61,8 @@ main = hakyll $ do
         renderAtom myFeedConfiguration feedCtx posts
 
 
-    forM_ [ "cv.pdf"
+    forM_ [ "resume.pdf"
+          , "resume.html"
           , "parallel-dna.pdf"
           , "regular-strands.pdf"
           , "schroedinger.pdf"

@@ -22,5 +22,8 @@ University of Vienna](https://www.tuwien.ac.at/en/). I completed my studies at
 the [Swiss Federal Instute of Technology](http://www.ethz.ch) in Zurich with a
 Master's Degree in Control Theory.
 
-For a condensed version of my experience, have a look at my <a
-href="cv.pdf">CV</a>.
+For a condensed version of my experience, have a look at my
+[resume][resume-html] (or download the [PDF version][resume-pdf]).
+
+[resume-html]: ./resume.html
+[resume-pdf]: ./resume.pdf
