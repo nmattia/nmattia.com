@@ -1,4 +1,4 @@
- * [TODO](posts/2018-03-11-reproducible-setup-linux-macos.html)
+ * [Nix: A Reproducible Setup for Linux and macOS](posts/2018-03-21-nix-reproducible-setup-linux-macos.html)
  * [A Fully Functional, Fully Functional Webapp](posts/2017-09-07-fully-functional-webapp.html)
  * [Introducing stutter, the anti-grep](posts/2017-05-01-release-stutter.html)
  * [Haskell makefile library release](posts/2017-04-29-haskell-makefile-release.html)

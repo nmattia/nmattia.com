@@ -1,8 +1,8 @@
 ---
-title: A Reproducible Setup for Linux and macOS
+title: Nix -- A Reproducible Setup for Linux and macOS
 ---
 
-# A Reproducible Setup for Linux and macOS
+# Nix: A Reproducible Setup for Linux and macOS
 
 This post describes how I set up a reproducible development environment in a
 few seconds on any Linux distribution (and potentially macOS as well). This
