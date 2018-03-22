@@ -3,6 +3,7 @@
 #!nix-shell -p bash
 #!nix-shell -p git
 #!nix-shell -p rsync
+#!nix-shell -p nix
 #!nix-shell --pure
 # vim: set ft=bash:
 
@@ -29,6 +30,10 @@ then
     echo "branch is dirty, please have a look."
     exit 1
 fi
+echo "done."
+
+echo "building the latest version..."
+nix-build
 echo "done."
 
 echo "syncing files..."
