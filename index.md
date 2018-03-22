@@ -3,7 +3,7 @@ title: home
 ---
 
 
-I'm an engineer living in Switzerland, currently working with [Tweag
+I'm an engineer living in Switzerland and working at [Tweag
 I/O](http://tweag.io). For more, checkout the [about page](/about.html).
 
 
