@@ -12,6 +12,14 @@ $ nix-shell -p 'haskellPackages.wai-app-static' --run 'warp -d result'
 
 ## Deploy
 
+Run the deploy script:
+
+``` shell
+$ ./script/deploy
+```
+
+or run the following commands:
+
 ``` shell
 $ git worktree add gh-pages gh-pages
 $ rsync -rv --exclude .git --exclude CNAME result/ gh-pages/ --delete
