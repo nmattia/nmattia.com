@@ -19,6 +19,27 @@ in
       export LANG=en_US.UTF-8 # fixes charset issues
       cp ${pkgs.resume}/resume.pdf resume.pdf
       cp ${pkgs.resume}/resume.html resume.html
+
+      # Create a file index for material/
+      mkdir -p material
+      pushd material
+      tree -H '.' -L 1 \
+        --noreport \
+        --charset utf8 \
+        -I index.html \
+        -o index.html
+      popd
+      for dir in material/*/;
+      do
+        pushd $dir
+        tree -H '.' -L 1 \
+          --noreport \
+          --charset utf8 \
+          -I index.html \
+          -o index.html
+        popd
+      done
+
       ${siteBuilder}/bin/site build
     '';
 
@@ -27,4 +48,6 @@ in
       ${pkgs.rsync}/bin/rsync -rts _site/ $out
       touch $out/.nojekyll
     '';
+
+    buildInputs = [ pkgs.tree ];
   }

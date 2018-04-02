@@ -60,6 +60,13 @@ main = hakyll $ do
                  loadAllSnapshots "posts/*" "content"
         renderAtom myFeedConfiguration feedCtx posts
 
+    match "material/index.html" $ do
+        route idRoute
+        compile copyFileCompiler
+    match "material/**/*" $ do
+        route idRoute
+        compile copyFileCompiler
+
 
     forM_ [ "resume.pdf"
           , "resume.html"
