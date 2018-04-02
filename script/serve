@@ -1,0 +1,10 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash
+#!nix-shell -p bash
+#!nix-shell -p haskellPackages.wai-app-static
+#!nix-shell --pure
+# vim: set ft=bash:
+
+set -euo pipefail
+
+warp -d result
