@@ -4,18 +4,18 @@ title: Automatically generated directories for individual tasty tests
 
 # Automatically generated directories for individual tasty tests
 
-This shows you how to easily create directories based on the test name using
-the Haskell test framework tasty and how to generally access the test names
-inside your [tasty][tasty] tests themselves.
+This is a ~~hack~~ _practical trick_ for creating directories based on test names
+using the Haskell test framework [tasty][tasty], as well as accessing the test
+names inside your [tasty][tasty] tests themselves.
 
 _You can find the full code on [GitHub][gist]_
 
-Last week I worked on a test suite that was printing a lot of logs to stdout.
-This didn't play well with [tasty][tasty] as the test results were interleaved
-with whatever was printed out on stdout. I decided to redirect the logs to
-files but I wanted those logs to be easily retrievable in case of a test
-failure. The easiest way to do so was to create a directory for each test,
-based on the test's name.
+Last week I worked on a test suite that printed a lot of logs to stdout. This
+didn't play well with [tasty][tasty] as the test results were interleaved with
+whatever was printed out on stdout. I decided to redirect the logs to files but
+I wanted those logs to be easily retrievable in case of a test failure. The
+easiest way to do so was to create a directory for each test, based on the
+test's name.
 
 The [tasty][tasty] framework unfortunately does not allow you to read the
 [`TestTree`][test-tree] structure, thereby making it impossible to know the
