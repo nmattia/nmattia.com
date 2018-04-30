@@ -1,3 +1,4 @@
+ * [Automatically generated directories for individual tasty tests](posts/2018-04-30-tasty-test-names.html)
  * [Nix: A Reproducible Setup for Linux and macOS](posts/2018-03-21-nix-reproducible-setup-linux-macos.html)
  * [A Fully Functional, Fully Functional Webapp](posts/2017-09-07-fully-functional-webapp.html)
  * [Introducing stutter, the anti-grep](posts/2017-05-01-release-stutter.html)
