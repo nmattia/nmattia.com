@@ -16,7 +16,9 @@ in
       };
 
     buildPhase = ''
-      export LANG=en_US.UTF-8 # fixes charset issues
+      export LC_ALL=en_US.UTF-8
+      export LANG=en_US.UTF-8
+      export LANGUAGE=en_US.UTF-8
       cp ${pkgs.resume}/resume.pdf resume.pdf
       cp ${pkgs.resume}/resume.html resume.html
 
@@ -49,5 +51,5 @@ in
       touch $out/.nojekyll
     '';
 
-    buildInputs = [ pkgs.tree ];
+    buildInputs = [ pkgs.tree pkgs.glibcLocales ];
   }
