@@ -3,8 +3,8 @@ title: Hunt bugs down before they are merged!
 ---
 
 I discuss a few reasons why catching bugs in master is more expensive than
-before merge, try to explain why some people think this isn't true, and talk a
-bit about merge queues.
+before they are merged, try to explain why some people think this isn't true,
+and talk a bit about merge queues.
 
 ---
 
@@ -19,20 +19,21 @@ bit about merge queues.
 
 # Hunt bugs down before they are merged!
 
-Here's something I regularly hear:
+Here's something I heard a few times from recalcitrant coworkers after I've
+asked them to write more tests in one of my signature uptight PR reviews:
 
 > The cost of fixing a bug **after it has been merged** into the master branch
 > is **the same** as that of fixing it **before it has been merged** into the
 > master branch.
 
-Catching a bug once it has landed in the main codebase has a huge associated
-cost. It boils down to the following reasons, which I'll describe individually
-in the next few sections:
+I beg to differ! Catching a bug once it has landed in the main codebase has a
+huge associated cost. It boils down to the following reasons, which I'll
+describe individually in the next few sections:
 
 * When someone hits a bug in the main code base, they were most likely
   not looking for one, but trying to get work done.
-* Whomever is tasked with fixing the bug may have lost (or never have had)
-  context relevant to the faulty code.
+* Whomever is tasked with fixing the bug may have lost context relevant to the
+  faulty code, or maybe they never had any to start with.
 * Reporting a bug creates noise in the form of tickets and pull requests (PRs).
 
 Let's jump right in!
@@ -142,10 +143,10 @@ codebase.
 <img src="../images/mads_the_hunt.jpg" alt="Mads “Hunter” Mikkelsen"><figcaption>Mads “Hunter” Mikkelsen</figcaption>
 </figure>
 
-This one should be pretty straightforward. Finding a bug that's introduced by a
-diff before merging the master branch limits the search space to that diff
-only. Trying to find a bug on master means potentially having to consider the
-whole codebase, unless your codebase lends itself to things like bisecting.
+This one should be pretty straightforward. Finding a bug that's been introduced
+by a diff before merge into the master branch limits the search space to that
+diff only. Trying to find a bug on master means potentially having to consider
+the whole codebase, unless your codebase lends itself to things like bisecting.
 
 </div>
 
@@ -250,7 +251,9 @@ them themselves!
 
 Bugs are not the only way to break master, race conditions also apply to
 software process. They may happen when a CI system only runs tests on a branch,
-without rebasing on master first. The following diagram lists three branches,
+without rebasing on master first (note: some CI systems, like [Travis] and
+[CircleCI], will test both your branch as it is _and_ after having rebased it
+on or merged it into master). The following diagram lists three branches,
 `master`, `bob` and `alice`:
 
 <div class="story">
@@ -344,7 +347,7 @@ This is a very tedious process and is better automatized by tools like [bors-ng]
 
 <div class="story">
 
-### War story
+### The Poor Man's Merge Queue
 
 Merge queues need not be fancy. The first time we realized that we were wasting
 a lot of time fixing rebase issues, my team and I came up with a very simple
@@ -360,3 +363,5 @@ PR.
 
 </div>
 
+[Travis]: https://travis-ci.org/
+[CircleCI]: https://circleci.com
