@@ -40,6 +40,11 @@ body {
     background-color: #3b6484;
     height: 100%;
     margin: 0;
+    line-height: 200%;
+}
+
+pre {
+    line-height: 100%;
 }
 
 div.main {

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash
+#!nix-shell -I nixpkgs=./nix/nixpkgs
 #!nix-shell -p bash
 #!nix-shell -p git
 #!nix-shell -p rsync
