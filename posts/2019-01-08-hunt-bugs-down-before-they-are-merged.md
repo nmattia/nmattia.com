@@ -229,7 +229,7 @@ around. Most likely it's a waste of time for everyone involved.
 So _why_ do some people tend to think that it's more efficient to merge new
 code and do damage control later (a.k.a shoot-from-the-hip coding)? Well, in
 the short term, it may save time for the implementer (let's call a spade a
-space: the culprit) by:
+spade: the culprit) by:
 
 * Not writing tests or coming up with enough test cases.
 * Potentially merging without review.
