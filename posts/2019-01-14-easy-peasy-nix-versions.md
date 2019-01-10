@@ -2,26 +2,49 @@
 title: Easy Peasy Nix Versions
 ---
 
+<style>
+.story {
+  background-color: lightblue;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+</style>
+
 # Easy Peasy Nix Versions
 
-I explain a simple mechanism for handling third-party package versions in Nix.
+This is a convention for using third-party packages in Nix. It has a simple
+directory structure, makes using the packages straightforward and automatizes
+updates.
 
 ---
 
-It uses a single
-file to store all versions rather than having each package define its URL and
-version separately. I tend to get lost with the latter.
+Where should you declare the third-party packages you use in your Nix project?
+Should all specs be declared in the `default.nix`? Should each third-party
+package get its own directory with a `default.nix` and a `spec.src.json`? Or
+maybe the specs should only exist at call site, potentially duplicated if the
+package is used in different places? I settled on a simple convention which
+I've been using for a year across all my personal and work Nix projects.
 
-It's not a full-blown solution like [require.nix] but it does the job very well
-for small- to medium-sized project.
-
-We'll take the [homies] repository as an example.
+The idea is to use a single JSON file to store all versions rather than having
+each package in a directory defining its URL and version separately (I tend to
+get lost with the latter). Two more files are involved: one that acts as glue
+between JSON and Nix, and one that automatizes the package updates. It's not a
+full-blown solution like [require.nix] but it does the job very well for small-
+to medium-sized project.
 
 ## Specifying and fetching third-party packages
 
-One `nix/` directory containing two files: `versions.json` and `fetch.nix`. The
-[`nix/versions.json`] file contains information about _where_ to find each of
-the third-party packages.
+We'll take the [homies] repository as an example.
+
+<div class="story">
+[homies] is a Nix-based reproducible environment, you can read about it in the
+[dedicated article][homies-article].
+</div>
+
+If you checkout the repository you'll see a `nix/` directory with two files:
+`versions.json` and `fetch.nix`.  The [`nix/versions.json`] file contains
+information about _where_ to find each of the third-party packages:
 
 ``` json
 {
@@ -42,8 +65,17 @@ the third-party packages.
 }
 ```
 
+Each third-party package is given a name, like `nixpkgs` or `snack` in the
+above. That name is used as a key in a JSON dictionary. For each package the
+corresponding value is the GitHub repository information as well as the
+`sha256` for `fetchurl` (this is tailored for GitHub, but make sure to read the
+[closing thoughts](#closing-thoughts) for ideas). The `branch` attribute is not
+used by Nix but comes in handy for [updating the
+packages](#updating-third-party-packages).
+
 The [`nix/fetch.nix`] file is a wrapper for using the third-party packages in
-your Nix code, for instance from [`default.nix`]:
+your Nix code. The third-party packages are retrieved using the name you gave
+them in the JSON file; see the [`default.nix`] in [homies]:
 
 ``` nix
 with { fetch = import ./nix/fetch.nix; };
@@ -52,16 +84,31 @@ let
 ...
 ```
 
+A single function is exported from [`nix/fetch.nix`]: `fetch`. It takes a
+package name and returns the path of the unpacked archive. Neat, heh?
+
+The first time I used this scheme it greatly simplified my life, because I knew
+exactly where all the third-party packages were defined. No more going up and
+down directory trees to figure out _this_ or _that_ package's repo name, and
+moreover it only takes a second to check whether any package is defined locally
+or if you're pulling it from GitHub. Another benefit of this approach is that
+it makes updating the packages super easy as well. Read on!
+
 ## Updating third-party packages
 
-Then an update file in [`script/update`] which updates the packages:
+If your third-party package specs are spread all over your codebase, updating
+them all will take ages. With the approach described above updating all
+packages only takes a bash loop and some [`jq`]-ing. The [homies] repo has a
+single update script, [`script/update`]. It takes the path to the
+`versions.json` file and a list of packages to update (below I stick to a
+single package for simplicity's sake):
 
 ``` bash
 versions=...    # The file `versions.json`
 package=...     # The package to update
 ```
 
-Then we read that package's owner, repository name and the branch that we're
+Then it reads that package's owner, repository name and the branch that we're
 tracking:
 
 ``` bash
@@ -70,8 +117,8 @@ repo=$(cat $versions | jq -r ".[\"$package\"].repo")
 branch=$(cat $versions | jq -r ".[\"$package\"].branch")
 ```
 
-Using this we can retrieve the GitHub URL and call `nix-prefetch-url` to
-compute the sha256:
+Using this it retrieves the GitHub URL and calls `nix-prefetch-url` to compute
+the sha256:
 
 ``` bash
 # Ask GitHub what the latest commit (revision) is on $branch:
@@ -84,8 +131,8 @@ url=https://github.com/$owner/$repo/archive/$new_rev.tar.gz
 new_sha256=$(nix-prefetch-url --unpack "$url")
 ```
 
-Finally we re-read the `versions.json` content, update the `rev` and `sha256`
-attributes of that package, and write it back to `versions.json`:
+Finally it re-reads the `versions.json` content, updates the `rev` and `sha256`
+attributes of that package, and writes it back to `versions.json`:
 
 ``` bash
 res=$(cat $versions \
@@ -96,16 +143,33 @@ res=$(cat $versions \
 echo "$res" > $versions
 ```
 
-This cannot be abstracted away in a separate repo because there's a chicken and
-egg problem: if this is a Nix "library", how do we fetch it?
+Package: UPDATED!
 
-The `versions.json` file is very simple and you should tweak it to your needs.
-For instance you could store URLs instead of GitHub repositories (you should
-then also tweak the update script).
+## Closing thoughts
 
-[homies]: https://github.com/nmattia/homies
-[require.nix]: https://www.youtube.com/watch?v=DHOLjsyXPtM
-[`script/update`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/script/update
+As mentioned in the introduction, this is a convention and should be tweaked to
+fit your needs. The important points are:
+
+* All versions and package specs should live in a single file.
+* The specs should be machine readable for automated update.
+
+When I create a new Nix project I simply copy over the [`nix/fetch.nix`] file
+and the [update script][`script/update`]. This cannot be abstracted away in a
+separate repo because there's a chicken and egg problem: if this is a Nix
+"library", how do we fetch it?
+
+The `versions.json` file is very simple; YMMV. For instance you could store
+URLs instead of GitHub repositories (you should then also tweak the update
+script). The [`script/update`] can also be adapted to your needs; for instance,
+in [homies], it's possible to only compute the `sha256` without pulling the
+branch's latest revision. That's super convenient when adding new packages: you
+don't have to call `nix-prefetch-url` by hand!
+
+[`default.nix`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/default.nix
+[`jq`]: https://stedolan.github.io/jq/
 [`nix/fetch.nix`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/nix/fetch.nix
 [`nix/versions.json`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/nix/versions.json
-[`default.nix`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/default.nix
+[`script/update`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/script/update
+[homies-article]: https://nmattia.com/posts/2018-03-21-nix-reproducible-setup-linux-macos.html
+[homies]: https://github.com/nmattia/homies
+[require.nix]: https://www.youtube.com/watch?v=DHOLjsyXPtM
