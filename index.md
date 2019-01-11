@@ -10,6 +10,12 @@ I/O](http://tweag.io). For more, checkout the [about page](/about.html).
 Here are some projects I played with lately (there's more [on
 github](http://github.com/nmattia)):
 
+ * [*snack* <i class="fa fa-github"></i>](http://github.com/nmattia/snack)
+   is a build tool that uses the power of Nix to build Haskell projects. It is
+   configured with Hpack, performs incremental builds and benefits from all of
+   Nix's cool features like reproducibility guarantees, parallel builds and
+   remote caches.
+
  * [*stutter* <i class="fa fa-github"></i>](http://github.com/nmattia/stutter)
    is a command-line string generator. You give it a regex-looking thing, it
    generates the strings.
