@@ -81,11 +81,13 @@ them in the JSON file; see the [`default.nix`] in [homies]:
 with { fetch = import ./nix/fetch.nix; };
 let
   pkgs = import fetch.nixpkgs {};
+  snack = (import fetch.snack).snack-exe;
 ...
 ```
 
-The [`nix/fetch.nix`] file creates a record, which takes a package name and
-returns the path of the unpacked archive. Neat, heh?
+The [`nix/fetch.nix`] file creates a record where the keys are the package
+names (`nixpkgs`, `snack`) and the values are the unpacked archives. Neat,
+heh?
 
 The first time I used this scheme it greatly simplified my life, because I knew
 exactly where all the third-party packages were defined. No more going up and
@@ -165,11 +167,11 @@ in [homies], it's possible to only compute the `sha256` without pulling the
 branch's latest revision. That's super convenient when adding new packages: you
 don't have to call `nix-prefetch-url` by hand!
 
-[`default.nix`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/default.nix
+[`default.nix`]: https://github.com/nmattia/homies/blob/b32cb0a02360968296ddea7463952c98e1af92d2/default.nix
 [`jq`]: https://stedolan.github.io/jq/
-[`nix/fetch.nix`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/nix/fetch.nix
-[`nix/versions.json`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/nix/versions.json
-[`script/update`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/script/update
+[`nix/fetch.nix`]: https://github.com/nmattia/homies/blob/b32cb0a02360968296ddea7463952c98e1af92d2/nix/fetch.nix
+[`nix/versions.json`]: https://github.com/nmattia/homies/blob/b32cb0a02360968296ddea7463952c98e1af92d2/nix/versions.json
+[`script/update`]: https://github.com/nmattia/homies/blob/b32cb0a02360968296ddea7463952c98e1af92d2/script/update
 [homies-article]: https://nmattia.com/posts/2018-03-21-nix-reproducible-setup-linux-macos.html
 [homies]: https://github.com/nmattia/homies
 [flake.nix]: https://github.com/nix-community/flake
