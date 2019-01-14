@@ -1,3 +1,5 @@
+ * [Hunt bugs down before they are merged!](posts/2019-01-08-hunt-bugs-down-before-they-are-merged.html)
+ * [cio: cached HTTP requests for a smooth Jupyter experience!](posts/2018-08-21-cio-cached-http-requests-jupyter.html)
  * [Automatically generated directories for individual tasty tests](posts/2018-04-30-tasty-test-names.html)
  * [Nix: A Reproducible Setup for Linux and macOS](posts/2018-03-21-nix-reproducible-setup-linux-macos.html)
  * [A Fully Functional, Fully Functional Webapp](posts/2017-09-07-fully-functional-webapp.html)
