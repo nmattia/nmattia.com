@@ -27,7 +27,7 @@ github](http://github.com/nmattia)):
 Here are some thoughts about software (you can find more in the [blog
 section](/blog.html)):
 
- * [Easy Peasy Nix Versions](posts/2019-01-14-easy-peasy-nix-versions.html)
+ * [Easy Peasy Nix Versions](posts/2019-01-15-easy-peasy-nix-versions.html)
  * [Hunt bugs down before they are merged!](posts/2019-01-08-hunt-bugs-down-before-they-are-merged.html)
  * [cio: cached HTTP requests for a smooth Jupyter experience!](posts/2018-08-21-cio-cached-http-requests-jupyter.html)
  * [Nix: A Reproducible Setup for Linux and macOS](posts/2018-03-21-nix-reproducible-setup-linux-macos.html)

@@ -30,8 +30,8 @@ The idea is to use a single JSON file to store all versions rather than having
 each package in a directory defining its URL and version separately (I tend to
 get lost with the latter). Two more files are involved: one that acts as glue
 between JSON and Nix, and one that automatizes the package updates. It's not a
-full-blown solution like [require.nix] but it does the job very well for small-
-to medium-sized project.
+full-blown solution like [require.nix] (a.k.a. [flake.nix]) but it does the
+job very well for small- to medium-sized project.
 
 ## Specifying and fetching third-party packages
 
@@ -80,12 +80,12 @@ them in the JSON file; see the [`default.nix`] in [homies]:
 ``` nix
 with { fetch = import ./nix/fetch.nix; };
 let
-  pkgs = import (fetch "nixpkgs") {};
+  pkgs = import fetch.nixpkgs {};
 ...
 ```
 
-A single function is exported from [`nix/fetch.nix`]: `fetch`. It takes a
-package name and returns the path of the unpacked archive. Neat, heh?
+The [`nix/fetch.nix`] file creates a record, which takes a package name and
+returns the path of the unpacked archive. Neat, heh?
 
 The first time I used this scheme it greatly simplified my life, because I knew
 exactly where all the third-party packages were defined. No more going up and
@@ -165,11 +165,12 @@ in [homies], it's possible to only compute the `sha256` without pulling the
 branch's latest revision. That's super convenient when adding new packages: you
 don't have to call `nix-prefetch-url` by hand!
 
-[`default.nix`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/default.nix
+[`default.nix`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/default.nix
 [`jq`]: https://stedolan.github.io/jq/
-[`nix/fetch.nix`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/nix/fetch.nix
-[`nix/versions.json`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/nix/versions.json
-[`script/update`]: https://github.com/nmattia/homies/blob/06aa54743990613f3b53a3bf7334d23ce59acc4a/script/update
+[`nix/fetch.nix`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/nix/fetch.nix
+[`nix/versions.json`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/nix/versions.json
+[`script/update`]: https://github.com/nmattia/homies/blob/0bc2ae721536711ee2feeec786a7e2bf9b91d4a2/script/update
 [homies-article]: https://nmattia.com/posts/2018-03-21-nix-reproducible-setup-linux-macos.html
 [homies]: https://github.com/nmattia/homies
+[flake.nix]: https://github.com/nix-community/flake
 [require.nix]: https://www.youtube.com/watch?v=DHOLjsyXPtM
