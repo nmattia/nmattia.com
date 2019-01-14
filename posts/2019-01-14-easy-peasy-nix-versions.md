@@ -66,7 +66,7 @@ information about _where_ to find each of the third-party packages:
 ```
 
 Each third-party package is given a name, like `nixpkgs` or `snack` in the
-above. That name is used as a key in a JSON dictionary. For each package the
+above example. That name is used as a key in a JSON dictionary. For each package the
 corresponding value is the GitHub repository information as well as the
 `sha256` for `fetchurl` (this is tailored for GitHub, but make sure to read the
 [closing thoughts](#closing-thoughts) for ideas). The `branch` attribute is not
