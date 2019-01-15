@@ -167,6 +167,9 @@ in [homies], it's possible to only compute the `sha256` without pulling the
 branch's latest revision. That's super convenient when adding new packages: you
 don't have to call `nix-prefetch-url` by hand!
 
+[zimbatm] -- thanks for reviewing this post bro -- also started work on
+something similar which you might want to check out: [nix-path]
+
 [`default.nix`]: https://github.com/nmattia/homies/blob/b32cb0a02360968296ddea7463952c98e1af92d2/default.nix
 [`jq`]: https://stedolan.github.io/jq/
 [`nix/fetch.nix`]: https://github.com/nmattia/homies/blob/b32cb0a02360968296ddea7463952c98e1af92d2/nix/fetch.nix
@@ -176,3 +179,5 @@ don't have to call `nix-prefetch-url` by hand!
 [homies]: https://github.com/nmattia/homies
 [flake.nix]: https://github.com/nix-community/flake
 [require.nix]: https://www.youtube.com/watch?v=DHOLjsyXPtM
+[nix-path]: https://github.com/zimbatm/nix-path
+[zimbatm]: https://zimbatm.com/
