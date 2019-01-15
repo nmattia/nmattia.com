@@ -1,3 +1,4 @@
+ * [Easy Peasy Nix Versions](posts/2019-01-15-easy-peasy-nix-versions.html)
  * [Hunt bugs down before they are merged!](posts/2019-01-08-hunt-bugs-down-before-they-are-merged.html)
  * [cio: cached HTTP requests for a smooth Jupyter experience!](posts/2018-08-21-cio-cached-http-requests-jupyter.html)
  * [Automatically generated directories for individual tasty tests](posts/2018-04-30-tasty-test-names.html)
