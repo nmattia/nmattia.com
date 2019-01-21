@@ -18,7 +18,7 @@ I describe five of the reasons why I think tests are important:
 * Ensure that the code you've written works.
 * Ensure that the code you've written works tomorrow.
 * Ensure that the code you've written works elsewhere.
-* Spot interface issues early on.
+* Spot usability issues early on.
 * Show how your feature is supposed to work, and how it should be used.
 
 **important**: None of the animals used in the examples were harmed in the
@@ -53,9 +53,9 @@ GET /cats?breed=<nameOfTheBreed>
 
 The usage is _straightforward_:
 
-* if `nameOfTheBreed` is `persian` then you read `cat.png` and return the
+* if `nameOfTheBreed` is `persian` then you read `cat.png`, return the
   resulting bytes and `200 OK`.
-* if `nameOfTheBreed` is `siamese` then you read `CAT.png` and return the
+* if `nameOfTheBreed` is `siamese` then you read `CAT.png`, return the
   resulting bytes and `200 OK`.
 * if `nameOfTheBreed` is anything else, you return zero bytes and `200 OK`
   (company policy GTE-421-f, introduced in 2003, forbids you from using
@@ -64,8 +64,8 @@ The usage is _straightforward_:
 </div>
 
 Because we're dealing with software, anything that can go wrong will go wrong.
-Let's see how tests can help you damage control. Below are five reasons why I
-believe tests are important, in no particular order.
+We'll go over the five reasons I listed above in more details and we'll see how
+tests can help you damage control.
 
 ## Ensure that the code you've written works
 
@@ -81,9 +81,9 @@ least important reason.
 Don't get it twisted Jimmy, I didn't say it was unimportant: the other reasons
 are just _more_ important. Most of the time you'll eventually try the feature
 (open the website, click `Siamese`, watch in awe as your cat appears on the
-screen) after having written the code -- which makes tests redundant. You will
-catch bugs like "trying to open `cat.jpg` instead of `cat.png`" straight away
-anyway.
+screen) after having written the code -- which is as much information as you'll
+get from a test. You will catch bugs like "trying to open `cat.jpg` instead of
+`cat.png`" straight away anyway.
 
 Running tests as you write the code is mostly a time saver when you develop a
 feature, as you (usually) have a single command to run in order to check that
@@ -170,7 +170,7 @@ today and tomorrow.
 right way to shoehorn my new feature into your existing code, but that kind of
 stuff is hopefully caught during review.
 
-## Spot interface issues early on
+## Spot usability issues early on
 
 When you decide to write a test for your new feature you might realize that
 your interface is awkward to work with. This is really the simplest usability
