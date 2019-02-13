@@ -16,6 +16,9 @@ github](http://github.com/nmattia)):
    Nix's cool features like reproducibility guarantees, parallel builds and
    remote caches.
 
+ * [*niv* <i class="fa fa-github"></i>](http://github.com/nmattia/niv)
+    easy dependency management for Nix projects!
+
  * [*stutter* <i class="fa fa-github"></i>](http://github.com/nmattia/stutter)
    is a command-line string generator. You give it a regex-looking thing, it
    generates the strings.
