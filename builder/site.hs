@@ -5,6 +5,7 @@ import Data.Monoid (mappend)
 import Control.Monad (forM_)
 import Hakyll
 import Hakyll.Web.Pandoc (pandocCompiler)
+import System.FilePath  (joinPath, splitPath)
 
 myFeedConfiguration :: FeedConfiguration
 myFeedConfiguration = FeedConfiguration
@@ -67,17 +68,28 @@ main = hakyll $ do
         route idRoute
         compile copyFileCompiler
 
+    match "icons/*" $ do
+        route dropIconsRoute
+        compile copyFileCompiler
 
     forM_ [ "resume.pdf"
           , "resume.html"
           , "parallel-dna.pdf"
           , "regular-strands.pdf"
           , "schroedinger.pdf"
-          , "stone-age.pdf" ]
+          , "stone-age.pdf"
+          ]
           (\f -> match f (route idRoute >> compile copyFileCompiler))
 
-
 --------------------------------------------------------------------------------
+-- | Drop the `icons/` part from a route.
+dropIconsRoute :: Routes
+dropIconsRoute = customRoute $ \ident ->
+    let path0 = toFilePath ident in
+    case splitPath path0 of
+        "icons/" : path1 -> joinPath path1
+        _                  -> path0
+
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`

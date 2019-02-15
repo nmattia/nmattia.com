@@ -27,3 +27,16 @@ $ git -C gh-pages/ add -A
 $ git -C gh-pages/ commit -m "foo"
 $ git -C gh-pages/ push
 ```
+
+## Update the icons
+
+[RealFaviconGenerator] is used for generating the icons (and some more). Go
+there and upload a picture. This is used for the android color:
+
+> #3b6484
+
+Then download the generated zip and replace the current
+`./favicon_package_v0.16.zip` and copy the generate HTML to
+`templates/default.html`.
+
+[RealFaviconGenerator]: https://realfavicongenerator.net/

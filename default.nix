@@ -11,7 +11,10 @@ in
           let baseName = baseNameOf (toString name);
           # filter out gh-pages build output and all irrelevant stuff
           in ! (  type == "directory" && baseName == "gh-pages"
-              ||  type == "file" && baseName == ".gitignore") ;
+              ||  type == "file" && baseName == ".gitignore"
+              ||  type == "file" && baseName == "face.png"
+              ||  type == "file" && baseName == "favicon_package_v0.16.zip"
+              ||  type == "file" && baseName == "tags") ;
         src = pkgs.lib.cleanSource ./.;
       };
 
@@ -21,6 +24,9 @@ in
       export LANGUAGE=en_US.UTF-8
       cp ${pkgs.resume}/resume.pdf resume.pdf
       cp ${pkgs.resume}/resume.html resume.html
+
+      mkdir -p icons
+      unzip ${./favicon_package_v0.16.zip} -d icons
 
       # Create a file index for material/
       mkdir -p material
@@ -51,5 +57,5 @@ in
       touch $out/.nojekyll
     '';
 
-    buildInputs = [ pkgs.tree pkgs.glibcLocales ];
+    buildInputs = [ pkgs.tree pkgs.glibcLocales pkgs.unzip ];
   }

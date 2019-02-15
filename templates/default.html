@@ -10,12 +10,24 @@
 
         <title>Nicolas Mattia</title>
 
-        <!-- Appended '?v=X' for dirtying cache -->
-        <link rel="stylesheet" type="text/css" href="/css/default.css?v=1" />
+        <link rel="stylesheet" type="text/css" href="/css/default.css" />
         <link href="https://fonts.googleapis.com/css?family=Montserrat|Varela+Round" rel="stylesheet">
         <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
         <link rel="alternate" type="application/atom+xml" title="nmattia Atom feed" href="/atom.xml?type=blog" />
         <link rel="alternate" type="application/rss+xml" title="nmattia RSS feed" href="/rss.xml?type=blog" />
+
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#3b6484">
+        <meta name="msapplication-TileColor" content="#3b6484">
+        <meta name="theme-color" content="#3b6484">
+
+
+
     </head>
 
     <body>
@@ -43,14 +55,15 @@
         </div>
 
         <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          if (document.location.hostname.search("nmattia.com") !== -1) {
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-82921132-1', 'auto');
-    ga('send', 'pageview');
-
+            ga('create', 'UA-82921132-1', 'auto');
+            ga('send', 'pageview');
+          }
         </script>
     </body>
 </html>
