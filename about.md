@@ -1,3 +1,7 @@
+---
+title: About
+---
+
 <img src="/images/nmattia.jpg" style="float:right;width:250px;padding:30px" />
 I'm Nicolas Mattia, a software engineer based in Zurich, Switzerland. I work at
 [Tweag I/O](http://tweag.io), a software innovation lab based in Paris. We

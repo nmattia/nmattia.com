@@ -1,5 +1,6 @@
 ---
 title: Parallel Computing with DNA
+og_image: /images/blueprint.jpg
 ---
 
 

@@ -1,3 +1,7 @@
+---
+title: Blog
+---
+
  * [The 5 Raisons d'Être of testing](posts/2019-01-22-the-5-raisons-detre-of-testing.html)
  * [Easy Peasy Nix Versions](posts/2019-01-15-easy-peasy-nix-versions.html)
  * [Hunt bugs down before they are merged!](posts/2019-01-08-hunt-bugs-down-before-they-are-merged.html)
