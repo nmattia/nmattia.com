@@ -17,6 +17,8 @@ jobs:
             # Enable sandbox
             echo "build-use-sandbox = true" | sudo tee -a /etc/nix/nix.conf
 
+      - checkout
+
       - run:
           name: "Update Node.js and npm"
           command: |
@@ -26,8 +28,6 @@ jobs:
           name: Install netlify-cli
           command: |
             npm install netlify-cli
-
-      - checkout
 
       - run:
           name: Netlify deploy
