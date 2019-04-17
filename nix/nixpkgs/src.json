@@ -1,7 +1,7 @@
 {
   "owner": "NixOS",
-  "repo": "nixpkgs-channels",
-  "branch": "nixos-19.03",
-  "rev": "7b36963e7a7363f1b40ac0a829c4644923dda909",
-  "sha256": "00ni9yca0pyy8xc949sck5ppgprzcl8bbhl15l09wp03pxr90va5"
+  "repo": "nixpkgs",
+  "branch": "master",
+  "rev": "a88ec5e8a5c04be6b6214a77aa4bb94ac9da5bb2",
+  "sha256": "1xl5m8yc82w18934yhnif8ixlqlmdh6vh0ggr30j9xnpiff7gnkb"
 }
