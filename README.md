@@ -36,7 +36,7 @@ there and upload a picture. This is used for the android color:
 > #3b6484
 
 Then download the generated zip and replace the current
-`./favicon_package_v0.16.zip` and copy the generate HTML to
+`./favicon_package_v0.16.zip` and copy the generated HTML to
 `templates/default.html`.
 
 [RealFaviconGenerator]: https://realfavicongenerator.net/
