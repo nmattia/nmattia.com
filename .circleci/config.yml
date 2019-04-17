@@ -20,6 +20,11 @@ jobs:
       - checkout
 
       - run:
+          name: Build
+          command: |
+            nix-build --no-link
+
+      - run:
           name: "Update Node.js and npm"
           command: |
             nix-env -f ./nix -iA nodejs-8_x
