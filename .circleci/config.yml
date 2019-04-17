@@ -22,7 +22,7 @@ jobs:
       - run:
           name: "Update Node.js and npm"
           command: |
-            nix-env -f ./nix -iA nodejs-10_x
+            nix-env -f ./nix -iA nodejs-8_x
 
       - run:
           name: Install netlify-cli
