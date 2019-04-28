@@ -25,6 +25,7 @@ in
           "^material$"
           "^material/.*$"
           "^css$"
+          "^css/default.css$"
           "^css/font-awesome.min.css$"
           "^posts$"
           "^posts/.*$"

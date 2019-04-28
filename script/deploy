@@ -1,14 +1,12 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash
-#!nix-shell -I nixpkgs=./nix/nixpkgs
+#!nix-shell -I nixpkgs=./nix
 #!nix-shell -p bash
 #!nix-shell -p git
 #!nix-shell -p rsync
 #!nix-shell -p nix
 #!nix-shell --pure
 # vim: set ft=bash:
-
-# Updates the src.json to the latest commit
 
 set -euo pipefail
 

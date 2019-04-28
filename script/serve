@@ -2,7 +2,7 @@
 #!nix-shell -i bash
 #!nix-shell -p bash
 #!nix-shell -p haskellPackages.wai-app-static
-#!nix-shell -I nixpkgs=./nix/nixpkgs
+#!nix-shell -I nixpkgs=./nix
 #!nix-shell --pure
 # vim: set ft=bash:
 
