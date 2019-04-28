@@ -2,21 +2,34 @@
 
 let
   siteBuilder = pkgs.haskellPackages.callPackage ./builder { inherit (pkgs) lib; };
+  sourceByRegex = name: src: regexes:
+    builtins.path
+      { filter =  (path: type:
+          let
+            relPath = pkgs.lib.removePrefix (toString src + "/") (toString path);
+            accept = pkgs.lib.any (re: builtins.match re relPath != null) regexes;
+          in pkgs.lib.traceSeq [ accept relPath ] accept);
+          inherit name;
+          path = src;
+      };
 in
   pkgs.stdenv.mkDerivation rec {
     name = "nmattia-com-builder";
 
-    src = pkgs.lib.cleanSourceWith
-      { filter = name: type:
-          let baseName = baseNameOf (toString name);
-          # filter out gh-pages build output and all irrelevant stuff
-          in ! (  type == "directory" && baseName == "gh-pages"
-              ||  type == "file" && baseName == ".gitignore"
-              ||  type == "file" && baseName == "face.png"
-              ||  type == "file" && baseName == "favicon_package_v0.16.zip"
-              ||  type == "file" && baseName == "tags") ;
-        src = pkgs.lib.cleanSource ./.;
-      };
+    src = sourceByRegex "nmattia-com" ./.
+        [ "^.*.pdf$"
+          "^images$"
+          "^images/.*$"
+          "^templates$"
+          "^templates/.*$"
+          "^material$"
+          "^material/.*$"
+          "^css$"
+          "^css/font-awesome.min.css$"
+          "^posts$"
+          "^posts/.*$"
+          "^[^R].*.md$" # allow all markdown files except README
+        ];
 
     buildPhase = ''
       export LC_ALL=en_US.UTF-8
