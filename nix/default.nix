@@ -1,5 +1,6 @@
 let
-  pkgs = ./nixpkgs;
+  sources = import ./sources.nix;
+  pkgs = sources.nixpkgs;
   fetchOverlay = self: super:
     { fetch = path:
         let
@@ -13,7 +14,7 @@ let
     { overlays =
         [
           fetchOverlay
-          (import ./resume/overlay.nix)
+          (self: super: { resume = import sources.resume { pkgs = self; }; })
         ];
     };
 in import pkgs extra

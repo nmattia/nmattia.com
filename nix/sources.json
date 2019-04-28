@@ -1,0 +1,35 @@
+{
+    "nixpkgs":
+    {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "branch": "master",
+        "rev": "a88ec5e8a5c04be6b6214a77aa4bb94ac9da5bb2",
+        "sha256": "1xl5m8yc82w18934yhnif8ixlqlmdh6vh0ggr30j9xnpiff7gnkb",
+        "url": "https://github.com/NixOS/nixpkgs/archive/a88ec5e8a5c04be6b6214a77aa4bb94ac9da5bb2.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+    ,
+    "niv": {
+        "homepage": "https://github.com/nmattia/niv",
+        "url": "https://github.com/nmattia/niv/archive/a489b65a5c3a29983701069d1ce395b23d9bde64.tar.gz",
+        "owner": "nmattia",
+        "branch": "master",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
+        "repo": "niv",
+        "type": "tarball",
+        "sha256": "0mvh2x4l4f3nbgzzygk317nkzbyj3xgnczivgdra4q82dg8x77ka",
+        "description": "Easy dependency management for Nix projects",
+        "rev": "a489b65a5c3a29983701069d1ce395b23d9bde64"
+    }, "resume":
+    {
+        "owner": "nmattia",
+        "repo": "resume",
+        "branch": "master",
+        "rev": "55190b404ca7b2fc52f3db3f582bf40b5f6bac45",
+        "sha256": "0fpp4in29ylk9dvwwv9gky5qkrm5j4rj7pd03nars8278rl0bsqn",
+        "url": "https://github.com/nmattia/resume/archive/55190b404ca7b2fc52f3db3f582bf40b5f6bac45.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+
+}
