@@ -1,3 +1,4 @@
+{}:
 let
   sources = import ./sources.nix;
   pkgs = sources.nixpkgs;

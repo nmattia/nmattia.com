@@ -1,4 +1,4 @@
-{ pkgs ? import ./nix }:
+{ pkgs ? import ./nix {} }:
 
 let
   siteBuilder = pkgs.haskellPackages.callPackage ./builder { inherit (pkgs) lib; };
