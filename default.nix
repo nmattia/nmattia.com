@@ -18,6 +18,7 @@ in
 
     src = sourceByRegex "nmattia-com" ./.
         [ "^.*.pdf$"
+          "^boot$"
           "^images$"
           "^images/.*$"
           "^templates$"
