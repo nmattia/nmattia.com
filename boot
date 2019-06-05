@@ -2,6 +2,7 @@
 # vim: set ft=bash
 
 set -x
+set -euo pipefail
 
 run_root() {
   if [[ $EUID -ne 0 ]]; then
@@ -21,9 +22,15 @@ run_user() {
   fi
 }
 
-run_root apt update
-run_root apt upgrade -y
-run_root apt install mosh -y
+if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]
+then
+    echo "Debian system, upgrading"
+    run_root apt update
+    run_root apt upgrade -y
+    run_root apt install mosh -y
+else
+    echo "Not Debian system, not upgrading"
+fi
 
 if id -u nicolas
 then

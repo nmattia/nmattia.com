@@ -78,6 +78,7 @@ main = hakyll $ do
           , "regular-strands.pdf"
           , "schroedinger.pdf"
           , "stone-age.pdf"
+          , "boot"
           ]
           (\f -> match f (route idRoute >> compile copyFileCompiler))
 
