@@ -6,9 +6,11 @@ set -euo pipefail
 
 run_root() {
   if [[ $EUID -ne 0 ]]; then
-    sudo "$@"
+    str="$@"
+    sudo "$str"
   else
-    "$@"
+    str="$@"
+    bash -c "$str"
   fi
 }
 
