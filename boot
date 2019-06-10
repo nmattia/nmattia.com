@@ -51,6 +51,8 @@ else
     run_root chown nicolas /nix
     run_user 'curl https://nixos.org/nix/install | sh'
     run_user "echo '. ~/.nix-profile/etc/profile.d/nix.sh' >> ~/.bashrc"
+    run_root mkdir -p /etc/nix
+    run_root 'echo "sandbox = true" > /etc/nix/nix.conf'
 fi
 
 
