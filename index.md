@@ -1,6 +1,5 @@
-I'm an engineer living in Switzerland and working at [Tweag
-I/O](http://tweag.io). For more, checkout the [about page](/about.html).
-
+I'm an engineer living in Switzerland. For more, checkout the [about
+page](/about.html).
 
 Here are some projects I played with lately (there's more [on
 github](http://github.com/nmattia)):
