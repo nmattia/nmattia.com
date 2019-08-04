@@ -35,7 +35,6 @@
     font-style: normal;
 }
 
-
 /* http://meyerweb.com/eric/tools/css/reset/
 v2.0 | 20110126
 License: none (public domain)
@@ -87,14 +86,11 @@ table {
     border-spacing: 0;
 }
 
-
 /* Tufte CSS styles */
 
 .nav ul {
     list-style-type: none;
 }
-
-
 
 body {
     font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
