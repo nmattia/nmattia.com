@@ -1,35 +1,38 @@
 {
     "nixpkgs": {
-        "url": "https://github.com/NixOS/nixpkgs/archive/a88ec5e8a5c04be6b6214a77aa4bb94ac9da5bb2.tar.gz",
+        "homepage": null,
+        "url": "https://github.com/NixOS/nixpkgs/archive/90b1b55e3e108e90c93f1c13edd7beab35379ea5.tar.gz",
         "owner": "NixOS",
-        "branch": "master",
+        "branch": "release-19.03",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
         "repo": "nixpkgs",
-        "sha256": "1xl5m8yc82w18934yhnif8ixlqlmdh6vh0ggr30j9xnpiff7gnkb",
-        "rev": "a88ec5e8a5c04be6b6214a77aa4bb94ac9da5bb2"
+        "type": "tarball",
+        "sha256": "17qky07f88wp5z35bpdq871qjwvyvm0ffkhzpl6vgc5zqmn43i0v",
+        "description": "Nix Packages collection",
+        "rev": "90b1b55e3e108e90c93f1c13edd7beab35379ea5"
     },
     "resume": {
         "homepage": "https://nmattia.com/resume.html",
-        "url": "https://github.com/nmattia/resume/archive/1fbcc9d7a1dffa2152b6d605ced76150d62d2abd.tar.gz",
+        "url": "https://github.com/nmattia/resume/archive/60016a859de157ac961ee913f3f978b2ee1fdc8a.tar.gz",
         "owner": "nmattia",
         "branch": "master",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
         "repo": "resume",
         "type": "tarball",
-        "sha256": "175kiaf1gmgzx6y6g1k8f3hzahpxms5biba7avqghy2wl4sm2m58",
+        "sha256": "1y7y2cwf7mdhwkqgpnqjr94gxqy9ymc86zvwpmg3s10wnlx6im3i",
         "description": "My resume",
-        "rev": "1fbcc9d7a1dffa2152b6d605ced76150d62d2abd"
+        "rev": "60016a859de157ac961ee913f3f978b2ee1fdc8a"
     },
     "niv": {
         "homepage": "https://github.com/nmattia/niv",
-        "url": "https://github.com/nmattia/niv/archive/a489b65a5c3a29983701069d1ce395b23d9bde64.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/8b7b70465c130d8d7a98fba1396ad1481daee518.tar.gz",
         "owner": "nmattia",
         "branch": "master",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
         "repo": "niv",
         "type": "tarball",
-        "sha256": "0mvh2x4l4f3nbgzzygk317nkzbyj3xgnczivgdra4q82dg8x77ka",
+        "sha256": "0fgdrxn2vzpnzr6pxaiyn5zzbd812c6f7xjjhfir0kpzamjnxwwl",
         "description": "Easy dependency management for Nix projects",
-        "rev": "a489b65a5c3a29983701069d1ce395b23d9bde64"
+        "rev": "8b7b70465c130d8d7a98fba1396ad1481daee518"
     }
 }

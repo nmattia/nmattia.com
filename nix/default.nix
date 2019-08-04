@@ -1,7 +1,6 @@
 {}:
 let
   sources = import ./sources.nix;
-  pkgs = sources.nixpkgs;
   fetchOverlay = self: super:
     { fetch = path:
         let
@@ -18,4 +17,8 @@ let
           (self: super: { resume = import sources.resume { pkgs = self; }; })
         ];
     };
-in import pkgs extra
+  pkgs = import sources.nixpkgs extra;
+in
+pkgs //
+  { resume = import sources.resume { inherit pkgs; }; } //
+  { niv = (import sources.niv { inherit pkgs; }).niv; }

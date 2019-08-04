@@ -8,7 +8,7 @@ let
           let
             relPath = pkgs.lib.removePrefix (toString src + "/") (toString path);
             accept = pkgs.lib.any (re: builtins.match re relPath != null) regexes;
-          in pkgs.lib.traceSeq [ accept relPath ] accept);
+          in accept);
           inherit name;
           path = src;
       };
@@ -37,8 +37,8 @@ in
       export LC_ALL=en_US.UTF-8
       export LANG=en_US.UTF-8
       export LANGUAGE=en_US.UTF-8
-      cp ${pkgs.resume}/resume.pdf resume.pdf
-      cp ${pkgs.resume}/resume.html resume.html
+      cp ${pkgs.resume.pdf}/resume.pdf resume.pdf
+      cp ${pkgs.resume.html}/resume.html resume.html
 
       mkdir -p icons
       unzip ${./favicon_package_v0.16.zip} -d icons
