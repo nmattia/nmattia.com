@@ -1,4 +1,16 @@
 {
+    "hakyll": {
+        "branch": "master",
+        "description": "A static website compiler library in Haskell",
+        "homepage": "jaspervdj.be/hakyll",
+        "owner": "jaspervdj",
+        "repo": "hakyll",
+        "rev": "680bd76de4945c79b950d22f8baf9a1e78454661",
+        "sha256": "1jd7d2y8nxswayhy7py7xxwdpy8y3y62f5cpm8fgn2rs7qisx5y6",
+        "type": "tarball",
+        "url": "https://github.com/jaspervdj/hakyll/archive/680bd76de4945c79b950d22f8baf9a1e78454661.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "niv": {
         "branch": "master",
         "description": "Easy dependency management for Nix projects",
@@ -17,10 +29,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "314e2acfe83827b0946492aa620d8e37f0f29602",
-        "sha256": "036adxjidb6sxrjyd9j95mk2rpsxsjlk1rkvhbza4myhqq7crn0v",
+        "rev": "90b1b55e3e108e90c93f1c13edd7beab35379ea5",
+        "sha256": "17qky07f88wp5z35bpdq871qjwvyvm0ffkhzpl6vgc5zqmn43i0v",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/314e2acfe83827b0946492aa620d8e37f0f29602.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/90b1b55e3e108e90c93f1c13edd7beab35379ea5.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "resume": {
@@ -29,10 +41,22 @@
         "homepage": "https://nmattia.com/resume.html",
         "owner": "nmattia",
         "repo": "resume",
-        "rev": "4f6a059f385b41aea2ce4cd9749864b47771f81c",
-        "sha256": "1i590q6agnbssn79sxrds41x6mw2vlw3an7ac6ab5j2pk1apjlva",
+        "rev": "60016a859de157ac961ee913f3f978b2ee1fdc8a",
+        "sha256": "1y7y2cwf7mdhwkqgpnqjr94gxqy9ymc86zvwpmg3s10wnlx6im3i",
         "type": "tarball",
-        "url": "https://github.com/nmattia/resume/archive/4f6a059f385b41aea2ce4cd9749864b47771f81c.tar.gz",
+        "url": "https://github.com/nmattia/resume/archive/60016a859de157ac961ee913f3f978b2ee1fdc8a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "tufte-css": {
+        "branch": "gh-pages",
+        "description": "Style your webpage like Edward Tufte’s handouts.",
+        "homepage": "https://edwardtufte.github.io/tufte-css/",
+        "owner": "edwardtufte",
+        "repo": "tufte-css",
+        "rev": "7d2e450c01b21fde4b936d5818472525a13b638e",
+        "sha256": "1m087yvjg9l27jxcpq8rfqxd6jmh68s7qydwiqayqcaqzxvcnwii",
+        "type": "tarball",
+        "url": "https://github.com/edwardtufte/tufte-css/archive/7d2e450c01b21fde4b936d5818472525a13b638e.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
