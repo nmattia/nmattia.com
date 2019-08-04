@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html>
-    <head>
+  <head>
 
-        <!-- proper charset -->
-        <meta charset="utf-8">
-        <!-- Disable mobile scaling -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- proper charset -->
+    <meta charset="utf-8">
+    <!-- Disable mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-        <title>Nicolas Mattia$if(title)$ &ndash; $title$ $endif$</title>
+    <title>Nicolas Mattia$if(title)$ &ndash; $title$ $endif$</title>
 
-        <link rel="stylesheet" type="text/css" href="/css/default.css" />
-        <link href="https://fonts.googleapis.com/css?family=Montserrat|Varela+Round" rel="stylesheet">
-        <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
-        <link rel="alternate" type="application/atom+xml" title="nmattia Atom feed" href="/atom.xml?type=blog" />
-        <link rel="alternate" type="application/rss+xml" title="nmattia RSS feed" href="/rss.xml?type=blog" />
+    <!-- the "hash=..." is replace with the hash of the CSS file -->
+    <link rel="stylesheet" type="text/css" href="/styles/default.css?hash=XXX" />
+    <link rel="alternate" type="application/atom+xml" title="nmattia Atom feed" href="/atom.xml?type=blog" />
+    <link rel="alternate" type="application/rss+xml" title="nmattia RSS feed" href="/rss.xml?type=blog" />
 
-        <!-- OG tags -->
-        $if(title)$<meta property="og:title" content="$title$" />$endif$
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://nmattia.com$url$" />
-        $if(og_image)$<meta property="og:image" content="https://nmattia.com$og_image$" />$endif$
+    <!-- comes from favicon generator -->
 
-        <!-- favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/site.webmanifest">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#3b6484">
-        <meta name="msapplication-TileColor" content="#3b6484">
-        <meta name="theme-color" content="#3b6484">
+    <!-- OG tags -->
+    $if(title)$<meta property="og:title" content="$title$" />$endif$
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://nmattia.com$url$" />
+    $if(og_image)$<meta property="og:image" content="https://nmattia.com$og_image$" />$endif$
 
-    </head>
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#3b6484">
+    <meta name="msapplication-TileColor" content="#3b6484">
+    <meta name="theme-color" content="#3b6484">
 
-    <body>
-        <div class="main">
-            <div class="header">
-                <div class="logo">
-                    <a href="/" class="home">Nicolas Mattia</br></a>
-                    <div class="links">
-                        <a href="https://www.github.com/nmattia"><i class="fa fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/nicolas-mattia/"><i class="fa fa-linkedin"></i></a>
-                        <a href="mailto:nicolas@nmattia.com"><i class="fa fa-envelope-o"></i></a>
-                    </div>
-                </div>
-                <div class="nav">
-                    <ul>
-                        <li><a href="/">home</a></li>
-                        <li><a href="/blog.html">blog</a></li>
-                        <li><a href="/about.html">about</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="content">
-                $body$
-            </div>
-        </div>
+    <!-- over and out -->
 
-        <script>
-          if (document.location.hostname.search("nmattia.com") !== -1) {
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  </head>
 
-            ga('create', 'UA-82921132-1', 'auto');
-            ga('send', 'pageview');
-            ga('set', 'anonymizeIp', true);
-          }
-        </script>
-    </body>
+  <body>
+    <div class="header">
+      <div class="nav">
+        <span class="links">
+        <a href="/" class="home">home</a>
+        <a href="/blog.html">blog</a>
+        <a href="/about.html">about</a>
+        </span>
+        <span class="social">
+          <a href="https://www.github.com/nmattia"><ion-icon name="logo-github"></ion-icon></a>
+          <a href="https://www.linkedin.com/in/nicolas-mattia/"><ion-icon name="logo-linkedin"></ion-icon></a>
+          <a href="mailto:nicolas@nmattia.com"><ion-icon name="mail"></ion-icon></a>
+        </span>
+      </div>
+      <!--<div class="logo">-->
+        <!--<a href="/" class="home">Nicolas Mattia</br></a>-->
+        <!--<a href="https://www.github.com/nmattia">github</a>-->
+        <!--<a href="https://www.linkedin.com/in/nicolas-mattia/">linkedin</a>-->
+        <!--<a href="mailto:nicolas@nmattia.com">email</a>-->
+      <!--</div>-->
+      <!--<div class="nav">-->
+        <!--<a href="/">home</a>-->
+        <!--<a href="/blog.html">blog</a>-->
+        <!--<a href="/about.html">about</a>-->
+      <!--</div>-->
+    </div>
+    <div class="content">
+      $body$
+    </div>
+
+    <script>
+      if (document.location.hostname.search("nmattia.com") !== -1) {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-82921132-1', 'auto');
+        ga('send', 'pageview');
+        ga('set', 'anonymizeIp', true);
+      }
+    </script>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+  </body>
 </html>

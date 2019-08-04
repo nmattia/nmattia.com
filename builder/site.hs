@@ -22,11 +22,11 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/default.css" $ do
+    match "styles/default.css" $ do
         route   idRoute
         compile compressCssCompiler
 
-    match "css/font-awesome/**/*" $ do
+    match "styles/fonts/**/*" $ do
         route idRoute
         compile copyFileCompiler
 

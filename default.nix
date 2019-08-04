@@ -1,6 +1,7 @@
 { pkgs ? import ./nix {} }:
 
 let
+  sources = import ./nix/sources.nix;
   siteBuilder = pkgs.haskellPackages.callPackage ./builder { inherit (pkgs) lib; };
   sourceByRegex = name: src: regexes:
     builtins.path
@@ -25,9 +26,8 @@ in
           "^templates/.*$"
           "^material$"
           "^material/.*$"
-          "^css$"
-          "^css/default.css$"
-          "^css/font-awesome.min.css$"
+          "^styles$"
+          "^styles/default.css$"
           "^posts$"
           "^posts/.*$"
           "^[^R].*.md$" # allow all markdown files except README
@@ -40,8 +40,17 @@ in
       cp ${pkgs.resume.pdf}/resume.pdf resume.pdf
       cp ${pkgs.resume.html}/resume.html resume.html
 
+      cat ${sources.hakyll}/web/css/syntax.css >> ./styles/default.css
+
+      css_hash=$(md5sum ./styles/default.css | cut -d ' ' -f 1)
+
+      echo $css_hash
+      sed -i "s:hash=XXX:$css_hash:g" ./templates/default.html
+
       mkdir -p icons
       unzip ${./favicon_package_v0.16.zip} -d icons
+
+      cp -r ${sources.tufte-css}/et-book ./styles/fonts
 
       # Create a file index for material/
       mkdir -p material

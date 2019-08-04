@@ -1,25 +1,29 @@
 I'm an engineer living in Switzerland. For more, checkout the [about
 page](/about.html).
 
+<hr>
+
 Here are some projects I played with lately (there's more [on
 github](http://github.com/nmattia)):
 
- * [*snack* <i class="fa fa-github"></i>](http://github.com/nmattia/snack)
+ * [*snack*<i class="fa fa-github"></i>](http://github.com/nmattia/snack)
    is a build tool that uses the power of Nix to build Haskell projects. It is
    configured with Hpack, performs incremental builds and benefits from all of
    Nix's cool features like reproducibility guarantees, parallel builds and
    remote caches.
 
- * [*niv* <i class="fa fa-github"></i>](http://github.com/nmattia/niv)
+ * [*niv*<i class="fa fa-github"></i>](http://github.com/nmattia/niv)
     easy dependency management for Nix projects!
 
- * [*stutter* <i class="fa fa-github"></i>](http://github.com/nmattia/stutter)
+ * [*stutter*<i class="fa fa-github"></i>](http://github.com/nmattia/stutter)
    is a command-line string generator. You give it a regex-looking thing, it
    generates the strings.
 
- * [*mask* <i class="fa fa-github"></i>](http://github.com/nmattia/mask) is a
+ * [*mask*<i class="fa fa-github"></i>](http://github.com/nmattia/mask) is a
    Makefile parser for Haskell. More in the
    [docs](http://nmattia.github.io/mask/).
+
+<hr>
 
 Here are some thoughts about software (you can find more in the [blog
 section](/blog.html)):
