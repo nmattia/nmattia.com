@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Build
           command: |
-            nix-build --no-link
+            nix-build --no-link --sandbox --max-jobs 20
 
       - run:
           name: "Update Node.js and npm"
