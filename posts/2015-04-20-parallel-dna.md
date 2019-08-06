@@ -3,7 +3,6 @@ title: Parallel Computing with DNA
 og_image: /images/blueprint.jpg
 ---
 
-
 DNA. Everybody knows that DNA is the blueprint by which our cells replicate.
 Everybody knows that Horatio Caine uses it to catch bad guys. **But... what if
 we used DNA to build supercomputers?** That is definitely science-fiction... or
@@ -13,8 +12,6 @@ bird's DNA to grow an optimal plane out of it. **I thought I would demystify it
 a bit.**
 
 <img src="/images/blueprint.jpg" style="float:left;width:250px;padding:15px" />
-
-
 
 ### A bit of history
 
@@ -67,7 +64,6 @@ When scenarios like that show up, it drives some scientists mad, and sometimes
 gives them weird ideas. Among those is trying to solve NP-Complete problems
 with DNA.
 
-
 ### DNA algorithms
 
 **DNA strands** are like little strings (or sentences) containing
@@ -84,7 +80,6 @@ to one another. If two DNA strands happen to contain sequences of complementary
 characters, they will attract each other, and clamp together, giving long
 **DNA** strands their **[sexy
 shape](https://en.wikipedia.org/wiki/Nucleic_acid_double_helix)**.
-
 
 Now, let's be serious, it's 2015. And in 2015 you can **design your DNA**
 strands and have them produced. Let's do exactly that (at least the design
@@ -108,8 +103,6 @@ bucket, fill it up with water, and throw our twelve thousand DNA strands in it.
 **Congratulations**, you just built and programmed **your first DNA computer**!
 
 <img src="/images/nine-minus-three.jpg" style="width:300px;float:right"/>
-
-
 
 Let's get that straight, right now: **you won't be running Minecraft on it
 anytime soon**. But what exactly happens in the bucket? First of all, both
@@ -144,7 +137,6 @@ by far that of a computer (if you can run the given algorithm in a first
 place). Yet, it is promising, and in the end theoricists don't care that much
 if it will work one day.
 
-
 ### My contributions
 
 Last February, I completed a research project as part of my Master's studies. I
@@ -172,19 +164,3 @@ complain about anything: just drop me a word in the comments below!
  * Qian, L., Winfree, E.: Scaling up digital circuit computation with dna strand displacement cascades. In: Science Magazine. (June 2011)
 
  *Also, Microsoft developed [a tool](http://research.microsoft.com/en-us/projects/dna/) for visualizing DNA computing. Have fun!*
-
-
-
-
-
-
-
-
-
- <script type="text/javascript"     src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
- <script type="text/x-mathjax-config">
- MathJax.Hub.Config({
-     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-     });
-     </script>
