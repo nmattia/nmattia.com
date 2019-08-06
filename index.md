@@ -1,30 +1,62 @@
+
+<div class="intro">
+
+<h2>Nicolas Mattia</h2>
+
 I'm an engineer living in Switzerland. For more, checkout the [about
 page](/about.html).
 
-<hr>
-
-Here are some projects I played with lately (there's more [on
-github](http://github.com/nmattia)):
-
- * [*snack*<i class="fa fa-github"></i>](http://github.com/nmattia/snack)
-   is a build tool that uses the power of Nix to build Haskell projects. It is
-   configured with Hpack, performs incremental builds and benefits from all of
-   Nix's cool features like reproducibility guarantees, parallel builds and
-   remote caches.
-
- * [*niv*<i class="fa fa-github"></i>](http://github.com/nmattia/niv)
-    easy dependency management for Nix projects!
-
- * [*stutter*<i class="fa fa-github"></i>](http://github.com/nmattia/stutter)
-   is a command-line string generator. You give it a regex-looking thing, it
-   generates the strings.
-
- * [*mask*<i class="fa fa-github"></i>](http://github.com/nmattia/mask) is a
-   Makefile parser for Haskell. More in the
-   [docs](http://nmattia.github.io/mask/).
+</div>
 
 <hr>
 
+
+<div class="portfolio">
+
+<h2>Some of my Work</h2>
+
+<br/>
+
+<div class="portfolio-cards">
+
+<div class="card" onclick="location.href = 'https://github.com/nmattia/snack'">
+<div class="container">
+<h3><b>snack</b></h3>
+<p>
+A Haskell build tool written in Nix. Fully incremental, reproducible, parallel,
+remote builds.
+</p>
+</div>
+</div>
+
+<div class="card">
+<div class="container">
+<h3><b>niv</b></h3>
+<p>
+Painless dependencies for Nix projects. Simplify your code and streamline your
+workflow.
+</p>
+</div>
+</div>
+
+<div class="card">
+<div class="container">
+<h3><b>DeckDeckGo</b></h3>
+<p>
+The Progressive Web App alternative for simple presentations. <br/> 50%
+TypeScript, 50% Haskell, and 100% Terraform and Nix.
+</p>
+</div>
+</div>
+</div>
+
+Find more on [GitHub](https://github.com/nmattia).
+
+</div>
+
+<hr>
+
+<div class="blog">
 Here are some thoughts about software (you can find more in the [blog
 section](/blog.html)):
 
@@ -37,3 +69,5 @@ section](/blog.html)):
  * [Recovering forgotten passwords with stutter and GNU parallel](posts/2017-03-05-crack-luks-stutter-gnu-parallel.html)
  * [Lens and Linear: 2048's logic in 22 lines](posts/2016-08-19-lens-linear-2048.html)
  * [Parallel computing with DNA](posts/2015-04-20-parallel-dna.html)
+
+</div>
