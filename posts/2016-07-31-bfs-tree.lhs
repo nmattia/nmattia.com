@@ -11,14 +11,17 @@ languages, and I thought I'd have a go at them using Haskell. I'll share
 today's experience, which hopefully will convince you that purely functional
 languages are (sometimes) suitable for puzzles.
 
-====Disclaimer:
+Disclaimer
+---
+
 *There is probably nothing new here. Also, there might be better
 solutions to solve the problem. I like this solution because it gave me an
 excuse to showcase Haskell's laziness. Feel free to ping me if you come up with
 something better.*
 
+The puzzle
+---
 
-====The puzzle
 Let's start with the problem itself. You are given a number, $x_0$, and a
 target, $x_f$. You are allowed two functions:
     $f(x) = 2 x + 1$
@@ -60,7 +63,8 @@ we can conclude that $x_f
 - x_0 > 2 ^ d$ and so our algorithm should run in $O(x_f - x_0)$. Now let's
   write some code.
 
-====The code
+The code
+---
 
 > import System.Environment (getArgs)
 
@@ -118,7 +122,6 @@ to check whether or not we have already visited the current node).  If you know
 your functional data structures, you'll recognize a typical queue:
 
 ``` haskell
-
 data Queue a = Queue { front :: [a]
                      , back  :: [a] }
 ```
@@ -131,7 +134,8 @@ reverse the back, see Okasaki's [Purely Functional
 Data Structures](https://www.cs.cmu.edu/~rwh/theses/okasaki.pdf) for a good
 overview).
 
-====The search
+The search
+---
 
 Easy enough. Now we just need a `State Queue` monad, traverse the tree, and
 update our queue every time, discarding the old one. Also, we'll need a `Writer
@@ -189,7 +193,6 @@ hit either $x_f$ or a number that we know is too large:
 >               | otherwise         = go ts
 >
 
-
 *Et voilà!* We can go a bit fancy and add a cli (that will happily crash on you
 on bad input):
 
@@ -224,3 +227,13 @@ posts/2016-07-31-bfs-tree 1 10000000000  1.49s user 0.62s system 99% cpu 2.111 t
 To get it to run on larger inputs, I suspect one would need to find a better
 algorithm. It would maybe even allow replacing `Int`s with `Integer`s. Once
 again, if you do find something, please get in touch : )
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
