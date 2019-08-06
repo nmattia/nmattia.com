@@ -29,7 +29,7 @@ remote builds.
 </div>
 </div>
 
-<div class="card">
+<div class="card" onclick="location.href = 'https://github.com/nmattia/niv'">
 <div class="container">
 <h3><b>niv</b></h3>
 <p>
@@ -39,7 +39,7 @@ workflow.
 </div>
 </div>
 
-<div class="card">
+<div class="card" onclick="location.href = 'https://beta.deckdeckgo.com/'">
 <div class="container">
 <h3><b>DeckDeckGo</b></h3>
 <p>
