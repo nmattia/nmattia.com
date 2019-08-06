@@ -361,6 +361,7 @@ label.margin-toggle:not(.sidenote-number) {
     height: 100%;
 }
 
+/* Big screens */
 @media (min-width: 1112px) {
 
     .content
@@ -375,9 +376,12 @@ label.margin-toggle:not(.sidenote-number) {
         font-size: 1.8rem;
     }
 
-
+    .card
+    {   max-width: 250px;
+    }
 }
 
+/* small screen */
 @media (max-width: 1112px) {
 
     .header {
@@ -496,6 +500,50 @@ label.margin-toggle:not(.sidenote-number) {
 
 .header .nav .social {
     float: right;
+}
+
+.intro { margin: 8vh 0; text-align: center }
+
+.portfolio {
+    margin: 8vh auto;
+    text-align: center;
+}
+.blog { margin: 8vh 0; }
+
+/* Portfolio */
+
+.portfolio-cards {
+    /*text-align: center;*/
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  display: inline-block;
+  margin: 30px;
+  font-size: 0.8rem;
+}
+
+.card h3
+    { text-align: center;
+    }
+
+.card p
+    {font-size: 1.2rem;
+    }
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    cursor:pointer;
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
 }
 
 
