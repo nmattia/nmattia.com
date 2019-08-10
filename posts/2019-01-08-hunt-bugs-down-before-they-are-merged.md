@@ -12,7 +12,7 @@ and talk a bit about merge queues.
 
 <style>
 .story {
-  background-color: lightblue;
+  background-color: #d6d6c7;
   padding: 20px;
   border-radius: 10px;
 }
@@ -67,6 +67,7 @@ The following HTTP call returns the list of all of a user's notes:
 ``` http
 GET /users/<user>/notes?query=<prefix>
 ```
+
 </div>
 
 ### It gets in the way
