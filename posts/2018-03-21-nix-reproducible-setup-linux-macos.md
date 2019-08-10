@@ -1,8 +1,6 @@
 ---
-title: Nix -- A Reproducible Setup for Linux and macOS
+title: "Nix: A Reproducible Setup for Linux and macOS"
 ---
-
-# Nix: A Reproducible Setup for Linux and macOS
 
 This post describes how I set up a reproducible development environment in a
 few seconds on any Linux distribution (and potentially macOS as well). This
@@ -10,6 +8,8 @@ setup includes simple executables (curl, git) but also programs with custom
 configurations and dotfiles (`vim`, `tmux`). The Nix language is used to
 describe the system configuration, which you can find [on github][homies] and
 follow along.
+
+<!--more-->
 
 ---
 

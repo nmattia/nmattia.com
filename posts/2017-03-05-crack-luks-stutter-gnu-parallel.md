@@ -1,5 +1,11 @@
+---
+title: Recovering forgotten passwords with stutter and GNU parallel
+---
+
 A few days ago I found myself with two terabytes' worth of my personal data
 encrypted but only half of a password. Here are notes from the adventure.
+
+<!--more-->
 
 I used the following tools to recover my password:
 

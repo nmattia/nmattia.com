@@ -1,15 +1,22 @@
 ---
 title: Puzzle solving in Haskell
----
+teaser: "
 
-*This is a literate Haskell file. You can find this code on
-[Github](https://github.com/nmattia/nmattia.com/blob/master/posts/2016-07-31-bfs-tree.lhs) and follow along in `ghci`.*
+In order to warm up for a round of interviews next week, I've been playing
+around with coding puzzles. Those are usually solved using imperative
+languages, and I thought I'd have a go at them using Haskell. I'll share
+today's experience, which hopefully will convince you that purely functional
+languages are (sometimes) suitable for puzzles."
+---
 
 In order to warm up for a round of interviews next week, I've been playing
 around with coding puzzles. Those are usually solved using imperative
 languages, and I thought I'd have a go at them using Haskell. I'll share
 today's experience, which hopefully will convince you that purely functional
 languages are (sometimes) suitable for puzzles.
+
+*This is a literate Haskell file. You can find this code on
+[Github](https://github.com/nmattia/nmattia.com/blob/master/posts/2016-07-31-bfs-tree.lhs) and follow along in `ghci`.*
 
 Disclaimer
 ---

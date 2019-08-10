@@ -30,9 +30,19 @@ main = hakyll $ do
         route idRoute
         compile copyFileCompiler
 
-    match (fromList ["blog.md", "index.md"]) $ do
+
+    match "blog.html" $ do
+      route idRoute
+      compile copyFileCompiler
+
+    match "index.md" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ do
+          let posts = recentFirst =<< loadAllSnapshots "posts/*" "content"
+          let indexCtx = listField "posts" postCtx posts <> defaultContext
+          getResourceBody
+            >>= applyAsTemplate indexCtx
+            >>= renderPandoc
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
@@ -42,28 +52,28 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompiler
               >>= saveSnapshot "content"
+              >>= loadAndApplyTemplate "templates/post.html" defaultContext
               >>= loadAndApplyTemplate "templates/default.html" defaultContext
               >>= relativizeUrls
 
+    let feedCtx = postCtx `mappend` bodyField "description"
+
+    let posts =
+          fmap (take 10) .
+          recentFirst =<< loadAllSnapshots "posts/*" "content"
+
     create ["atom.xml"] $ do
       route idRoute
-      compile $ do
-          let feedCtx = postCtx `mappend` bodyField "description"
-          posts <- fmap (take 10) . recentFirst =<<
-                   loadAllSnapshots "posts/*" "content"
-          renderAtom myFeedConfiguration feedCtx posts
+      compile $ renderAtom myFeedConfiguration feedCtx =<< posts
 
     create ["rss.xml"] $ do
       route idRoute
-      compile $ do
-        let feedCtx = postCtx `mappend` bodyField "description"
-        posts <- fmap (take 10) . recentFirst =<<
-                 loadAllSnapshots "posts/*" "content"
-        renderAtom myFeedConfiguration feedCtx posts
+      compile $ renderAtom myFeedConfiguration feedCtx =<< posts
 
     match "material/index.html" $ do
         route idRoute
         compile copyFileCompiler
+
     match "material/**/*" $ do
         route idRoute
         compile copyFileCompiler
@@ -93,5 +103,6 @@ dropIconsRoute = customRoute $ \ident ->
 
 postCtx :: Context String
 postCtx =
+    teaserField "teaser" "content" <>
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext

@@ -1,5 +1,5 @@
 ---
-title: Parallel Computing with DNA
+title: "Parallel Computing with DNA"
 og_image: /images/blueprint.jpg
 ---
 
@@ -10,6 +10,8 @@ is it? As I was working on DNA computing, I got my fair share of people staring
 at me like I was crazy. Someone even asked me if I could find a way to take a
 bird's DNA to grow an optimal plane out of it. **I thought I would demystify it
 a bit.**
+
+<!--more-->
 
 <img src="/images/blueprint.jpg" style="float:left;width:250px;padding:15px" />
 

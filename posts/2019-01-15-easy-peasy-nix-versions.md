@@ -2,20 +2,12 @@
 title: Easy Peasy Nix Versions
 ---
 
-<style>
-.story {
-  background-color: lightblue;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-</style>
-
-# Easy Peasy Nix Versions
 
 This is a convention for using third-party packages in Nix. It has a simple
 directory structure, makes using the packages straightforward and automatizes
 updates.
+
+<!--more-->
 
 ---
 
@@ -36,6 +28,16 @@ job very well for small- to medium-sized project.
 ## Specifying and fetching third-party packages
 
 We'll take the [homies] repository as an example.
+
+
+<style>
+.story {
+  background-color: lightblue;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+</style>
 
 <div class="story">
 [homies] is a Nix-based reproducible environment, you can read about it in the

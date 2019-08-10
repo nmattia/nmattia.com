@@ -1,10 +1,17 @@
 ---
-title: cio%3A cached HTTP requests for a smooth Jupyter experience!
+title: "cio: cached HTTP requests for a smooth Jupyter experience!"
 ---
 
-# cio: cached HTTP requests for a smooth Jupyter experience!
+This library provides a thin wrapper around the
+[wreq](http://serpentine.com/wreq) library (a simple HTTP client library). It
+is meant to be used with [Jupyter](http://jupyter.org/): all requests will be
+stored _on disk_ and served from the cache subsequently, even if your kernel
+gets restarted. The cache lookups are near-instantaneous thanks to the amazing
+[LevelDB](http://leveldb.org/) library. You can use `cio` just like you would
+`wreq` -- instead of importing `Network.Wreq`, import `CIO` (which stands for
+Cached IO):
 
-This library provides a thin wrapper around the [wreq](http://serpentine.com/wreq) library (a simple HTTP client library). It is meant to be used with [Jupyter](http://jupyter.org/): all requests will be stored _on disk_ and served from the cache subsequently, even if your kernel gets restarted. The cache lookups are near-instantaneous thanks to the amazing [LevelDB](http://leveldb.org/) library. You can use `cio` just like you would `wreq` -- instead of importing `Network.Wreq`, import `CIO` (which stands for Cached IO):
+<!--more-->
 
 
 ```haskell

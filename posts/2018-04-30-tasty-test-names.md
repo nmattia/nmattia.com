@@ -2,11 +2,11 @@
 title: Automatically generated directories for individual tasty tests
 ---
 
-# Automatically generated directories for individual tasty tests
-
 This is a ~~hack~~ _practical trick_ for creating directories based on test names
 using the Haskell test framework [tasty][tasty], as well as accessing the test
 names inside your [tasty][tasty] tests themselves.
+
+<!--more-->
 
 _You can find the full code on [GitHub][gist]_
 
