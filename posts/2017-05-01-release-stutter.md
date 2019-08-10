@@ -1,9 +1,13 @@
-# Stutter: the anti-grep
+---
+title: "Stutter: the anti-grep"
+---
 
 I'm going to introduce [`stutter`](https://github.com/nmattia/stutter), a
 command line tool for generating strings. I'll first show some examples, then
 talk a bit about the performance and finally about the implementation (for the
 Haskell friendly reader).
+
+<!--more-->
 
 This short introduction was motivated by a recent [post on
 reddit](https://redd.it/66o3lp) where the author was looking for something

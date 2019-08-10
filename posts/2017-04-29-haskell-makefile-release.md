@@ -1,4 +1,6 @@
-# Haskell makefile library
+---
+title: Haskell makefile library
+---
 
 I've just released a new version of
 [`makefile`](https://github.com/nmattia/mask), the Haskell library for parsing
@@ -6,6 +8,8 @@ and generating Makefiles. The new version is available on
 [hackage](http://hackage.haskell.org/package/makefile) and on
 [stackage](https://www.stackage.org/package/makefile). The code is available on
 [github](https://github.com/nmattia/mask).
+
+<!--more-->
 
 What happened since the last version:
 

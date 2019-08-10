@@ -6,6 +6,8 @@ I discuss a few reasons why catching bugs in master is more expensive than
 before they are merged, try to explain why some people think this isn't true,
 and talk a bit about merge queues.
 
+<!--more-->
+
 ---
 
 <style>

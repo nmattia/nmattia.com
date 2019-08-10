@@ -2,17 +2,6 @@
 title: The 5 Raisons d'Être of Testing
 ---
 
-<style>
-.story {
-  background-color: lightblue;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-</style>
-
-# The 5 Raisons d'Être of Testing
-
 I describe five of the reasons why I think tests are important:
 
 * Ensure that the code you've written works.
@@ -21,6 +10,8 @@ I describe five of the reasons why I think tests are important:
 * Spot usability issues early on.
 * Show how your feature is supposed to work, and how it should be used.
 
+<!--more-->
+
 **important**: None of the animals used in the examples were harmed in the
 making of this post.
 
@@ -28,6 +19,15 @@ making of this post.
 
 First, let's get in the mood (or [skip
 ahead](#ensure-that-the-code-youve-written-works)):
+
+
+<style>
+.story {
+  background-color: lightblue;
+  padding: 20px;
+  border-radius: 10px;
+}
+</style>
 
 <div class="story">
 
