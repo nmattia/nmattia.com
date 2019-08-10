@@ -3,8 +3,17 @@
 
 <h2>Nicolas Mattia</h2>
 
-I'm an engineer living in Switzerland. For more, checkout the [about
-page](/about.html).
+I'm a Software Engineer based in Zurich.
+
+I like functional programming, reproducible builds and "Infrastructure as
+Code".
+
+I've worked for a realtime messaging platform, as a consultant for a software
+innovation lab, and am now helping build a decentralized computing platform for
+the "Web 3.0".
+
+For more, check out my [resume](./resume.html). [<ion-icon
+name="cloud-download"></ion-icon>](./resume.pdf)
 
 </div>
 
