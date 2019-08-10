@@ -55,12 +55,12 @@ style="float:left;width:350px;padding:10px"/>
 Sometimes even that is not sufficient (which is kind of a good thing in regards
 to [cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), for
 instance). One of the **fastest algorithms** for solving our roadtrip problem
-runs in $$O(n^2 2^n)$$. Basically that means that if a computer takes two
+runs in $O(n^2 2^n)$. Basically that means that if a computer takes two
 thousandths of a second to solve the problem with eight cities, the same
 computer will need two minutes with sixteen cities, and a bit less than **a
 week to compute a result** for thirty-two cities. Most of that huge growth in
-time in regards of the number of cities comes from the exponential term $$2^n$$
-, and the multiplication by $$n^2$$ does not help at all.
+time in regards of the number of cities comes from the exponential term $2^n$
+, and the multiplication by $n^2$ does not help at all.
 
 When scenarios like that show up, it drives some scientists mad, and sometimes
 gives them weird ideas. Among those is trying to solve NP-Complete problems
