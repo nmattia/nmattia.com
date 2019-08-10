@@ -511,6 +511,10 @@ label.margin-toggle:not(.sidenote-number) {
     text-align: center;
 }
 
+/* otherwise (super|sub)scripts are not shown properly */
+sup {font-size:small; vertical-align:super;}
+sub {font-size:small; vertical-align:sub;}
+
 .blog-cards {
     text-align: center;
     justify-content: center;
