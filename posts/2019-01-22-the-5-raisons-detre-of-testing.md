@@ -20,16 +20,7 @@ making of this post.
 First, let's get in the mood (or [skip
 ahead](#ensure-that-the-code-youve-written-works)):
 
-
-<style>
-.story {
-  background-color: lightblue;
-  padding: 20px;
-  border-radius: 10px;
-}
-</style>
-
-<div class="story">
+<div class="pop">
 
 You are a backend engineer at `MyCuteThings.com`, the famous website of cute
 things. Your boss comes to you and Tommy (your frontend sidekick) one Wednesday
@@ -96,7 +87,7 @@ fixing a bug you ensure that the bug actually exists. This is typical
 ## Ensure that the code you've written works elsewhere
 
 
-<div class="story">
+<div class="pop">
 You wrote your feature and Tommy wrote his part. Feature "ninja" got merged
 into the master branch, after you diligently tested it out by hand. You go home
 that evening, and as you're about to start watching the third season of The
@@ -130,7 +121,7 @@ machine(s) and on the various clusters that a deploy goes through.
 
 ## Ensure that the code you've written works tomorrow
 
-<div class="story">
+<div class="pop">
 A month has passed, and not only are you relieved that Season 3 was much better
 that Season 2, but you've also forgotten all about feature "ninja". You're
 sitting at your desk at 5pm, eyeing the clock on the wall more and more
@@ -185,7 +176,7 @@ newcomers.
 ## Show how your feature is supposed to work and how it should be used
 
 
-<div class="story">
+<div class="pop">
 It's been three weeks since you blew your chance at a promotion. In order to
 avoid similar situations in the future, you've added tests. Feature "ninja" has
 been working seamlessly ever since.

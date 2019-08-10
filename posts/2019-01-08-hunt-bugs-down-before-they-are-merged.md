@@ -10,15 +10,6 @@ and talk a bit about merge queues.
 
 ---
 
-<style>
-.story {
-  background-color: #d6d6c7;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-</style>
-
 # Hunt bugs down before they are merged!
 
 Here's something I heard a few times from recalcitrant coworkers after I've
@@ -40,7 +31,7 @@ describe individually in the next few sections:
 
 Let's jump right in!
 
-<div class="story">
+<div class="pop">
 You are a frontend engineer for a company that stores online notes. You're
 tasked with writing an autocomplete function allowing the user to find notes
 more quickly:
@@ -72,7 +63,7 @@ GET /users/<user>/notes?query=<prefix>
 
 ### It gets in the way
 
-<div class="story" style="display: inline-block;">
+<div class="pop" style="display: inline-block;">
 
 <figure style="float: left;">
 <img src="../images/peanut_butter_cookies_nola.jpg" alt="Rated #1 in NOLA"><figcaption>And #2 in America!</figcaption>
@@ -111,7 +102,7 @@ is a myth, sorry).
 
 ### It creates noise
 
-<div class="story">
+<div class="pop">
 
 > you> @channel I'm experiencing server crashes when there are no matches on
 > `/users/foo/notes?query=bar`, anybody knows anything about this?
@@ -155,7 +146,7 @@ the whole codebase, unless your codebase lends itself to things like bisecting.
 
 ### Lack of context
 
-<div class="story">
+<div class="pop">
 The VP of engineering comes to you, in his typical nonchalant tread:
 
 > VP: You'll need to fix that server crash bug.
@@ -201,7 +192,7 @@ before they've been merged.
 
 ### Moar noise
 
-<div class="story">
+<div class="pop">
 
 > you> @channel I've got a fix for the server crash issue, anybody care to
 > review #2578?
@@ -259,7 +250,7 @@ without rebasing on master first (note: some CI systems, like [Travis] and
 on or merged it into master). The following diagram lists three branches,
 `master`, `bob` and `alice`:
 
-<div class="story">
+<div class="pop">
 
 ```
 
@@ -298,7 +289,7 @@ Alice's feature makes use of a function that doesn't exist in the codebase
 anymore after Bob's changes. The solution to avoid those issues is to always
 rebase a branch before running CI tests:
 
-<div class="story">
+<div class="pop">
 
 ```
 
@@ -348,7 +339,7 @@ This is a very tedious process and is better automatized by tools like [bors-ng]
 
 [bors-ng]: https://github.com/bors-ng/bors-ng
 
-<div class="story">
+<div class="pop">
 
 ### The Poor Man's Merge Queue
 
@@ -364,6 +355,7 @@ PR.
 <img src="../images/slack-topic-merge-queue.png" alt="Where does it end"><figcaption>Save some cost! DIY merge queue.</figcaption>
 </figure>
 
+</div>
 </div>
 
 [Travis]: https://travis-ci.org/

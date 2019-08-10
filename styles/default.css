@@ -361,6 +361,13 @@ label.margin-toggle:not(.sidenote-number) {
     height: 100%;
 }
 
+/* Some content that's supposed to pop out visually */
+.pop {
+  background-color: #d6d6c7;
+  padding: 20px;
+  border-radius: 10px;
+}
+
 /* Big screens */
 @media (min-width: 1112px) {
 
