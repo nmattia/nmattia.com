@@ -29,17 +29,7 @@ job very well for small- to medium-sized project.
 
 We'll take the [homies] repository as an example.
 
-
-<style>
-.story {
-  background-color: lightblue;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-</style>
-
-<div class="story">
+<div class="pop">
 [homies] is a Nix-based reproducible environment, you can read about it in the
 [dedicated article][homies-article].
 </div>
