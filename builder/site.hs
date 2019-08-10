@@ -52,8 +52,8 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompiler
               >>= saveSnapshot "content"
-              >>= loadAndApplyTemplate "templates/post.html" defaultContext
-              >>= loadAndApplyTemplate "templates/default.html" defaultContext
+              >>= loadAndApplyTemplate "templates/post.html" postCtx
+              >>= loadAndApplyTemplate "templates/default.html" postCtx
               >>= relativizeUrls
 
     let feedCtx = postCtx `mappend` bodyField "description"

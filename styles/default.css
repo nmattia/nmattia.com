@@ -366,7 +366,7 @@ label.margin-toggle:not(.sidenote-number) {
 
     .content
     {   max-width: 1012px;
-        margin: auto;
+        margin: 100px auto;
     }
 
     .header {
@@ -514,6 +514,8 @@ label.margin-toggle:not(.sidenote-number) {
 /* otherwise (super|sub)scripts are not shown properly */
 sup {font-size:small; vertical-align:super;}
 sub {font-size:small; vertical-align:sub;}
+
+footer { text-align: center; margin: 30px 0; }
 
 .blog-cards {
     text-align: center;
