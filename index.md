@@ -47,7 +47,7 @@ workflow.
 </div>
 </div>
 
-<div class="portfolio-card" onclick="location.href = 'https://beta.deckdeckgo.com/'">
+<div class="portfolio-card" onclick="location.href = 'https://deckdeckgo.com/'">
 <div class="portfolio-card-container">
 <h3><b>DeckDeckGo</b></h3>
 <p>
