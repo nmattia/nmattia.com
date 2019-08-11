@@ -43,7 +43,7 @@ main = hakyll $ do
           getResourceBody
             >>= applyAsTemplate indexCtx
             >>= renderPandoc
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= loadAndApplyTemplate "templates/default.html" noTitleContext
             >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
@@ -106,3 +106,13 @@ postCtx =
     teaserField "teaser" "content" <>
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+-- Simplest way to drop the "title"; used as a workaround for the index page's
+-- title
+noTitleContext :: Context String
+noTitleContext =
+    bodyField     "body"     `mappend`
+    metadataField            `mappend`
+    urlField      "url"      `mappend`
+    pathField     "path"     `mappend`
+    missingField
