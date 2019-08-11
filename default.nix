@@ -42,13 +42,34 @@ in
 
       cat ${sources.hakyll}/web/css/syntax.css >> ./styles/default.css
 
-      css_hash=$(md5sum ./styles/default.css | cut -d ' ' -f 1)
-
-      echo $css_hash
-      sed -i "s:hash=XXX:$css_hash:g" ./templates/default.html
-
       mkdir -p icons
       unzip ${./favicon_package_v0.16.zip} -d icons
+
+      color="fffff8"
+      sed -i "s:XXX_COLOR:$color:g" ./templates/default.html
+
+      # The site.webmanifest has some old color hard coded
+      sed -i "s:#3b6484:$color:g" ./icons/site.webmanifest
+
+      hash=$(md5sum ./styles/default.css | cut -d ' ' -f 1)
+      sed -i "s:XXX_CSS:$hash:g" ./templates/default.html
+
+      hash=$(md5sum ./icons/apple-touch-icon.png | cut -d ' ' -f 1)
+      sed -i "s:XXX_APPLE:$hash:g" ./templates/default.html
+
+      hash=$(md5sum ./icons/favicon-32x32.png | cut -d ' ' -f 1)
+      sed -i "s:XXX_FAV32:$hash:g" ./templates/default.html
+
+      hash=$(md5sum ./icons/favicon-16x16.png | cut -d ' ' -f 1)
+      sed -i "s:XXX_FAV16:$hash:g" ./templates/default.html
+
+      hash=$(md5sum ./icons/site.webmanifest | cut -d ' ' -f 1)
+      manifest_name="site.webmanifest.$hash"
+      mv ./icons/site.webmanifest "./icons/$manifest_name"
+      sed -i "s:site.webmanifest:$manifest_name:g" ./templates/default.html
+
+      hash=$(md5sum ./icons/safari-pinned-tab.svg | cut -d ' ' -f 1)
+      sed -i "s:XXX_SAFARI:$hash:g" ./templates/default.html
 
       cp -r ${sources.tufte-css}/et-book ./styles/fonts
 
