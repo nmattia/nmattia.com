@@ -49,7 +49,7 @@ in
       sed -i "s:XXX_COLOR:$color:g" ./templates/default.html
 
       # The site.webmanifest has some old color hard coded
-      sed -i "s:#3b6484:$color:g" ./icons/site.webmanifest
+      sed -i "s:#3b6484:#$color:g" ./icons/site.webmanifest
 
       hash=$(md5sum ./styles/default.css | cut -d ' ' -f 1)
       sed -i "s:XXX_CSS:$hash:g" ./templates/default.html
