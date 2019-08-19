@@ -5,10 +5,10 @@
         "homepage": "jaspervdj.be/hakyll",
         "owner": "jaspervdj",
         "repo": "hakyll",
-        "rev": "680bd76de4945c79b950d22f8baf9a1e78454661",
-        "sha256": "1jd7d2y8nxswayhy7py7xxwdpy8y3y62f5cpm8fgn2rs7qisx5y6",
+        "rev": "25a4460b75b3c9f3ce339b3311b084d92994f5f1",
+        "sha256": "1izlw95g2rmd6fks5rbsnclrncg1nvrydi4acvyi4hcmnbxsg6dz",
         "type": "tarball",
-        "url": "https://github.com/jaspervdj/hakyll/archive/680bd76de4945c79b950d22f8baf9a1e78454661.tar.gz",
+        "url": "https://github.com/jaspervdj/hakyll/archive/25a4460b75b3c9f3ce339b3311b084d92994f5f1.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -29,10 +29,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "878531fbdbbe78a6746e90694c20eff8cfb70fae",
-        "sha256": "01g9j0xi8d0qna4lv2m8d7wlq3kf6dqrixq3smacjcnkivcm5z55",
+        "rev": "5e5a51f7868df98d6db4331bb6cf149040ce474a",
+        "sha256": "11si8y32qnanifcnnx2qa5bsqmk66r0399cphx2gf1piz4wjfwp7",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/878531fbdbbe78a6746e90694c20eff8cfb70fae.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/5e5a51f7868df98d6db4331bb6cf149040ce474a.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "resume": {
