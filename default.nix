@@ -48,8 +48,15 @@ in
       color="fffff8"
       sed -i "s:XXX_COLOR:$color:g" ./templates/default.html
 
+      mv ./icons/site.webmanifest ./manifest.json
       # The site.webmanifest has some old color hard coded
-      sed -i "s:#3b6484:#$color:g" ./icons/site.webmanifest
+      jq '.theme_color = "#fffff8"' ./manifest.json | sponge ./manifest.json
+      jq '.background_color = "#fffff8"' ./manifest.json | sponge ./manifest.json
+      jq '.start_url = "/"' ./manifest.json | sponge ./manifest.json
+      jq '.short_name = "nmattia"' ./manifest.json | sponge ./manifest.json
+      jq '.name = "Nicolas Mattia"' ./manifest.json | sponge ./manifest.json
+
+      mv manifest.json ./icons/manifest.json
 
       hash=$(md5sum ./styles/default.css | cut -d ' ' -f 1)
       sed -i "s:XXX_CSS:$hash:g" ./templates/default.html
@@ -62,11 +69,6 @@ in
 
       hash=$(md5sum ./icons/favicon-16x16.png | cut -d ' ' -f 1)
       sed -i "s:XXX_FAV16:$hash:g" ./templates/default.html
-
-      hash=$(md5sum ./icons/site.webmanifest | cut -d ' ' -f 1)
-      manifest_name="site.webmanifest.$hash"
-      mv ./icons/site.webmanifest "./icons/$manifest_name"
-      sed -i "s:site.webmanifest:$manifest_name:g" ./templates/default.html
 
       hash=$(md5sum ./icons/safari-pinned-tab.svg | cut -d ' ' -f 1)
       sed -i "s:XXX_SAFARI:$hash:g" ./templates/default.html
@@ -102,5 +104,5 @@ in
       touch $out/.nojekyll
     '';
 
-    buildInputs = [ pkgs.tree pkgs.glibcLocales pkgs.unzip ];
+    buildInputs = [ pkgs.tree pkgs.glibcLocales pkgs.unzip pkgs.moreutils pkgs.jq ];
   }
