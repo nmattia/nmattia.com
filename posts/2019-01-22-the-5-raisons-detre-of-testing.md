@@ -205,6 +205,6 @@ The bottom line is that there's more than one dimension to having a working
 codebase: it should be future proof, function in different environments, be
 usable, and be self-describing. Tests are a great way to achieve this, and when
 you pair them with a [good
-process](posts/2019-01-08-hunt-bugs-down-before-they-are-merged.html) you'll
+process](/posts/2019-01-08-hunt-bugs-down-before-they-are-merged.html) you'll
 become king of the world. Or at least a happy and efficient programmer, part of
 a happy team.
