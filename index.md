@@ -73,7 +73,10 @@ Find more on [GitHub](https://github.com/nmattia).
 <div class="blog-cards">
 
 $for(posts)$
-<div class="blog-card" onclick="location.href = '$url$'">
+<!-- the "." in ".<dollar>url" is a hack, because <dollar>url in an absolute path, so we turn
+"/posts/foo" into "./posts/foo", which happens to be a correct relative path
+from the index. -->
+<div class="blog-card" onclick="location.href = '.$url$'">
 <div class="blog-card-container">
 <h3><b>$title$</b></h3>
 <p>$teaser$</p>
