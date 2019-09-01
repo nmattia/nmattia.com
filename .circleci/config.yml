@@ -23,6 +23,12 @@ jobs:
           name: Build
           command: |
             nix-build --no-link --sandbox --max-jobs 20
+            build_dir=$(nix-build --no-link)
+            mkdir -p /tmp/artifacts
+            cp -r "$build_dir"/* /tmp/artifacts
+
+      - store_artifacts:
+          path: /tmp/artifacts
 
       - run:
           name: "Update Node.js and npm"
