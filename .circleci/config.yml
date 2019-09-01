@@ -31,33 +31,27 @@ jobs:
           path: /tmp/artifacts
 
       - run:
-          name: "Update Node.js and npm"
+          name: "Update Node.js and npm (master only)"
           command: |
-            nix-env -f ./nix -iA nodejs-8_x
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+                nix-env -f ./nix -iA nodejs-8_x
+            fi
 
       - run:
-          name: Install netlify-cli
+          name: "Install netlify-cli (master only)"
           command: |
-            npm install netlify-cli
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+                npm install netlify-cli
+            fi
 
       - run:
-          name: Netlify deploy
+          name: "Netlify deploy (master only)"
           command: |
-            echo "Branch:" "$CIRCLE_BRANCH"
-            echo "Repo:" "$CIRCLE_REPOSITORY_URL"
-            echo "PR:" "$CIRCLE_PULL_REQUEST"
             if [ "$CIRCLE_BRANCH" == "master" ]; then
                 echo "Deploying to production"
                 ./node_modules/netlify-cli/bin/run deploy \
                     --dir=$(nix-build --no-link) \
                     --message="$CIRCLE_SHA1" --prod
-            elif [ -n "$CIRCLE_PULL_REQUEST" ]; then
-                echo "One time deploy for PR $CIRCLE_PR_NUMBER"
-                ./node_modules/netlify-cli/bin/run deploy \
-                    --dir=$(nix-build --no-link) \
-                    --message="$CIRCLE_SHA1"
-            else
-                echo "Not deploying"
             fi
 
 workflows:
