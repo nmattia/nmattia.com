@@ -5,10 +5,10 @@
         "homepage": "jaspervdj.be/hakyll",
         "owner": "jaspervdj",
         "repo": "hakyll",
-        "rev": "779fa66c7b1719e071dc3f4d38a4cc2feb9492c6",
-        "sha256": "1s47acrnaa741f5mphdy8n82r9vnh2b09jzi6h828h7kxv73p8py",
+        "rev": "6592d8ddc19d0c0e25621b8880af3cb29501fb57",
+        "sha256": "0rqqfkchb5fnps54dxf98ri384pgs524pg3w0nr4r54w1vx5kh75",
         "type": "tarball",
-        "url": "https://github.com/jaspervdj/hakyll/archive/779fa66c7b1719e071dc3f4d38a4cc2feb9492c6.tar.gz",
+        "url": "https://github.com/jaspervdj/hakyll/archive/6592d8ddc19d0c0e25621b8880af3cb29501fb57.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -17,10 +17,10 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "8b7b70465c130d8d7a98fba1396ad1481daee518",
-        "sha256": "0fgdrxn2vzpnzr6pxaiyn5zzbd812c6f7xjjhfir0kpzamjnxwwl",
+        "rev": "213315b65807ceae979da902875efaad1c53dc1d",
+        "sha256": "1cczwqnmfs17i00gn8s9l7sf2s3h498gzlv7wrkdin4v31lydv08",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/8b7b70465c130d8d7a98fba1396ad1481daee518.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/213315b65807ceae979da902875efaad1c53dc1d.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
@@ -29,10 +29,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e67da9e4cabadb05c3c39de7a8e3aec384784052",
-        "sha256": "00p623nsgzgbiylhlhamh2rrf1dav90ys1v7swxsryysnd6l9823",
+        "rev": "d8d61079e1111d288b1499bc2f9cd7b99f436544",
+        "sha256": "0jikibhhh3x21aqfsp1d3yv5jkhidra8r3gp022vk09g9hh2z7m4",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/e67da9e4cabadb05c3c39de7a8e3aec384784052.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/d8d61079e1111d288b1499bc2f9cd7b99f436544.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "resume": {
@@ -41,10 +41,10 @@
         "homepage": "https://nmattia.com/resume.html",
         "owner": "nmattia",
         "repo": "resume",
-        "rev": "6b4f38a1897ab18966439dd5bfcf3a5fb2757d33",
-        "sha256": "1sw9rlv2spx54d14dqhh6hmpqkiisrqrv9wvahvgf7vz4ck3j25z",
+        "rev": "fefe5fa9ce8c18cd191aacaf023d23994fc809fd",
+        "sha256": "1fq8lmb35rcm2i8bvkjiak5v48g9p4l409fbhv5km65zsxafdm0h",
         "type": "tarball",
-        "url": "https://github.com/nmattia/resume/archive/6b4f38a1897ab18966439dd5bfcf3a5fb2757d33.tar.gz",
+        "url": "https://github.com/nmattia/resume/archive/fefe5fa9ce8c18cd191aacaf023d23994fc809fd.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "tufte-css": {
@@ -53,10 +53,10 @@
         "homepage": "https://edwardtufte.github.io/tufte-css/",
         "owner": "edwardtufte",
         "repo": "tufte-css",
-        "rev": "7d2e450c01b21fde4b936d5818472525a13b638e",
-        "sha256": "1m087yvjg9l27jxcpq8rfqxd6jmh68s7qydwiqayqcaqzxvcnwii",
+        "rev": "c414b9117d5b39bdb747a172822333fc1043aee3",
+        "sha256": "1g782rjqjn9nlps2m277j3plnkaisjwliwi5p0dpja7lr54af0bd",
         "type": "tarball",
-        "url": "https://github.com/edwardtufte/tufte-css/archive/7d2e450c01b21fde4b936d5818472525a13b638e.tar.gz",
+        "url": "https://github.com/edwardtufte/tufte-css/archive/c414b9117d5b39bdb747a172822333fc1043aee3.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
