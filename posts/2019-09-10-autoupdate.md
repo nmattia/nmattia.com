@@ -38,15 +38,19 @@ other repository `$repo_name`:
 
 * clone `github.com/nmattia/$repo_name`.
 * update the dependencies. I use [Nix] -- a "programmable package manager" --
-  to specify all my dependencies, and [niv] to go look for new updates. If
-  there was any update, I ...
-* ... fork `nmattia/$repo_name`, and create a PR, with GitHub's [hub] tool.
+  to specify all my dependencies, and [niv] to go look for new updates (but you
+  don't _need_ Nix for this). If there was any update, I ...
+* ... fork `nmattia/$repo_name`, and create a PR, with GitHub's [hub] tool. All
+  checks _after the update_ are handled by `$repo_name`'s CI.
 
-I'll first explain how the dependencies get updated, then I'll talk about the
-CircleCI configuration I use to trigger the weekly updates. Then I'll talk
-about how I deal with preview deploys for my website, to make sure the update
-didn't break anything that can't be programatically checked -- no computer
-system has my innate sense of design.
+Here's the plan for the rest of the article.
+
+* I'll first explain how the dependencies get updated.
+* Then I'll talk about the CircleCI configuration I use to trigger the weekly
+  updates.
+* Finally I'll talk about how I deal with preview deploys for my website. I
+  have to make sure the update didn't break anything that can't be
+  programatically checked -- no computer system has my innate sense of design.
 
 ## The Update Script
 
@@ -59,10 +63,8 @@ only job is to update the dependencies, be it:
 * System libraries needed for the build like `openssl`, `libgmp`, etc.
 * System tools needed for the tests and build like `curl`, `redis`, etc.
 
-I use [Nix] in all of my projects. Nix is a programming language aimed at
-building packages, so the builds are very flexible and there's no limit to how
-you can configure your builds. On top of that there's [niv], whose job is to
-automatically update dependencies for Nix projects.
+[Nix] provides the system libraries and tools. On top of that there's [niv],
+whose job is to automatically update dependencies for Nix projects.
 
 The combination of those two tools means that my update script almost always
 looks like this:
@@ -90,8 +92,8 @@ Quick recap: all your repos now have a script, `./script/update`, performing
 the update. Now we'll configure a _new_ repository (mine's
 [`autoupdate`](https://github.com/nmattia/autoupdate)), whose job is to
 checkout your _other_ repositories and run `./script/update`. My favorite CI
-for open-source projects is CircleCI, and I was delighted to discovered that
-they have a "scheduled" build feature.
+for open-source projects is CircleCI, and I was delighted to discover that they
+have a "scheduled" build feature.
 
 A snippet speaks a thousand words, let's start with that:
 
