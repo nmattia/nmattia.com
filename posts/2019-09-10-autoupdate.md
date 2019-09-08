@@ -43,6 +43,10 @@ other repository `$repo_name`:
 * ... fork `nmattia/$repo_name`, and create a PR, with GitHub's [hub] tool. All
   checks _after the update_ are handled by `$repo_name`'s CI.
 
+<div style="text-align: center">
+<img src="/images/autoupdate-schema.png" style="width:600px;padding:50px"/>
+</div>
+
 Here's the plan for the rest of the article.
 
 * I'll first explain how the dependencies get updated.
