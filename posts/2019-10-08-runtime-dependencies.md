@@ -187,7 +187,7 @@ is stored in the object's `.key` (whereas the derivation itself is in `.drv`).
 Getting the paths of runtime dependencies -- that we got for free from `cinfo`.
 As we walk down the tree of functions, we get to the other big piece of the
 puzzle: laying our hands on the original derivations of all the buildtime
-dependendencies.
+dependencies.
 
 <div style="text-align: center">
 <img src="/images/warning-hack-ahead.png" style="width:600px"/>
