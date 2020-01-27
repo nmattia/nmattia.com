@@ -29,10 +29,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8818bed7716f713fc1afb9bc615b5594439a551a",
-        "sha256": "01fky5ljixv7a8ga6jjzmdwr0p4rndxjfh7i6iysz6lgrrpi5j3q",
+        "rev": "c7f0659e03467cd74c4f4608f99a62c4ac15b414",
+        "sha256": "0kjbgnjl3w0s4hfvm86crbzh2h6s7fl5vx0xpbg34rdx6zccb73d",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/8818bed7716f713fc1afb9bc615b5594439a551a.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/c7f0659e03467cd74c4f4608f99a62c4ac15b414.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "resume": {
@@ -41,10 +41,10 @@
         "homepage": "https://nmattia.com/resume.html",
         "owner": "nmattia",
         "repo": "resume",
-        "rev": "085ef502c774b130b8a45ef2154d19ed639b4365",
-        "sha256": "1ri8nyw79xys1qbqaps0a5j9vf8q19m5v6g1ll3qvjy7kczvdidc",
+        "rev": "a4cd4bfc563e2f3f2e133e8e1de086277d307036",
+        "sha256": "1xbyb73b0xl9d5sj8kfbp4ix43bc0da680kf0a2kaqj5ld5z4cnh",
         "type": "tarball",
-        "url": "https://github.com/nmattia/resume/archive/085ef502c774b130b8a45ef2154d19ed639b4365.tar.gz",
+        "url": "https://github.com/nmattia/resume/archive/a4cd4bfc563e2f3f2e133e8e1de086277d307036.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "tufte-css": {
