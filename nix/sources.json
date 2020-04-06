@@ -17,10 +17,10 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "5b5508f85567e82d97e7c1a5a0aa87e131ebab39",
-        "sha256": "0daa6gidnjbvxsmy5cl0w1h902qslc821hghppzi63q7qxg1pvr3",
+        "rev": "f73bf8d584148677b01859677a63191c31911eae",
+        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/5b5508f85567e82d97e7c1a5a0aa87e131ebab39.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
@@ -29,10 +29,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "34c7eb7545d155cc5b6f499b23a7cb1c96ab4d59",
-        "sha256": "11z6ajj108fy2q5g8y4higlcaqncrbjm3dnv17pvif6avagw4mcb",
+        "rev": "f53bdf3dda32ebdfc4609e81a3aaa919d9d2514e",
+        "sha256": "1dshwilqklyy6l4is7nx90ada12gyqgqgi2knfmjk3fj7m0diqky",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/34c7eb7545d155cc5b6f499b23a7cb1c96ab4d59.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/f53bdf3dda32ebdfc4609e81a3aaa919d9d2514e.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "resume": {
@@ -41,10 +41,10 @@
         "homepage": "https://nmattia.com/resume.html",
         "owner": "nmattia",
         "repo": "resume",
-        "rev": "16ef2f5ed95c81892ff74cbdfb3240ae674100d1",
-        "sha256": "16d8nlwn9llgvxj5mai17gd3qs25c86nvnicfpx8zpa6nmjjc3an",
+        "rev": "c2d512c515b440198fbaf55d3b00d702eebc2c98",
+        "sha256": "1aydf2fcisfvl6qf9h6sjjn3yriqxrd016xwgmz7vf7m5sx8fw11",
         "type": "tarball",
-        "url": "https://github.com/nmattia/resume/archive/16ef2f5ed95c81892ff74cbdfb3240ae674100d1.tar.gz",
+        "url": "https://github.com/nmattia/resume/archive/c2d512c515b440198fbaf55d3b00d702eebc2c98.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "tufte-css": {
