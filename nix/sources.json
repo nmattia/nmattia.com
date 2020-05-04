@@ -41,10 +41,10 @@
         "homepage": "https://nmattia.com/resume.html",
         "owner": "nmattia",
         "repo": "resume",
-        "rev": "bc78d4436d7f65667dfc8df9d91eeec58cb6061c",
-        "sha256": "05ry99v48fr91xi6rff9w6wr76jzr9g1xa2i8rj0a93zsv4qgp9i",
+        "rev": "b7cb47ada7b312474876c3cc9180ab71b4408f15",
+        "sha256": "10sj95gqfnjq8ppsz70l43mw9pdzfnghw96glsk55g5m1z2r20r2",
         "type": "tarball",
-        "url": "https://github.com/nmattia/resume/archive/bc78d4436d7f65667dfc8df9d91eeec58cb6061c.tar.gz",
+        "url": "https://github.com/nmattia/resume/archive/b7cb47ada7b312474876c3cc9180ab71b4408f15.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "tufte-css": {
