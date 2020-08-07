@@ -1,0 +1,31 @@
+name: "Test"
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  tests:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: './.github/actions/nix'
+      with:
+        CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
+        CACHIX_CACHE: nmattia-com
+    - name: "Run tests"
+      run: nix-build -o build --max-jobs 4
+    - name: "Deploy to netlify"
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      if: github.ref == 'refs/heads/master'
+      run: |
+        echo "installing node"
+        nix-env -f ./nix -iA nodejs-10_x
+        echo "installing netlify-cli"
+        npm install netlify-cli
+        echo "deploying"
+        ./node_modules/netlify-cli/bin/run deploy \
+            --dir=$(readlink ./build) \
+            --message="$GITHUB_SHA" --prod
