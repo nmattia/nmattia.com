@@ -15,17 +15,12 @@ jobs:
         CACHIX_CACHE: nmattia-com
     - name: "Run tests"
       run: nix-build -o build --max-jobs 4
-    - name: "Deploy to netlify"
+    - name: "Deploy to Netlify"
+      if: github.ref == 'refs/heads/master'
+      uses: netlify/actions/cli@feeabbe5daa2a48493ce68cbac6ead466e917f7b
+      with:
+        args: deploy --dir=$(readlink ./build) --message="$GITHUB_SHA" --prod
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      if: github.ref == 'refs/heads/master'
-      run: |
-        echo "installing node"
-        nix-env -f ./nix -iA nodejs-10_x
-        echo "installing netlify-cli"
-        npm install netlify-cli
-        echo "deploying"
-        ./node_modules/netlify-cli/bin/run deploy \
-            --dir=$(readlink ./build) \
-            --message="$GITHUB_SHA" --prod
+
