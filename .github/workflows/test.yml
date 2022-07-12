@@ -21,8 +21,6 @@ jobs:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       if: github.ref == 'refs/heads/master'
       run: |
-        echo "installing node"
-        nix-env -f ./nix -iA nodejs-10_x
         echo "installing netlify-cli"
         npm install netlify-cli
         echo "deploying"
