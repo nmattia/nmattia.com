@@ -21,9 +21,6 @@ jobs:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       if: github.ref == 'refs/heads/master'
       run: |
-        echo "installing netlify-cli"
-        npm install netlify-cli
-        echo "deploying"
-        ./node_modules/netlify-cli/bin/run deploy \
+        npm exec -- netlify-cli deploy \
             --dir=$(readlink ./build) \
             --message="$GITHUB_SHA" --prod

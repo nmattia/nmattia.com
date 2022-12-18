@@ -8,8 +8,8 @@ I like functional programming, reproducible builds and "Infrastructure as
 Code".
 
 I've worked for a realtime messaging platform, as a consultant for a software
-innovation lab, and am now helping build a decentralized computing platform for
-the "Web 3.0".
+innovation lab, and am now helping build Web3 alien tech.
+
 
 For more, check out my [resume](./resume.html). [<ion-icon
 name="cloud-download"></ion-icon>](./resume.pdf)

@@ -1,4 +1,4 @@
-{ lib, mkDerivation, base, filepath, hakyll, stdenv }:
+{ lib, mkDerivation, base, filepath, hakyll }:
 mkDerivation {
   pname = "nmattia-site-builder";
   version = "0.1.0.0";
@@ -6,5 +6,5 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [ base hakyll filepath ];
-  license = stdenv.lib.licenses.free;
+  license = lib.licenses.free;
 }
