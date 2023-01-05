@@ -1,5 +1,6 @@
 ---
 title: "Triggered CI Builds: Automatically Update your Project's Dependencies"
+description: "I explain how I built a simple CircleCI scheduled job that updates dependencies in some of my open-source projects"
 ---
 
 

@@ -1,5 +1,7 @@
 ---
 title: Recovering Nix derivation attributes of runtime dependencies
+og_image: /images/schematics_dependencies.jpg
+description: "This describes how to get a list of runtime dependencies of a Nix package, from within Nix"
 ---
 
 A coworker recently asked me to compile a list of licenses used at runtime by

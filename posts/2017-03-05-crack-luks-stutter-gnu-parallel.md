@@ -1,5 +1,7 @@
 ---
 title: Recovering forgotten passwords with stutter and GNU parallel
+og_image: /images/password_prompt_steampunk.jpg
+description: "I explain how I managed to crack my LUKS-encrypted hard drive by generating many, many passwords"
 ---
 
 A few days ago I found myself with two terabytes' worth of my personal data

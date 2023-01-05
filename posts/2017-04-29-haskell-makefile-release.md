@@ -1,5 +1,7 @@
 ---
 title: Haskell makefile library
+og_image: /images/gnu_books.jpg
+description: "The release article for a Haskell makefile parsing library"
 ---
 
 I've just released a new version of

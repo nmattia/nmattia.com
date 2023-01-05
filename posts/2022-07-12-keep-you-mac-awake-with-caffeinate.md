@@ -1,5 +1,6 @@
 ---
 title: "Keep your Mac awake with caffeinate"
+description: "This explains how to keep a Mac from going to sleep using a simple command"
 ---
 
 Today I needed a way to prevent my Mac from going to sleep while downloading a big file. Turns out macOS has a convenient utility called `caffeinate` that helps keep your Mac awake.

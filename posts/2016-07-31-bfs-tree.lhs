@@ -1,5 +1,7 @@
 ---
 title: Puzzle solving in Haskell
+og_image: /images/bfs_tree_og.jpg
+description: "An article that explains how I used Haskell to solve a particular puzzle"
 teaser: "
 
 In order to warm up for a round of interviews next week, I've been playing

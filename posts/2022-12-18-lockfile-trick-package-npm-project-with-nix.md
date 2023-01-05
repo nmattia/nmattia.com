@@ -1,5 +1,7 @@
 ---
 title: "Lockfile trick: Package an npm project with Nix in 20 lines"
+og_image: /images/package_delivery.jpg
+description: "This article explains how to package an npm project with Nix by using information from the lockfile directly to download the dependencies."
 ---
 
 I recently needed to package a JavaScript npm project with Nix. This is very simple to do and does not require any ugly workarounds like importing from derivation or generating Nix files and works just fine with sandboxed builds. Here's the general idea and an example.

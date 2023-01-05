@@ -1,5 +1,6 @@
 ---
 title: "Stutter: the anti-grep"
+description: "The release article for stutter, a tool that takes a regex and tries to generate matching strings"
 ---
 
 I'm going to introduce [`stutter`](https://github.com/nmattia/stutter), a

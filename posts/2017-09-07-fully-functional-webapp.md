@@ -1,5 +1,6 @@
 ---
 title: A Fully Functional, Fully Functional Webapp
+description: "This is a link to a talk I gave at WebZurich on how to build a webapp using functional programming"
 ---
 
 Last Tuesday I gave a 30 minute talk about building and packaging a webapp

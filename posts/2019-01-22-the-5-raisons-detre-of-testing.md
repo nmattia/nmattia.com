@@ -1,5 +1,6 @@
 ---
 title: The 5 Raisons d'Être of Testing
+description: "A personal take on why testing is necessary"
 ---
 
 I describe five of the reasons why I think tests are important:

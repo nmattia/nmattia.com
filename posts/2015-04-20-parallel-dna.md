@@ -1,6 +1,7 @@
 ---
 title: "Parallel Computing with DNA"
 og_image: /images/blueprint.jpg
+description: "An introduction to using DNA to compute"
 ---
 
 DNA. Everybody knows that DNA is the blueprint by which our cells replicate.

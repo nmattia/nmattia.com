@@ -1,5 +1,6 @@
 ---
 title: Easy Peasy Nix Versions
+description: "Describes a simple way to update Nix dependencies and shows a simple Bash script implementing it"
 ---
 
 

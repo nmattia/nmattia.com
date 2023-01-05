@@ -1,5 +1,6 @@
 ---
 title: "NixCon Talk: An Overview of Language Support in Nix"
+description: "This is a link to a talk I gave at NixCon about language support in Nix"
 ---
 
 Last October I gave a talk at NixCon 2019 in Brno about the various approaches

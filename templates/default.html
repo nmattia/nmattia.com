@@ -8,22 +8,24 @@
     <!-- Disable mobile scaling -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <title>Nicolas Mattia$if(title)$ &ndash; $title$ $endif$</title>
 
-    <meta name="description" content="Software Engineer based in Zurich who has a thing for functional programming, reproducible builds and infrastructure as code">
 
     <!-- the "hash=..." is replace with the hash of the CSS file -->
     <link rel="stylesheet" type="text/css" href="/styles/default.css?hash=XXX_CSS" />
     <link rel="alternate" type="application/atom+xml" title="nmattia Atom feed" href="/atom.xml?type=blog" />
     <link rel="alternate" type="application/rss+xml" title="nmattia RSS feed" href="/rss.xml?type=blog" />
 
-    <!-- comes from favicon generator -->
+    <title>Nicolas Mattia$if(title)$ &ndash; $title$ $endif$</title>
 
-    <!-- OG tags -->
+    <!-- open graph tags -->
+
     $if(title)$<meta property="og:title" content="$title$" />$endif$
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://nmattia.com$url$" />
+    <!-- use 'date' as a hack: if date, then article; else it's the website -->
+    <meta property="og:type" content="$if(date)$article$else$website$endif$">
+    <meta name="description" content="$if(description)$$description$$else$Software Engineer based in Zurich who has a thing for functional programming, reproducible builds and infrastructure as code$endif$">
+    <meta property="og:description" content="$if(description)$$description$$else$Software Engineer based in Zurich who has a thing for functional programming, reproducible builds and infrastructure as code$endif$">
     $if(og_image)$<meta property="og:image" content="https://nmattia.com$og_image$" />$endif$
+    <meta property="og:url" content="https://nmattia.com$url$" />
 
     <!-- favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?hash=XXX_APPLE">
@@ -71,7 +73,7 @@
     </script>
 
     <script type="module" src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule="" src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.js"></script>	
+    <script nomodule="" src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.js"></script>
 
   </body>
 </html>

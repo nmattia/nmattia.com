@@ -1,5 +1,6 @@
 ---
 title: Hunt bugs down before they are merged!
+description: "A humorous article about why bugs should be caught sooner rather than later"
 ---
 
 I discuss a few reasons why catching bugs in master is more expensive than
