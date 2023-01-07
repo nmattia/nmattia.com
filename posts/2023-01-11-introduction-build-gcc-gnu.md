@@ -97,6 +97,8 @@ And that's "all" you need to build GCC!
 
 ## The platforms: build, host & target
 
+<img src="/images/gnu-platform.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
+
 If you have another look at the generic build command shown earlier, you can see the following argument to the `configure` script: `--build=$platform`:
 
 ``` bash
@@ -143,10 +145,10 @@ Finally you can imagine a situation where the build, host and target platforms a
 
 
 
-<div style="text-align: center">
+<div style="text-align: center; padding: 2em;">
 <img src="/images/build-host-target.gif" style="max-width: 600px;"/>
 <p style="font-size: 80%; line-height: 0.6em">
-A compiler compiled by a computer god, run by a computer demigod, producing an iOS app used by a mere mortal.
+A compiler built by a computer god, run by a computer demigod, producing an iOS app used by a mere mortal.
 </p>
 </div>
 
@@ -176,6 +178,7 @@ Relatively painless, right? Let's move on!
 
 ## Preparation: pkg-config
 
+<img src="/images/pkg-config.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
 
 We'll soon need to configure where to find dependencies (e.g. in the next section we'll be building `mpfr` which depends on `gmp` that we built in the last section). For that we'll use a handy tool: [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/).
 
@@ -196,7 +199,6 @@ Cflags: -I${includedir}
 Libs: -L${libdir} -lgmp
 ```
 
-<img src="/images/pkg-config.png" style="float: left; max-width: 300px; padding: 2em;"/>
 
 And `pkg-config` is a tool that interprets those configs and generates C-compiler-friendly flags:
 
@@ -268,9 +270,9 @@ We built `gmp`, `mpfr` and `libmpc`, which GCC needs. Let's now build GCC itself
 
 ## Building GCC
 
-Here's one way to build GCC, though there are others:
+<img src="/images/gnu-coding.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
 
-<img src="/images/gnu-coding.png" style="float: right; padding: 2em; max-width: 300px;"/>
+Here's one way to build GCC, though there are others:
 
 ```bash
 $gcc_src/configure \
@@ -300,6 +302,9 @@ For more information about the configuration, you can check out the full list of
 This is not a short build, so go grab a coffee or a book!
 
 ## Go and build more
+
+<img src="/images/gnu-sunset.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
+
 
 This is where our journey ends, for now at least! You should now have a working `gcc` executable in `$gcc/bin/gcc`.
 
