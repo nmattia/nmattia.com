@@ -1,8 +1,9 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 
+import Data.Maybe (isNothing)
 import Data.Monoid (mappend)
-import Control.Monad (forM_)
+import Control.Monad (forM_, filterM)
 import Hakyll
 import Hakyll.Web.Pandoc (pandocCompiler)
 import System.FilePath  (joinPath, splitPath)
@@ -15,6 +16,14 @@ myFeedConfiguration = FeedConfiguration
     , feedAuthorEmail = "nicolas@nmattia.com"
     , feedRoot        = "http://www.nmattia.com"
     }
+
+dropPreview :: (MonadMetadata m, MonadFail m) => [Item a] -> m [Item a]
+dropPreview = filterM isReleased
+    where
+    isReleased item = do
+        let identifier = itemIdentifier item
+        preview <- getMetadataField identifier "preview"
+        pure $ isNothing preview
 
 main :: IO ()
 main = hakyll $ do
@@ -30,15 +39,17 @@ main = hakyll $ do
         route idRoute
         compile copyFileCompiler
 
-
     match "blog.html" $ do
       route idRoute
       compile copyFileCompiler
 
+    let posts = loadAllSnapshots "posts/*" "content"
+                  >>= recentFirst
+                  >>= dropPreview
+
     match "index.md" $ do
         route $ setExtension "html"
         compile $ do
-          let posts = recentFirst =<< loadAllSnapshots "posts/*" "content"
           let indexCtx = listField "posts" postCtx posts <> defaultContext
           getResourceBody
             >>= applyAsTemplate indexCtx
@@ -58,9 +69,7 @@ main = hakyll $ do
 
     let feedCtx = postCtx `mappend` bodyField "description"
 
-    let posts =
-          fmap (take 10) .
-          recentFirst =<< loadAllSnapshots "posts/*" "content"
+    let feedPosts = fmap (take 10) posts
 
     create ["atom.xml"] $ do
       route idRoute

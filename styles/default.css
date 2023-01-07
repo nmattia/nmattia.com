@@ -597,3 +597,8 @@ footer { text-align: center; margin: 30px 0; }
 .portfolio-card-container {
   padding: 2px 16px;
 }
+
+pre.sourceCode {
+    border: 2px solid black;
+    border-radius: 5px;
+}
