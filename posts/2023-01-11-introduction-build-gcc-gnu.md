@@ -219,7 +219,7 @@ make
 make install
 ```
 
-The source I use (unpacked in `$pkg_config_src`) is [https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz](https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz). We configure the build with `--with-internal-glib`, meaning that `pkg-config` will be built against a vendored version of `glib` so that we don't have to build `glibg` ourselves (otherwise this article will really get too long).
+The source I use (unpacked in `$pkg_config_src`) is [https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz](https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz). We configure the build with `--with-internal-glib`, meaning that `pkg-config` will be built against a vendored version of `glib` so that we don't have to build `glib` ourselves (otherwise this article will really get too long).
 
 Ok, let's now use `pkg-config` to build `mpfr` and `libmpc`, the last dependencies needed for the actual GCC build!
 
