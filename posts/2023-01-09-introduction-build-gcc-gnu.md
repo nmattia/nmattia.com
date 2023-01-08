@@ -147,7 +147,7 @@ Finally you can imagine a situation where the build, host and target platforms a
 <div style="text-align: center; padding: 2em;">
 <img src="/images/build-host-target.gif" style="max-width: 600px;"/>
 <p style="font-size: 80%; line-height: 0.6em">
-A compiler built by a computer wizard, used by a app developper, producing an iOS app used by a mere mortal.
+A compiler built by a computer wizard, used by an app developper, producing an iOS app used by a mere mortal.
 </p>
 </div>
 
