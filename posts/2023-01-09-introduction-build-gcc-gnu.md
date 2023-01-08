@@ -2,16 +2,15 @@
 title: "Intro to building GCC and some other GNU projects (focus on macOS & Apple Silicon)"
 og_image: /images/gnu_chip.jpg
 description: "An introduction to the GNU build system (./configure & make), pkg-config, the concepts of build, host and target platforms, and building gcc, including on Apple Silicon"
-preview: ""
 ---
 
 Once a year or so I need to build <abbr title="GNU Compiler Collection">GCC</abbr>. And every year I wish I had notes from the year before. This is my cheatsheet on the GNU Build System, build/host/target platforms, `pkg-config`, and `gcc` building.
 
-The goal is to have a `gcc` executable built from source, and we'll take a few detours to better understand some pervasive concepts in the "build" world.
-
 <!--more-->
 
 ---
+
+The goal is to have a `gcc` executable built from source, and we'll take a few detours to better understand some pervasive concepts in the "build" world.
 
 > Disclaimer: I love Linux but I also love a display that works when I connect it to my laptop. My development machine is an Apple Silicon (M1) MacBook and hence the focus of this article is on macOS, but most of it will apply to Linux and potentially WSL too.
 
