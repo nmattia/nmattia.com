@@ -514,6 +514,13 @@ label.margin-toggle:not(.sidenote-number) {
 
 .blog {
     margin: 8vh auto;
+}
+
+.blog h2 {
+    text-align: center;
+}
+
+.centered {
     text-align: center;
 }
 
@@ -523,12 +530,7 @@ sub {font-size:small; vertical-align:sub;}
 
 footer { text-align: center; margin: 30px 0; }
 
-.blog-cards {
-    text-align: center;
-    justify-content: center;
-}
-
-.blog-card {
+.card {
   /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
@@ -536,29 +538,33 @@ footer { text-align: center; margin: 30px 0; }
   font-size: 0.8rem;
 }
 
-.blog-card h3
+.card h3
     { text-align: center;
     }
 
-.blog-card p
-    {font-size: 1.2rem;
-    }
 
 /* On mouse-over, add a deeper shadow */
-.blog-card:hover {
+.card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     cursor:pointer;
 }
 
 /* Add some padding inside the card container */
-.blog-card-container {
+.card-container {
   padding: 2px 16px;
+}
+
+.card-container .teaser {
+  padding: 2em;
 }
 
 /* Portfolio */
 
 .portfolio {
     margin: 8vh auto;
+}
+
+.portfolio h2 {
     text-align: center;
 }
 

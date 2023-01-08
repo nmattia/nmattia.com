@@ -2,13 +2,7 @@
 title: Puzzle solving in Haskell
 og_image: /images/bfs_tree_og.jpg
 description: "An article that explains how I used Haskell to solve a particular puzzle"
-teaser: "
-
-In order to warm up for a round of interviews next week, I've been playing
-around with coding puzzles. Those are usually solved using imperative
-languages, and I thought I'd have a go at them using Haskell. I'll share
-today's experience, which hopefully will convince you that purely functional
-languages are (sometimes) suitable for puzzles."
+teaser: "<p>In order to warm up for a round of interviews next week, I've been playing around with coding puzzles. Those are usually solved using imperative languages, and I thought I'd have a go at them using Haskell. I'll share today's experience, which hopefully will convince you that purely functional languages are (sometimes) suitable for puzzles.</p>"
 ---
 
 In order to warm up for a round of interviews next week, I've been playing
