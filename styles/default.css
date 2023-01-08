@@ -316,7 +316,6 @@ h3 > code {
 pre > code {
     font-size: 0.9rem;
     margin-left: 2.5%;
-    overflow-x: auto;
     display: block;
 }
 
@@ -598,9 +597,16 @@ footer { text-align: center; margin: 30px 0; }
   padding: 2px 16px;
 }
 
-pre.sourceCode {
+pre {
     border: 2px solid black;
     border-radius: 5px;
     min-width: 300px;
     overflow-x: scroll;
+}
+
+.sourceCode {
+    /* the hakyll default styles specify "visible" which makes
+     * the whole code box scroll and isn't really nice, so we override here
+     */
+    overflow: auto !important;
 }

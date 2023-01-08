@@ -168,9 +168,9 @@ make
 make install
 ```
 
-Pretty easy, heh? The source is [`https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz`](https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz) which I unpacked in `$gmp_src` (can be any directory). GNU recommends _not_ building in the same directory where the sources are, so you could for instance set `$gmp_src` to `~/my-srcs/gmp_src`, and then run the commands above in a temporary directory. The build artifacts will be placed in `$gmp`, which can be anything -- you could set `$gmp` to `~/my-libs/gmp` for instance.
+Pretty easy, heh? For the the source I unpacked the [tarball](https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz) for `gmp-6.2.1` in `$gmp_src` (can be any directory). GNU recommends _not_ building in the same directory where the sources are, so you could for instance set `$gmp_src` to `~/my-srcs/gmp_src`, and then run the commands above in a temporary directory. The build artifacts will be placed in `$gmp`, which again can be anything -- you could set `$gmp` to `~/my-libs/gmp` for instance.
 
-If `6.2.1` is not to your liking, the easiest way I found to browse versions (applies to `gmp` and others) is to go to the [https://ftp.gnu.org/gnu](https://ftp.gnu.org/gnu) and click around. It's not very modern but works like a charm.
+If `6.2.1` is not to your liking, the easiest way I found to browse versions (applies to `gmp` and others) is to go to the [GNU FTP](https://ftp.gnu.org/gnu) and click around. It's not very modern but works like a charm.
 
 Finally, you might notice one last argument, `--with-pic`. This configures the build to produce [position independent code](https://en.wikipedia.org/wiki/Position-independent_code). I don't understand this enough to attempt to explain it, but you'll definitely want this when building libraries (`.dylib`,`.so`, `.a`, etc).
 
@@ -221,7 +221,7 @@ make
 make install
 ```
 
-The source I use (unpacked in `$pkg_config_src`) is [https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz](https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz). We configure the build with `--with-internal-glib`, meaning that `pkg-config` will be built against a vendored version of `glib` so that we don't have to build `glib` ourselves (otherwise this article will really get too long).
+For the source I downloaded the [tarball](https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz) for `pkg-config-0.29.2` and unpacked it in `$pkg_config_src`. We configure the build with `--with-internal-glib`, meaning that `pkg-config` will be built against a vendored version of `glib` so that we don't have to build `glib` ourselves (otherwise this article will really get too long).
 
 Ok, let's now use `pkg-config` to build `mpfr` and `libmpc`, the last dependencies needed for the actual GCC build!
 
@@ -264,7 +264,7 @@ make
 make install
 ```
 
-For `$mpfr_src` I used [https://ftp.gnu.org/gnu/mpfr/mpfr-4.1.0.tar.xz](https://ftp.gnu.org/gnu/mpfr/mpfr-4.1.0.tar.xz) and for `$libmpc_src` I used [https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz](https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz).
+As for sources, I unpacked the [tarball](https://ftp.gnu.org/gnu/mpfr/mpfr-4.1.0.tar.xz) for `mpfr-4.1.0` in `$mpfr_src` and I unpacked the [tarball](https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz) for `mpc-1.3.1` in `$libmpc_src`.
 
 We built `gmp`, `mpfr` and `libmpc`, which GCC needs. Let's now build GCC itself!
 
@@ -291,7 +291,7 @@ make
 make install
 ```
 
-For `$gcc_src` I used [https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz](https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz). Apple Silicon may need to use [this patch](https://raw.githubusercontent.com/Homebrew/formula-patches/1d184289/gcc/gcc-12.2.0-arm.diff), which adds some support for the `aarch64-apple-darwin` build platform.
+For sources I unpacked the [tarball](https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz) for `gcc-12.2.0` in `$gcc_src`. Apple Silicon users may need to use [this patch](https://raw.githubusercontent.com/Homebrew/formula-patches/1d184289/gcc/gcc-12.2.0-arm.diff), which adds some support for the `aarch64-apple-darwin` build platform.
 
 Instead of using `pkg-config`, we use the `./configure` options `--with-<lib>` to specify the install paths of the dependencies, though I'm sure it could be done with `pkg-config` too -- although this is simpler. We also simplify the build a bit by disabling "native language support" (_natural_ languages, i.e. French, Spanish, etc) with `--disable-nls`, make `gcc` only report its major version number (`7` instead of `7.23.5444-patch-foo`) with `--with-gc-major-version-only` and instruct it to only enable the `C` compiler, although you can add more with `--enable-languages=c,c++,...`.
 
