@@ -53,14 +53,14 @@ make
 make install
 ```
 
-The first line (calling some `configure` script) will ... configure the build, and `make` will actually use whatever tools were configured to actually build the code. This is the bedrock of the [GNU build system](https://en.wikipedia.org/wiki/Configure_script), and if you learn how to use `configure` scripts you'll feel at home in a lot of C and C++ codebases.
+The first line (calling some `configure` script) will ... configure the build, and `make` will use whatever tools were configured to actually build the code. This is the bedrock of the [GNU build system](https://en.wikipedia.org/wiki/Configure_script), and if you learn how to use `configure` scripts you'll feel at home in a lot of C and C++ codebases.
 
-(For the curious reader: the `configure` script and the `Makefile`s used by `make` are rarely written by hand, but you won't need the details unless you're packaging your own projects using autoconf and automake.)
+(For the curious reader: the `configure` script and the `Makefile`s used by `make` are rarely written by hand, but you won't need the details unless you're packaging your own projects using [autoconf](https://www.gnu.org/software/autoconf/) and [automake](https://www.gnu.org/software/automake/).)
 
 In order to run those two commands successfully (`configure` and `make`), you'll need:
 
 * a C compiler (any will do), which the GCC build will use to actually compile its code, and
-* `make` (any will do... I think), which will actually drive the build. You can read more about `make` on the [GNU](https://www.gnu.org/software/make/) website.
+* `make` (any will do... I think), which will drive the build. You can read more about `make` on the [GNU](https://www.gnu.org/software/make/) website.
 
 If you're building on macOS, then run `xcode-select --install`, which will install the "Command-Line Tools" (CLT) from Xcode (but more lightweight). Then you'll have `/usr/bin/cc` and `/usr/bin/make`.
 
@@ -81,7 +81,7 @@ Thread model: posix
 InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 ```
 
-However the make version shipped with CLT is actually GNU:
+However the make version shipped with CLT is GNU:
 
 ```bash
 $ /usr/bin/make --version
@@ -114,7 +114,7 @@ Here, you can set `$platform` to the platform you're _building_ GCC on. This in 
 
 > A NOTE TO APPLE SILICON USERS: you may want to specify the `--build` explicitly since the "Apple Silicon" platform (e.g. `aarch64-apple-darwin13` for Ventura) is fairly recent and some older `configure` scripts will struggle to figure it out). I'll specify `--build` in all snippets since that's the `build` platform I care about.
 
-To clarify the idea of "platforms":
+To clarify the idea of "platforms" further:
 
 <div style="display: flex; align-items: center;"> <img src="/images/build-tools.png" style="max-width: 100px; margin: 0 2em;"/> <p style="display: table-cell; vertical-align: middle;">build: where you want to <em>build</em> the compiler</p></div>
 
@@ -138,7 +138,7 @@ However you may want to specify a `target` different from the `host` (and `build
 ```bash
 my-machine$ ./compile-gcc --output=./dist --target=avr # avr ~= Arduino
 my-machine$ ./dist/avr-gcc ~/sample-arduino/main.c -o arduino.hex
-# arduino.hex will actually get executed on the Arduino
+# arduino.hex will run on the Arduino
 ```
 
 Finally you can imagine a situation where the build, host and target platforms are all different. You could for instance have a web platform that allows users to compile firmware for keyboards with `avr` chips. In this case you'd first build GCC on e.g. your Linux laptop (so the `build` platform would be Linux), with the intent of running GCC in the browser (the `host` platform would be [WebAssembly](https://webassembly.org)) and the programs produced by that GCC would be running on your keyboard (the `target` would be the AVR platform).
@@ -148,11 +148,11 @@ Finally you can imagine a situation where the build, host and target platforms a
 <div style="text-align: center; padding: 2em;">
 <img src="/images/build-host-target.gif" style="max-width: 600px;"/>
 <p style="font-size: 80%; line-height: 0.6em">
-A compiler built by a computer god, run by a computer demigod, producing an iOS app used by a mere mortal.
+A compiler built by a computer wizard, used by a app developper, producing an iOS app used by a mere mortal.
 </p>
 </div>
 
-Now that you understand the concept of "platform" and before we start building `gmp`, the first dependency, it's important to stress this: the libraries we'll be building here, i.e. GCC dependencies, will be built for the "host" platform because GCC will use them as it runs for internal stuff. In some cases however (which we won't get into here) you may also need to compile some libraries for the _target_ platform, like a `libc` used at runtime by GCC-compiled executables.
+Now that you understand the concept of "platform" and before we start building `gmp`, the first dependency, it's important to stress this: the libraries we'll be building here, i.e. GCC dependencies, will be built for the "host" platform because GCC will use them for internal stuff as it runs. In some cases however (which we won't get into here) you may also need to compile some libraries for the _target_ platform (like a `libc` used at runtime by GCC-compiled executables).
 
 ## Building gmp
 
@@ -221,7 +221,7 @@ make
 make install
 ```
 
-For the source I downloaded the [tarball](https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz) for `pkg-config-0.29.2` and unpacked it in `$pkg_config_src`. We configure the build with `--with-internal-glib`, meaning that `pkg-config` will be built against a vendored version of `glib` so that we don't have to build `glib` ourselves (otherwise this article will really get too long).
+For the source I downloaded the [tarball](https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz) for `pkg-config-0.29.2` and unpacked it in `$pkg_config_src`. We configure the build with `--with-internal-glib`, meaning that `pkg-config` will be built against a vendored version of `glib` so that we don't have to build `glib` ourselves (otherwise this article will get too long).
 
 Ok, let's now use `pkg-config` to build `mpfr` and `libmpc`, the last dependencies needed for the actual GCC build!
 
@@ -293,7 +293,7 @@ make install
 
 For sources I unpacked the [tarball](https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz) for `gcc-12.2.0` in `$gcc_src`. Apple Silicon users may need to use [this patch](https://raw.githubusercontent.com/Homebrew/formula-patches/1d184289/gcc/gcc-12.2.0-arm.diff), which adds some support for the `aarch64-apple-darwin` build platform.
 
-Instead of using `pkg-config`, we use the `./configure` options `--with-<lib>` to specify the install paths of the dependencies, though I'm sure it could be done with `pkg-config` too -- although this is simpler. We also simplify the build a bit by disabling "native language support" (_natural_ languages, i.e. French, Spanish, etc) with `--disable-nls`, make `gcc` only report its major version number (`7` instead of `7.23.5444-patch-foo`) with `--with-gc-major-version-only` and instruct it to only enable the `C` compiler, although you can add more with `--enable-languages=c,c++,...`.
+Instead of using `pkg-config`, we use the `./configure` options `--with-<lib>` to specify the install paths of the dependencies, though I'm sure it could be done with `pkg-config` too. We also simplify the build a bit by disabling "native language support" (_natural_ languages, i.e. French, Spanish, etc) with `--disable-nls`, make `gcc` only report its major version number (`7` instead of `7.23.5444-patch-foo`) with `--with-gcc-major-version-only` and instruct it to only enable the `C` compiler, although you can add more with `--enable-languages=c,c++,...`.
 
 I do not know if it's an artifact of only installing CLT (Command-Line Tools) instead of a full blown Xcode install, but headers that `gcc` expect in `/usr/include` are not there, and hence we need to specify the path to the CLT SDK with `--with-sysroot`. Your mileage may very though!
 
