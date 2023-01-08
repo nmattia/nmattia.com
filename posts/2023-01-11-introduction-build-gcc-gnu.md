@@ -5,7 +5,7 @@ description: "An introduction to the GNU build system (./configure & make), pkg-
 preview: ""
 ---
 
-Once a year or so I need to build GCC. And every year I wish I had notes from the year before. This is my cheatsheet on the GNU Build System, build/host/target platforms, `pkg-config`, and `gcc` building.
+Once a year or so I need to build <abbr title="GNU Compiler Collection">GCC</abbr>. And every year I wish I had notes from the year before. This is my cheatsheet on the GNU Build System, build/host/target platforms, `pkg-config`, and `gcc` building.
 
 The goal is to have a `gcc` executable built from source, and we'll take a few detours to better understand some pervasive concepts in the "build" world.
 
