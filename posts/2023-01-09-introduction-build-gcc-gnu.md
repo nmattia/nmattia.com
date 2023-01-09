@@ -10,7 +10,7 @@ Once a year or so I need to build <abbr title="GNU Compiler Collection">GCC</abb
 
 ---
 
-The goal is to have a `gcc` executable built from source, and we'll take a few detours to better understand some pervasive concepts in the "build" world.
+The goal is to have a `gcc` executable built from source, and we'll take a few detours to better understand some pervasive concepts in the "build" world. And just to be clear, I'm no GCC or build expert! If you see anything suspicious please do reach out.
 
 > Disclaimer: I love Linux but I also love a display that works when I connect it to my laptop. My development machine is an Apple Silicon (M1) MacBook and hence the focus of this article is on macOS, but most of it will apply to Linux and potentially WSL too.
 
@@ -35,7 +35,7 @@ In addition to that we'll also build [`pkg-config`](http://pkgconfig.freedesktop
 
 We'll start with `gmp`, not only because we need it to build `gcc` and its other dependencies but also because it's very simple and will allow us to warm up. Then we'll work up the dependency chain and build `pkg-config` along the way.
 
-The best doc I've found on building GCC is actually in the [`avr-libc`](https://www.nongnu.org/avr-libc/user-manual/index.html) manual, if you ever want to go into details. They also have a great introduction to what the linker does, and more.
+The best doc I've found on building GCC is actually in the [`avr-libc`](https://www.nongnu.org/avr-libc/user-manual/index.html) manual, if you ever want to go into details. They also have a great introduction to what the linker does, and more. Another great source of inspiration is the [`gcc` formula](https://github.com/Homebrew/homebrew-core/blob/ec638d7f8f94f2a26333f93a95f8090fcfe4171a/Formula/gcc.rb) for Homebrew.
 
 With that out of the way, let's make sure we have all the tools required to start building!
 
