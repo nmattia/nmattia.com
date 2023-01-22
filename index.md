@@ -1,6 +1,6 @@
 <div class="intro">
 
-<h2>Nicolas Mattia</h2>
+<h1>Nicolas Mattia</h1>
 
 I'm a Software Engineer based in Zurich.
 

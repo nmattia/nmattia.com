@@ -73,8 +73,6 @@ in
       hash=$(md5sum ./icons/safari-pinned-tab.svg | cut -d ' ' -f 1)
       sed -i "s:XXX_SAFARI:$hash:g" ./templates/default.html
 
-      cp -r ${sources.tufte-css}/et-book ./styles/fonts
-
       # Create a file index for material/
       mkdir -p material
       pushd material

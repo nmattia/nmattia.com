@@ -1,40 +1,5 @@
 @charset "UTF-8";
 
-/* Import ET Book styles
-   adapted from https://github.com/edwardtufte/fonts/blob/gh-pages/et-book.css */
-
-@font-face {
-    font-family: "et-book";
-    src: url("fonts/et-book-roman-line-figures/et-book-roman-line-figures.eot");
-    src: url("fonts/et-book-roman-line-figures/et-book-roman-line-figures.eot?#iefix") format("embedded-opentype"), url("fonts/et-book-roman-line-figures/et-book-roman-line-figures.woff") format("woff"), url("fonts/et-book-roman-line-figures/et-book-roman-line-figures.ttf") format("truetype"), url("fonts/et-book-roman-line-figures/et-book-roman-line-figures.svg#etbookromanosf") format("svg");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "et-book";
-    src: url("fonts/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot");
-    src: url("fonts/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot?#iefix") format("embedded-opentype"), url("fonts/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff") format("woff"), url("fonts/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf") format("truetype"), url("fonts/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.svg#etbookromanosf") format("svg");
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "et-book";
-    src: url("fonts/et-book-bold-line-figures/et-book-bold-line-figures.eot");
-    src: url("fonts/et-book-bold-line-figures/et-book-bold-line-figures.eot?#iefix") format("embedded-opentype"), url("fonts/et-book-bold-line-figures/et-book-bold-line-figures.woff") format("woff"), url("fonts/et-book-bold-line-figures/et-book-bold-line-figures.ttf") format("truetype"), url("fonts/et-book-bold-line-figures/et-book-bold-line-figures.svg#etbookromanosf") format("svg");
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "et-book-roman-old-style";
-    src: url("fonts/et-book-roman-old-style-figures/et-book-roman-old-style-figures.eot");
-    src: url("fonts/et-book-roman-old-style-figures/et-book-roman-old-style-figures.eot?#iefix") format("embedded-opentype"), url("fonts/et-book-roman-old-style-figures/et-book-roman-old-style-figures.woff") format("woff"), url("fonts/et-book-roman-old-style-figures/et-book-roman-old-style-figures.ttf") format("truetype"), url("fonts/et-book-roman-old-style-figures/et-book-roman-old-style-figures.svg#etbookromanosf") format("svg");
-    font-weight: normal;
-    font-style: normal;
-}
-
 /* http://meyerweb.com/eric/tools/css/reset/
 v2.0 | 20110126
 License: none (public domain)
@@ -86,41 +51,43 @@ table {
     border-spacing: 0;
 }
 
-/* Tufte CSS styles */
+
+/* END reset */
 
 .nav ul {
     list-style-type: none;
 }
 
 body {
-    font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
     background-color: #fffff8;
     color: #111;
     counter-reset: sidenote-counter;
 }
 
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Roboto Slab',serif;
+}
+
 h1 {
-    font-weight: 400;
-    margin-top: 4rem;
+    font-weight: 600;
+    font-size: 2.2rem;
+    line-height: 1.3;
     margin-bottom: 1.5rem;
-    font-size: 2rem;
-    line-height: 1;
+    margin-top: 4rem;
 }
 
 h2 {
-    font-weight: 400;
-    margin-top: 2.1rem;
+    font-size: 1.8rem;
     margin-bottom: 1.4rem;
-    font-size: 2.2rem;
-    line-height: 1;
+    margin-top: 2.1rem;
 }
 
 h3 {
-    font-weight: 400;
     font-size: 1.7rem;
-    margin-top: 2rem;
     margin-bottom: 1.4rem;
-    line-height: 1;
+    margin-top: 1.5rem;
 }
 
 hr {
@@ -160,7 +127,7 @@ section {
 p,
 ol,
 ul {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     line-height: 2rem;
 }
 
@@ -170,30 +137,6 @@ p {
     padding-right: 0;
     vertical-align: baseline;
 }
-
-/* Chapter Epigraphs */
-div.epigraph {
-    margin: 5em 0;
-}
-
-div.epigraph > blockquote {
-    margin-top: 3em;
-    margin-bottom: 3em;
-}
-
-div.epigraph > blockquote,
-div.epigraph > blockquote > p {
-    font-style: italic;
-}
-
-div.epigraph > blockquote > footer {
-    font-style: normal;
-}
-
-div.epigraph > blockquote > footer > cite {
-    font-style: italic;
-}
-/* end chapter epigraphs styles */
 
 blockquote {
     font-size: 1.4rem;
@@ -262,11 +205,6 @@ figure.fullwidth figcaption {
 a:link,
 a:visited {
     color: inherit;
-}
-
-.no-tufte-underline:link {
-    background: unset;
-    text-shadow: unset;
 }
 
 a:link::selection,

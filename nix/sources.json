@@ -46,17 +46,5 @@
         "type": "tarball",
         "url": "https://github.com/nmattia/resume/archive/3cf6ccaf02239adbcff4124b1989d7213e4dde44.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "tufte-css": {
-        "branch": "gh-pages",
-        "description": "Style your webpage like Edward Tufte’s handouts.",
-        "homepage": "https://edwardtufte.github.io/tufte-css/",
-        "owner": "edwardtufte",
-        "repo": "tufte-css",
-        "rev": "c414b9117d5b39bdb747a172822333fc1043aee3",
-        "sha256": "1g782rjqjn9nlps2m277j3plnkaisjwliwi5p0dpja7lr54af0bd",
-        "type": "tarball",
-        "url": "https://github.com/edwardtufte/tufte-css/archive/c414b9117d5b39bdb747a172822333fc1043aee3.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
