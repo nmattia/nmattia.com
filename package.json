@@ -1,0 +1,26 @@
+{
+  "name": "@nmattia/nmattia.com",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && tsc --noEmit && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "bash -c 'prettier --ignore-path <(cat .gitignore .git/info/exclude) --write .'"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^0.15.0",
+    "@astrojs/rss": "^2.1.0",
+    "@astrojs/sitemap": "^1.0.0",
+    "@astropub/md": "^0.1.4",
+    "astro": "2.0.1",
+    "prettier": "^2.8.3"
+  },
+  "devDependencies": {
+    "rehype-katex": "^6.0.2",
+    "remark-math": "^5.1.1"
+  }
+}

@@ -1,0 +1,53 @@
+---
+
+// The articles (from the "blog" collection) rendered
+
+import Default from "../../components/Default.astro";
+
+import { entries, entryName } from "../../blog";
+
+// Generate a new path for each article
+export async function getStaticPaths() {
+  const blogEntries = await entries();
+  return blogEntries.map((entry) => {
+    return {
+      params: { slug: entryName(entry) },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Returns the date as "January 9, 2012", to be shown in articles
+const prettyDate = (d: Date) => {
+  return d.toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+---
+
+<Default
+  title={entry.data.title}
+  description={entry.data.description}
+  ogType="article"
+  og_image={entry.data.og_image}
+>
+  <h1>{entry.data.title}</h1>
+  <h4>{prettyDate(entry.data.pubDate)}</h4>
+  <hr />
+
+  {
+    entry.data.og_image ? (
+      <img
+        src={entry.data.og_image}
+        style="margin: auto; display: block; max-height: 630px;"
+      />
+    ) : undefined
+  }
+  <Content />
+</Default>

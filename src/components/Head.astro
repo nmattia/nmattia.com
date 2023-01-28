@@ -1,0 +1,92 @@
+---
+// The HTML <head>
+
+import "../styles/global.css";
+
+export type Props = {
+  title?: string;
+  ogType: "website" | "article";
+  description: string;
+  og_image?: string;
+};
+
+const { title = undefined, ogType, description, og_image }: Props = Astro.props;
+
+// By default the title is "Nicolas Mattia", which the page's specific title appended if any.
+let actualTitle = "Nicolas Mattia";
+if (title !== undefined) {
+  actualTitle = actualTitle + " – " + title;
+}
+---
+
+<head>
+  <!-- proper charset -->
+  <meta charset="utf-8" />
+  <!-- Disable mobile scaling -->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  <!-- KaTeX for inline math stylesheets -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+    integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"
+    crossorigin="anonymous"
+  />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,500;1,300;1,500&family=Roboto+Slab:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- RSS feed -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="nmattia RSS feed"
+    href="/rss.xml?type=blog"
+  />
+
+  <!-- OG, favicons, etc -->
+  <meta property="og:title" content={actualTitle} />
+  <meta property="og:type" content={ogType} />
+  <meta name="description" content={description} /><meta
+    property="og:description"
+    content={description}
+  /><meta property="og:url" content="https://nmattia.com$url$" />
+  {
+    og_image !== undefined ? (
+      <meta property="og:image" content={`https://nmattia.com${og_image}`} />
+    ) : undefined
+  }
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/apple-touch-icon.png"
+  /><link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/favicon-32x32.png"
+  /><link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/favicon-16x16.png"
+  /><link rel="manifest" href="/manifest.json" /><link
+    rel="mask-icon"
+    href="/safari-pinned-tab.svg"
+    color="#fffff8"
+  /><meta name="msapplication-TileColor" content="#fffff8" /><meta
+    name="theme-color"
+    content="#fffff8"
+  />
+
+  <!-- title -->
+  <title>{actualTitle}</title>
+</head>

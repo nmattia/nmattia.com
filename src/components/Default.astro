@@ -1,0 +1,55 @@
+---
+
+// Default component wrapping all pages
+
+import Head from "./Head.astro";
+
+type Props = Parameters<typeof Head>[0];
+
+const { title = undefined, ogType, description, og_image }: Props = Astro.props;
+---
+
+<!--?xml version="1.0" encoding="UTF-8"?--><!DOCTYPE html>
+<html lang="en">
+  <Head
+    title={title}
+    ogType={ogType}
+    description={description}
+    og_image={og_image}
+  />
+
+  <body>
+    <div class="header">
+      <div class="nav">
+        <span class="links">
+          <a href="/" class="home">home</a>
+        </span>
+        <span class="social">
+          <a href="https://www.github.com/nmattia"
+            ><ion-icon name="logo-github"></ion-icon></a
+          >
+          <a href="https://www.linkedin.com/in/nicolas-mattia/"
+            ><ion-icon name="logo-linkedin"></ion-icon></a
+          >
+          <a href="mailto:nicolas@nmattia.com"
+            ><ion-icon name="mail"></ion-icon></a
+          >
+        </span>
+      </div>
+    </div>
+    <div class="content">
+      <slot />
+    </div>
+
+    <footer>&copy; Nicolas Mattia 2023</footer>
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

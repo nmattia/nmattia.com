@@ -1,0 +1,52 @@
+---
+
+// Index page, with a list of articles
+
+
+import Default from "../components/Default.astro";
+
+import { teaser, entries, entryPath } from "../blog";
+
+const blogEntries = await entries();
+
+const description =
+  "Software Engineer based in Zurich who has a thing for functional programming, reproducible builds and infrastructure as code";
+
+---
+
+<Default ogType="website" description={description}>
+  <div class="intro">
+    <h1>Nicolas Mattia</h1>
+
+    <p>
+      I'm a Software Engineer based in Zurich.<br />I like functional
+      programming, reproducible builds and "Infrastructure as Code".
+    </p>
+  </div>
+
+  <hr />
+
+  <div class="blog" id="blog">
+    <h2>Articles</h2>
+
+    <br />
+    <div>
+      {
+        blogEntries.map((blogPostEntry) => (
+          <a href={entryPath(blogPostEntry)} style="text-decoration: none;">
+            <div class="card">
+              <div class="card-container">
+                <h3>
+                  <b>{blogPostEntry.data.title}</b>
+                </h3>
+                <div class="teaser">
+                  <p set:html={teaser(blogPostEntry)} />
+                </div>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Default>
