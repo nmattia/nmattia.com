@@ -67,7 +67,7 @@ GET /users/<user>/notes?query=<prefix>
 <div class="pop" style="display: inline-block;">
 
 <figure style="float: left;">
-<img src="../images/peanut_butter_cookies_nola.jpg" alt="Rated #1 in NOLA"><figcaption>And #2 in America!</figcaption>
+<img src="/images/peanut_butter_cookies_nola.jpg" alt="Rated #1 in NOLA"><figcaption>And #2 in America!</figcaption>
 </figure>
 
 You've been doing amazing work. You got the flow. Mind like water. You're done
@@ -137,7 +137,7 @@ codebase.
 ### The Hunt
 
 <figure style="float: right;">
-<img src="../images/mads_the_hunt.jpg" alt="Mads “Hunter” Mikkelsen"><figcaption>Mads “Hunter” Mikkelsen</figcaption>
+<img src="/images/mads_the_hunt.jpg" alt="Mads “Hunter” Mikkelsen"><figcaption>Mads “Hunter” Mikkelsen</figcaption>
 </figure>
 
 This one should be pretty straightforward. Finding a bug that's been introduced
@@ -215,7 +215,7 @@ before they've been merged.
 
 <div style="display: inline-block;">
 <figure style="float: left;">
-<img src="../images/where_does_it_end.jpg" alt="Where does it end"><figcaption>Where does it end?</figcaption>
+<img src="/images/where_does_it_end.jpg" alt="Where does it end"><figcaption>Where does it end?</figcaption>
 </figure>
 Fixed the issue? A new round of PRs and reviews creates even more noise. At
 best this justifies hiring the intern whose job it is to move JIRA tickets
@@ -357,7 +357,7 @@ PR.
 
 <div style="display: inline-block;">
 <figure style="float: left;">
-<img src="../images/slack-topic-merge-queue.png" alt="Where does it end"><figcaption>Save some cost! DIY merge queue.</figcaption>
+<img src="/images/slack-topic-merge-queue.png" alt="Where does it end"><figcaption>Save some cost! DIY merge queue.</figcaption>
 </figure>
 
 </div>

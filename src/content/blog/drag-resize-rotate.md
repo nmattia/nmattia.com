@@ -56,7 +56,7 @@ bottom-right of the _rotated_ rectangle. We can easily recover its position:
 that's where the user's cursor is when they start dragging!
 
 <div style="text-align: center;">
-<img src="../images/drag-resize-rotate-schema.png" style="width: 100%" alt="TODO"/>
+<img src="/images/drag-resize-rotate-schema.png" style="width: 100%" alt="TODO"/>
 </div>
 
 Here's the million dollar question: when the user moves $q'$ around, how do we
@@ -75,7 +75,7 @@ move as well...
 
 <div style="text-align: center;">
 <figure style="margin: auto;">
-<img src="../images/janos-pach.jpg" alt="Linear Algebra Ahead"><figcaption>János Pach Warned You</figcaption>
+<img src="/images/janos-pach.jpg" alt="Linear Algebra Ahead"><figcaption>János Pach Warned You</figcaption>
 </figure>
 </div>
 
@@ -114,7 +114,7 @@ point is actually the origin for the duration of the rotation. Basically, move
 that point (and everything else) to the origin, rotate, and then move back.
 
 <div style="text-align: center;">
-<img src="../images/drag-resize-rotate-schema-2.png" style="width: 100%" alt="TODO"/>
+<img src="/images/drag-resize-rotate-schema-2.png" style="width: 100%" alt="TODO"/>
 </div>
 
 That means a rotation around a point $c$ is something like this:
@@ -138,7 +138,7 @@ but this time around the new center of rotation. New? Yes! Because when $q'$
 was dragged, the center of the rectangle moved!
 
 <div style="text-align: center;">
-<img src="../images/drag-resize-rotate-schema-3.png" style="width: 100%" alt="TODO"/>
+<img src="/images/drag-resize-rotate-schema-3.png" style="width: 100%" alt="TODO"/>
 </div>
 
 This new center is simply the point halfway between the new, dragged $q'$ and
