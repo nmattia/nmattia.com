@@ -640,6 +640,9 @@ footer {
 pre {
   position: relative;
   min-width: 300px;
+}
+
+pre code {
   /* make sure code blocks don't grow the page horizontally */
   overflow-x: scroll;
 }
