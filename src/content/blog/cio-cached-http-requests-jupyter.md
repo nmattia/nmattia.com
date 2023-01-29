@@ -2,6 +2,8 @@
 title: "cio: cached HTTP requests for a smooth Jupyter experience!"
 description: "Introduction of a small Haskell library for caching HTTP requests"
 pubDate: 2018-08-21
+tags:
+  - "haskell"
 ---
 
 This library provides a thin wrapper around the

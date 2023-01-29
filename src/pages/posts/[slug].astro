@@ -2,6 +2,7 @@
 // The articles (from the "blog" collection) rendered
 
 import Default from "../../components/Default.astro";
+import Article from "../../components/Article.astro";
 
 import { entries, entryName } from "../../blog";
 
@@ -35,17 +36,19 @@ const prettyDate = (d: Date) => {
   ogType="article"
   og_image={entry.data.og_image}
 >
-  <h1>{entry.data.title}</h1>
-  <h4>{prettyDate(entry.data.pubDate)}</h4>
-  <hr />
+  <Article tags={entry.data.tags} name={entryName(entry)}>
+    <h1>{entry.data.title}</h1>
+    <h4>{prettyDate(entry.data.pubDate)}</h4>
+    <hr />
 
-  {
-    entry.data.og_image ? (
-      <img
-        src={entry.data.og_image}
-        style="margin: auto; display: block; max-height: 630px;"
-      />
-    ) : undefined
-  }
-  <Content />
+    {
+      entry.data.og_image ? (
+        <img
+          src={entry.data.og_image}
+          style="margin: auto; display: block; max-height: 630px;"
+        />
+      ) : undefined
+    }
+    <Content />
+  </Article>
 </Default>

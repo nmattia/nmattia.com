@@ -4,6 +4,8 @@ og_image: /images/lens_sunset.jpg
 teaser: "Last week a friend of mine asked me how I would implement the game [2048](https://gabrielecirulli.github.io/2048/) in Java (at least the update logic). It is actually a problem that can be solved elegantly in Haskell using a few [Iso](http://hackage.haskell.org/package/lens-4.14/docs/Control-Lens-Iso.html)s and [Traversal](http://hackage.haskell.org/package/lens-4.14/docs/Control-Lens-Traversal.html)s."
 description: "An article that explains how I used Haskell to implement the game logic of 2048."
 pubDate: 2016-08-19
+tags:
+  - "haskell"
 ---
 
 Last week a friend of mine asked me how I would implement the game

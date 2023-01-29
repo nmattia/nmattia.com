@@ -1,0 +1,43 @@
+---
+import type { Tag } from "../content/config";
+import { topics } from "../content/config";
+import { entries, entryName, entryPath } from "../blog";
+
+type Props = { tags: Tag[]; name: string };
+
+const { tags = [], name }: Props = Astro.props;
+
+// Some machinery to suggest similar articles (by topics)
+const topicNames: undefined | string = tags
+  ?.map((tag) => topics[tag])
+  .join(" and ");
+
+const allEntries = await entries();
+
+const otherEntries = allEntries.filter((e) => entryName(e) !== name);
+
+const similarEntries = otherEntries.filter((e) =>
+  tags.some((t) => e.data.tags?.includes(t))
+);
+
+const suggestedEntries = similarEntries.slice(0, 2);
+---
+
+<slot />
+
+<hr style="margin: 5em auto;" />
+
+{
+  topicNames.length > 0 ? (
+    <>
+      <p>Like {topicNames}? Here's more on the topic:</p>
+      <ul>
+        {suggestedEntries.map((e) => (
+          <li>
+            <a href={entryPath(e)}> {e.data.title}</a>
+          </li>
+        ))}
+      </ul>
+    </>
+  ) : undefined
+}

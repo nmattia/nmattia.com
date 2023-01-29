@@ -2,6 +2,8 @@
 title: Automatically generated directories for individual tasty tests
 description: "This describes a trick for creating directories based on test names when using the Tasty Haskell testing library"
 pubDate: 2018-04-30
+tags:
+  - "haskell"
 ---
 
 This is a ~~hack~~ _practical trick_ for creating directories based on test names

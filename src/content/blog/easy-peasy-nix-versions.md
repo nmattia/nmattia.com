@@ -2,6 +2,8 @@
 title: Easy Peasy Nix Versions
 description: "Describes a simple way to update Nix dependencies and shows a simple Bash script implementing it"
 pubDate: 2019-01-15
+tags:
+  - "nix"
 ---
 
 This is a convention for using third-party packages in Nix. It has a simple
