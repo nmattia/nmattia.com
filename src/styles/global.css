@@ -636,17 +636,3 @@ footer {
 .portfolio-card-container {
   padding: 2px 16px;
 }
-
-pre {
-  border: 2px solid black;
-  border-radius: 5px;
-  min-width: 300px;
-  overflow-x: scroll;
-}
-
-.sourceCode {
-  /* the hakyll default styles specify "visible" which makes
-     * the whole code box scroll and isn't really nice, so we override here
-     */
-  overflow: auto !important;
-}
