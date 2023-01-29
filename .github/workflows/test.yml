@@ -8,15 +8,15 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: "Build"
-      run: npm ci && npm run build
-    - name: "Deploy to netlify"
-      env:
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      if: github.ref == 'refs/heads/master'
-      run: |
-        npm exec -- netlify-cli deploy \
-            --dir=./dist \
-            --message="$GITHUB_SHA" --prod
+      - uses: actions/checkout@v3
+      - name: "Build"
+        run: npm ci && npm run build
+      - name: "Deploy to netlify"
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        if: github.ref == 'refs/heads/master'
+        run: |
+          npm exec -- netlify-cli deploy \
+              --dir=./dist \
+              --message="$GITHUB_SHA" --prod
