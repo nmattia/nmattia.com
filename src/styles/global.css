@@ -636,3 +636,40 @@ footer {
 .portfolio-card-container {
   padding: 2px 16px;
 }
+
+pre {
+  position: relative;
+  min-width: 300px;
+  /* make sure code blocks don't grow the page horizontally */
+  overflow-x: scroll;
+}
+
+/* Everything clipboard related */
+pre .clipboard-copy {
+  fill: transparent;
+}
+
+pre:hover .clipboard-copy {
+  fill: white;
+}
+
+.clipboard-copy {
+  transition: fill 300ms;
+  transition: background 100ms;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  margin: 0.5em;
+  padding: 0.5em;
+  border: 1px solid transparent;
+  border-radius: 5px;
+}
+
+.clipboard-copy:hover {
+  border: 1px solid white;
+}
+
+.clipboard-copy:active {
+  background: white;
+}
