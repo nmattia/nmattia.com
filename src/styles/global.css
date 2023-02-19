@@ -189,16 +189,21 @@ img {
     max-width: 1012px;
     margin: 100px auto;
   }
+}
 
+/* small screen */
+@media (max-width: 1112px) {
+  .content {
+    margin: 0 1em;
+  }
+}
+
+@media (min-width: 1112px) {
   .header {
     margin: auto;
     border-bottom-style: solid;
     border-bottom-width: 2px;
     font-size: 1.8rem;
-  }
-
-  .portfolio-card {
-    max-width: 250px;
   }
 }
 
@@ -210,77 +215,12 @@ img {
     border-bottom-width: 2px;
     font-size: 1.4rem;
   }
+}
 
-  .content {
-    margin: 0 50px;
-  }
 
-  hr,
-  section > p,
-  section > footer,
-  section > table {
-    width: 100%;
-  }
-
-  section > ol {
-    width: 90%;
-  }
-
-  section > ul {
-    width: 90%;
-  }
-
-  figure {
-    max-width: 90%;
-  }
-
-  figcaption,
-  figure.fullwidth figcaption {
-    margin-right: 0%;
-    max-width: none;
-  }
-
-  blockquote {
-    margin-left: 1.5em;
-    margin-right: 0em;
-  }
-
-  blockquote p,
-  blockquote footer {
-    width: 100%;
-  }
-
-  label.margin-toggle:not(.sidenote-number) {
-    display: inline;
-  }
-
-  .sidenote,
-  .marginnote {
-    display: none;
-  }
-
-  .margin-toggle:checked + .sidenote,
-  .margin-toggle:checked + .marginnote {
-    display: block;
-    float: left;
-    left: 1rem;
-    clear: both;
-    width: 95%;
-    margin: 1rem 2.5%;
-    vertical-align: baseline;
-    position: relative;
-  }
-
-  label {
-    cursor: pointer;
-  }
-
-  table {
-    width: 85%;
-  }
-
-  img {
-    width: 100%;
+@media (min-width: 1112px) {
+  .portfolio-card {
+    max-width: 250px;
   }
 }
 
