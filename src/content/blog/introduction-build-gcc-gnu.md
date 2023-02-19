@@ -67,7 +67,7 @@ In order to run those two commands successfully (`configure` and `make`), you'll
 If you're building on macOS, then run `xcode-select --install`, which will install the "Command-Line Tools" (CLT) from Xcode (but more lightweight). Then you'll have `/usr/bin/cc` and `/usr/bin/make`.
 
 <div style="text-align: center">
-<img src="/images/xcode-select-install.jpg" style="max-width: 600px;"/>
+<img src="/images/xcode-select-install.jpg" style="width: 80%; max-width: 600px;"/>
 <p style="font-size: 80%; line-height: 0.6em">
 Install some build tools provided by Apple
 </p>
@@ -144,7 +144,7 @@ my-machine$ ./dist/avr-gcc ~/sample-arduino/main.c -o arduino.hex
 Finally you can imagine a situation where the build, host and target platforms are all different. You could for instance have a web platform that allows users to compile firmware for keyboards with `avr` chips. In this case you'd first build GCC on e.g. your Linux laptop (so the `build` platform would be Linux), with the intent of running GCC in the browser (the `host` platform would be [WebAssembly](https://webassembly.org)) and the programs produced by that GCC would be running on your keyboard (the `target` would be the AVR platform).
 
 <div style="text-align: center; padding: 2em;">
-<img src="/images/build-host-target.gif" style="max-width: 600px;"/>
+<img src="/images/build-host-target.gif" style="width: 80%; max-width: 600px;"/>
 <p style="font-size: 80%; line-height: 0.6em">
 A compiler built by a computer wizard, used by an app developper, producing an iOS app used by a mere mortal.
 </p>
