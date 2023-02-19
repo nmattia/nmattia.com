@@ -1,23 +1,24 @@
 ---
 import type { Tag } from "../content/config";
 import { topics } from "../content/config";
-import { entries, entryName, entryPath } from "../blog";
+import { entries, entryPath } from "../blog";
+import type { CollectionEntry } from "astro:content";
 
-type Props = { tags: Tag[]; name: string };
+type Props = { entry: CollectionEntry<"blog"> };
 
-const { tags = [], name }: Props = Astro.props;
+const { entry }: Props = Astro.props;
+
+const tags: Tag[] = entry.data.tags ?? [];
 
 // Some machinery to suggest similar articles (by topics)
-const topicNames: undefined | string = tags
-  ?.map((tag) => topics[tag])
-  .join(" and ");
+const suggestedTopics = tags?.map((tag) => topics[tag]).join(" and ");
 
 const allEntries = await entries();
 
-const otherEntries = allEntries.filter((e) => entryName(e) !== name);
-
-const similarEntries = otherEntries.filter((e) =>
-  tags.some((t) => e.data.tags?.includes(t))
+const similarEntries = allEntries.filter(
+  (e) =>
+    e.data.pubDate.getTime() < entry.data.pubDate.getTime() &&
+    tags.some((t) => e.data.tags?.includes(t))
 );
 
 const suggestedEntries = similarEntries.slice(0, 2);
@@ -28,9 +29,9 @@ const suggestedEntries = similarEntries.slice(0, 2);
 <hr style="margin: 5em auto;" />
 
 {
-  topicNames.length > 0 ? (
+  suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
     <>
-      <p>Like {topicNames}? Here's more on the topic:</p>
+      <p>Like {suggestedTopics}? Here's more on the topic:</p>
       <ul>
         {suggestedEntries.map((e) => (
           <li>

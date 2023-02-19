@@ -3,6 +3,8 @@ title: "Dragging, Resizing and Rotating HTML elements: Fun with Web Components a
 og_image: /images/rotating_knob_synth.jpg
 description: "This explains how to build user-friendly drag/resize/rotate operations in JavaScript and goes through a bit of the math behind it"
 pubDate: 2020-03-03
+tags:
+  - "js"
 ---
 
 I was recently faced with the following problem: How do you resize a rotated

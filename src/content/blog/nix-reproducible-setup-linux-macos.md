@@ -5,6 +5,7 @@ pubDate: 2018-03-21
 description: "Introduction to homies, a reproducible development environment"
 tags:
   - "nix"
+  - "macos"
 ---
 
 This post describes how I set up a reproducible development environment in a

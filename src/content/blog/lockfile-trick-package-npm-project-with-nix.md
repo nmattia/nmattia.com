@@ -6,6 +6,7 @@ pubDate: 2022-12-18
 tags:
   - "nix"
   - "build"
+  - "js"
 ---
 
 I recently needed to package a JavaScript npm project with Nix. This is very simple to do and does not require any ugly workarounds like importing from derivation or generating Nix files and works just fine with sandboxed builds. Here's the general idea and an example.

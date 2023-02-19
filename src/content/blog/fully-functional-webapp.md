@@ -5,6 +5,7 @@ pubDate: 2017-09-07
 tags:
   - "haskell"
   - "nix"
+  - "js"
 ---
 
 Last Tuesday I gave a 30 minute talk about building and packaging a webapp

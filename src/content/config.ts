@@ -7,6 +7,8 @@ export const topics = {
   nix: "Nix",
   build: "build systems",
   haskell: "Haskell",
+  macos: "macOS",
+  js: "JavaScript",
 } as const;
 
 // Zod schema/inference machinery

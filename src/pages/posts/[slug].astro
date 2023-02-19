@@ -36,7 +36,7 @@ const prettyDate = (d: Date) => {
   ogType="article"
   og_image={entry.data.og_image}
 >
-  <Article tags={entry.data.tags} name={entryName(entry)}>
+  <Article entry={entry}>
     <h1>{entry.data.title}</h1>
     <h4>{prettyDate(entry.data.pubDate)}</h4>
     <hr />
