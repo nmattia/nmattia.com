@@ -1,5 +1,8 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import rehypeRaw from "rehype-raw";
+
+import { rehypeShikiCommands } from "./plugins/rehype-shiki-commands";
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,6 +13,6 @@ export default defineConfig({
       theme: "dark-plus",
     },
     remarkPlugins: ["remark-math"],
-    rehypePlugins: ["rehype-katex"],
+    rehypePlugins: ["rehype-katex", rehypeRaw, rehypeShikiCommands],
   },
 });

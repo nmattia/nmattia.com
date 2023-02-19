@@ -194,7 +194,8 @@ img {
 /* small screen */
 @media (max-width: 1112px) {
   .content {
-    margin: 0 1em;
+    margin: 0;
+    padding: 1em;
   }
 }
 
@@ -216,7 +217,6 @@ img {
     font-size: 1.4rem;
   }
 }
-
 
 @media (min-width: 1112px) {
   .portfolio-card {
@@ -352,17 +352,32 @@ footer {
 }
 
 /* Code styling */
+
+/* inline code */
+code {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
 pre {
   border-radius: 5px;
   position: relative;
+  padding: 1em;
 }
 
 pre > code {
   display: block;
-  margin: 1.5em;
   border-radius: 5px;
   line-height: 1.2em;
   overflow-x: scroll;
+}
+
+/* Line highlight used in code blocks */
+.highlight::before {
+  content: " ";
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  position: absolute;
+  left: 0;
 }
 
 /* Everything clipboard related */

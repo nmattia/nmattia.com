@@ -54,23 +54,26 @@ Some more:
 #![no_std]
 #![no_main]
 
-use pimoroni_tiny2040 as bsp;
+// With some highlight:
+use pimoroni_tiny2040 as bsp; // [sh! highlight]
 
 #[entry]
 fn main() -> ! {
     let mut pac = pac::Peripherals::take().unwrap();
     let mut watchdog = hal::Watchdog::new(pac.WATCHDOG);
     let clocks = hal::clocks::init_clocks_and_plls(
-        bsp::XOSC_CRYSTAL_FREQ,
-        pac.XOSC,
-        pac.CLOCKS,
+        // And some more highlights
+        bsp::XOSC_CRYSTAL_FREQ, // [sh! highlight]
+        pac.XOSC, // [sh! highlight]
+        pac.CLOCKS, // [sh! highlight]
         pac.PLL_SYS,
         pac.PLL_USB,
-        &mut pac.RESETS,
+        &mut pac.RESETS, // some inline [sh_! highlight]commands
         &mut watchdog,
     )
     .ok()
     .unwrap();
+}
 ```
 
 ## More

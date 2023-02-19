@@ -75,7 +75,7 @@ Install some build tools provided by Apple
 
 And while you might think you've installed GCC, it's a lie:
 
-```bash
+```
 $ /usr/bin/gcc --version
 Apple clang version 14.0.0 (clang-1400.0.29.202)
 Target: arm64-apple-darwin22.1.0
@@ -85,7 +85,7 @@ InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
 However the `make` version shipped with CLT is GNU:
 
-```bash
+```
 $ /usr/bin/make --version
 GNU Make 3.81
 Copyright (C) 2006  Free Software Foundation, Inc.
@@ -106,7 +106,7 @@ If you have another look at the generic build command shown earlier, you can see
 ```bash
 $src/configure \
   --prefix=$out \
-  --build=$platform
+  --build=$platform [sh_! highlight]
 
 make
 make install
