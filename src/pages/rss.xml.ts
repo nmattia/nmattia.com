@@ -2,13 +2,10 @@
 
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
-import { entryPath } from "../blog";
+import { entries, entryPath } from "../blog";
 
 export async function get() {
-  const blog = await getCollection("blog");
-
-  blog.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-
+  const blog = await entries();
   return rss({
     title: "nmattia's blog",
     site: "https://nmattia.com",

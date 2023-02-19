@@ -1,141 +1,12 @@
 @charset "UTF-8";
 
-/* http://meyerweb.com/eric/tools/css/reset/
-v2.0 | 20110126
-License: none (public domain)
- */
+.nav ul {
+  list-style-type: none;
+}
 
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
-body {
-  line-height: 1;
-}
-ol,
 ul {
   list-style-type: circle;
   margin-left: 2em;
-}
-
-blockquote,
-q {
-  quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-/* END reset */
-
-.nav ul {
-  list-style-type: none;
 }
 
 body {
@@ -144,6 +15,7 @@ body {
   background-color: #fffff8;
   color: #111;
   counter-reset: sidenote-counter;
+  line-height: 1;
 }
 
 h1,
@@ -182,6 +54,7 @@ hr {
   border: 0;
   border-top: 1px solid #ccc;
   padding: 0;
+  margin: 1em auto;
 }
 
 p.subtitle {
@@ -192,12 +65,13 @@ p.subtitle {
   line-height: 1;
 }
 
-.numeral {
-  font-family: et-book-roman-old-style;
-}
-
 .danger {
   color: red;
+}
+
+a:any-link {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 article {
@@ -550,16 +424,6 @@ label.margin-toggle:not(.sidenote-number) {
   text-align: center;
 }
 
-/* otherwise (super|sub)scripts are not shown properly */
-sup {
-  font-size: small;
-  vertical-align: super;
-}
-sub {
-  font-size: small;
-  vertical-align: sub;
-}
-
 footer {
   text-align: center;
   margin: 30px 0;
@@ -675,4 +539,10 @@ pre:hover .clipboard-copy {
 
 .clipboard-copy:active {
   background: white;
+}
+
+svg.ionicon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
 }

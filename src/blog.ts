@@ -6,7 +6,11 @@ import { markdown } from "@astropub/md";
 
 // All blog entries, sorted
 export const entries = async () => {
-  const blogEntries = await getCollection("blog");
+  const blogEntries = await getCollection(
+    "blog",
+    // Only build draft pages in dev mode
+    ({ data }) => import.meta.env.DEV || data.draft !== true
+  );
   blogEntries.sort(
     (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
   );

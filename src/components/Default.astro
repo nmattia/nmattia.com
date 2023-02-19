@@ -2,6 +2,9 @@
 // Default component wrapping all pages
 
 import Head from "./Head.astro";
+import GitHubIcon from "./GitHubIcon.astro";
+import LinkedInIcon from "./LinkedInIcon.astro";
+import MailIcon from "./MailIcon.astro";
 
 type Props = Parameters<typeof Head>[0];
 
@@ -24,31 +27,19 @@ const { title = undefined, ogType, description, og_image }: Props = Astro.props;
           <a href="/" class="home">home</a>
         </span>
         <span class="social">
-          <a href="https://www.github.com/nmattia"
-            ><ion-icon name="logo-github"></ion-icon></a
-          >
+          <a href="https://www.github.com/nmattia">
+            <GitHubIcon />
+          </a>
           <a href="https://www.linkedin.com/in/nicolas-mattia/"
-            ><ion-icon name="logo-linkedin"></ion-icon></a
+            ><LinkedInIcon /></a
           >
-          <a href="mailto:nicolas@nmattia.com"
-            ><ion-icon name="mail"></ion-icon></a
-          >
+          <a href="mailto:nicolas@nmattia.com"><MailIcon /></a>
         </span>
       </div>
     </div>
     <div class="content">
       <slot />
     </div>
-
     <footer>&copy; Nicolas Mattia 2023</footer>
-
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule=""
-      src="https://unpkg.com/ionicons@4.6.3/dist/ionicons/ionicons.js"
-    ></script>
   </body>
 </html>

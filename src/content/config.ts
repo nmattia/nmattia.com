@@ -17,6 +17,7 @@ export type Tag = z.infer<typeof Tags>;
 
 const blogCollection = defineCollection({
   schema: z.object({
+    draft: z.boolean().optional(), // when true, the page is only built in dev mode
     title: z.string(),
     og_image: z.string().optional(),
     description: z.string(),
