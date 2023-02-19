@@ -8,7 +8,7 @@ type Props = { entry: CollectionEntry<"blog"> };
 
 const { entry }: Props = Astro.props;
 
-const tags: Tag[] = entry.data.tags ?? [];
+const tags: Tag[] = entry.data.tags?.slice(0, 2) ?? [];
 
 // Some machinery to suggest similar articles (by topics)
 const suggestedTopics = tags?.map((tag) => topics[tag]).join(" and ");
