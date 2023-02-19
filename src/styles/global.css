@@ -414,12 +414,15 @@ footer {
 /* Code styling */
 pre {
   border-radius: 5px;
+  position: relative;
 }
 
 pre > code {
   display: block;
   margin: 1.5em;
   border-radius: 5px;
+  line-height: 1.2em;
+  overflow-x: scroll;
 }
 
 /* Everything clipboard related */

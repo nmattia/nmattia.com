@@ -6,6 +6,9 @@ export default defineConfig({
   site: "https://nmattia.com",
   integrations: [sitemap()],
   markdown: {
+    shikiConfig: {
+      theme: "dark-plus",
+    },
     remarkPlugins: ["remark-math"],
     rehypePlugins: ["rehype-katex"],
   },
