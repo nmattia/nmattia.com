@@ -9,6 +9,8 @@ export const topics = {
   haskell: "Haskell",
   macos: "macOS",
   js: "JavaScript",
+  frontend: "Front-end development",
+  astro: "Astro",
 } as const;
 
 // Zod schema/inference machinery
