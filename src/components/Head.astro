@@ -9,9 +9,16 @@ export type Props = {
   ogType: "website" | "article";
   description: string;
   og_image?: string;
+  path?: string;
 };
 
-const { title = undefined, ogType, description, og_image }: Props = Astro.props;
+const {
+  title = undefined,
+  ogType,
+  description,
+  og_image,
+  path,
+}: Props = Astro.props;
 
 // By default the title is "Nicolas Mattia", which the page's specific title appended if any.
 let actualTitle = "Nicolas Mattia";
@@ -59,7 +66,13 @@ if (title !== undefined) {
   <meta name="description" content={description} /><meta
     property="og:description"
     content={description}
-  /><meta property="og:url" content="https://nmattia.com$url$" />
+  />
+
+  {
+    path !== undefined ? (
+      <meta property="og:url" content={`https://nmattia.com${path}`} />
+    ) : undefined
+  }
   {
     og_image !== undefined ? (
       <meta property="og:image" content={`https://nmattia.com${og_image}`} />

@@ -8,7 +8,13 @@ import MailIcon from "./MailIcon.astro";
 
 type Props = Parameters<typeof Head>[0];
 
-const { title = undefined, ogType, description, og_image }: Props = Astro.props;
+const {
+  title = undefined,
+  ogType,
+  description,
+  og_image,
+  path,
+}: Props = Astro.props;
 ---
 
 <!--?xml version="1.0" encoding="UTF-8"?--><!DOCTYPE html>
@@ -18,6 +24,7 @@ const { title = undefined, ogType, description, og_image }: Props = Astro.props;
     ogType={ogType}
     description={description}
     og_image={og_image}
+    path={path}
   />
 
   <body>

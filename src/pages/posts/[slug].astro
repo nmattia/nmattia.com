@@ -51,6 +51,7 @@ const suggestedEntries = similarEntries.slice(0, 2);
   description={entry.data.description}
   ogType="article"
   og_image={entry.data.og_image}
+  path={entryPath(entry)}
 >
   <h1>{entry.data.title}</h1>
   <h4>{prettyDate(entry.data.pubDate)}</h4>
