@@ -361,23 +361,35 @@ code {
 pre {
   border-radius: 5px;
   position: relative;
-  padding: 1em;
 }
 
 pre > code {
-  display: block;
   border-radius: 5px;
   line-height: 1.2em;
   overflow-x: scroll;
+  display: inline-block;
+  min-width: 100%;
 }
 
-/* Line highlight used in code blocks */
-.highlight::before {
-  content: " ";
-  width: 100%;
+/* Code line highlighting */
+
+.line:nth-child(1) {
+  padding-top: 1em;
+}
+
+.line:last-child {
+  padding-bottom: 1em;
+}
+
+.line {
+  display: inline-block;
+  min-width: 100%;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.highlight {
   background: rgba(255, 255, 255, 0.15);
-  position: absolute;
-  left: 0;
 }
 
 /* Everything clipboard related */
