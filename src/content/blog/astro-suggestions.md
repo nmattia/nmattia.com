@@ -114,8 +114,7 @@ const allEntries = await getCollection("blog");
 
 allEntries.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const similarEntries = allEntries.filter(
-  // [sh! highlight]
+const similarEntries = allEntries.filter(// [sh! highlight]
   (e) => tags.some((t) => e.data.tags?.includes(t)) // [sh! highlight]
 ); // [sh! highlight]
 
