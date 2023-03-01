@@ -18,6 +18,21 @@ body {
   line-height: 1;
 }
 
+/* Some global reset reset. */
+
+/* Make sure strikethroughs are struckthrough */
+del {
+  text-decoration-line: line-through;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
 h1,
 h2,
 h3,
@@ -273,6 +288,10 @@ img {
   .blog-container {
     grid-template-columns: 100%;
   }
+}
+
+.blog-article {
+  padding: 0 1em;
 }
 
 .centered {

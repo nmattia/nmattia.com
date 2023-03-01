@@ -17,6 +17,12 @@ This is an example post showcasing [nmattia.com](https://nmattia.com)'s styles.
 
 This is a paragraph.
 
+~~Strikethrough~~.
+
+_italic_.
+
+**bold**.
+
 This is a much longer paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dictum, lorem a ornare pharetra, ligula lorem ullamcorper elit, vitae pretium erat sem eget dui. Sed at velit egestas, lobortis ex vitae, fermentum lectus. Phasellus ac ipsum non lectus gravida lacinia eu ac nulla. Duis id libero vitae purus suscipit fermentum in in justo. Quisque ullamcorper eros in commodo molestie. Duis hendrerit consequat metus eu vehicula. Curabitur pulvinar id magna in convallis.
 
 ### Sub headings (h3)
