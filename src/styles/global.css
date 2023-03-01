@@ -217,12 +217,6 @@ img {
   }
 }
 
-@media (min-width: 1112px) {
-  .portfolio-card {
-    max-width: 250px;
-  }
-}
-
 .header .links a {
   padding: 0 0.8rem;
   text-transform: uppercase;
@@ -319,51 +313,6 @@ footer {
 
 .card-container .teaser {
   padding: 2em;
-}
-
-/* Portfolio */
-
-.portfolio {
-  margin: 8vh auto;
-}
-
-.portfolio h2 {
-  text-align: center;
-}
-
-.portfolio-cards {
-  /*text-align: center;*/
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.portfolio-card {
-  /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  display: inline-block;
-  margin: 30px;
-  font-size: 0.8rem;
-}
-
-.portfolio-card h3 {
-  text-align: center;
-}
-
-.portfolio-card p {
-  font-size: 1.2rem;
-}
-
-/* On mouse-over, add a deeper shadow */
-.portfolio-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
-
-/* Add some padding inside the card container */
-.portfolio-card-container {
-  padding: 2px 16px;
 }
 
 /* Code styling */
