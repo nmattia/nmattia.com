@@ -12,7 +12,7 @@ ul {
 body {
   font-family: "Nunito", sans-serif;
   font-weight: 300;
-  background-color: #fffff8;
+  background-color: hsl(60deg, 100%, 97%);
   color: #111;
   counter-reset: sidenote-counter;
   line-height: 1;
@@ -31,6 +31,30 @@ em {
 
 strong {
   font-weight: bold;
+}
+
+/* Shadows */
+
+:root {
+  --shadow-color: 0deg 0% 46%;
+  --shadow-elevation-low: 0.6px 0.4px 0.5px hsl(var(--shadow-color) / 0.86),
+    0.8px 0.6px 0.8px -2.5px hsl(var(--shadow-color) / 0.58),
+    2.5px 1.9px 2.4px -5px hsl(var(--shadow-color) / 0.29);
+  --shadow-elevation-medium: 0.6px 0.4px 0.5px hsl(var(--shadow-color) / 0.73),
+    0.7px 0.6px 0.7px -1.2px hsl(var(--shadow-color) / 0.58),
+    2px 1.5px 1.9px -2.5px hsl(var(--shadow-color) / 0.44),
+    5.6px 4.2px 5.3px -3.7px hsl(var(--shadow-color) / 0.29),
+    12.4px 9.4px 11.7px -5px hsl(var(--shadow-color) / 0.15);
+  --shadow-elevation-high: 0.6px 0.4px 0.5px hsl(var(--shadow-color) / 0.67),
+    0.6px 0.5px 0.6px -0.6px hsl(var(--shadow-color) / 0.61),
+    1.3px 1px 1.2px -1.1px hsl(var(--shadow-color) / 0.54),
+    3.1px 2.3px 2.9px -1.7px hsl(var(--shadow-color) / 0.47),
+    6.6px 5px 6.2px -2.2px hsl(var(--shadow-color) / 0.4),
+    12.3px 9.3px 11.6px -2.8px hsl(var(--shadow-color) / 0.34),
+    20.9px 15.8px 19.7px -3.3px hsl(var(--shadow-color) / 0.27),
+    32.8px 24.8px 30.8px -3.9px hsl(var(--shadow-color) / 0.2),
+    48.7px 36.8px 45.8px -4.4px hsl(var(--shadow-color) / 0.13),
+    69.1px 52.2px 65px -5px hsl(var(--shadow-color) / 0.07);
 }
 
 h1,
@@ -304,13 +328,15 @@ footer {
 }
 
 .card {
-  --shadow-baseline: 4px;
+  --shadow-baseline: var(--shadow-elevation-low);
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 var(--shadow-baseline) calc(2 * var(--shadow-baseline)) 0
-    rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-baseline);
   transition: 0.3s;
   margin: 2em;
   font-size: 0.8rem;
+  border-radius: 0.5em;
+  background-color: hsl(60deg, 100%, 99%);
+  border: 1px solid hsl(60deg, 60%, 85%);
 }
 
 /* small screen */
@@ -320,6 +346,7 @@ footer {
     margin: 0;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
+    border-radius: 0;
   }
 
   .card:hover {
@@ -334,7 +361,7 @@ footer {
 
 /* On mouse-over, add a deeper shadow */
 .card:hover {
-  --shadow-baseline: 8px;
+  --shadow-baseline: var(--shadow-elevation-medium);
   cursor: pointer;
 }
 
