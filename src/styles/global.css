@@ -13,7 +13,7 @@ body {
   font-family: "Nunito", sans-serif;
   font-weight: 300;
   background-color: hsl(60deg, 100%, 97%);
-  color: #111;
+  color: hsl(60deg, 0%, 13%);
   counter-reset: sidenote-counter;
   line-height: 1;
 }
