@@ -1,6 +1,7 @@
 ---
 title: "cio: cached HTTP requests for a smooth Jupyter experience!"
 description: "Introduction of a small Haskell library for caching HTTP requests"
+og_image: "/images/jupyter-antenna.jpg"
 pubDate: 2018-08-21
 tags:
   - "haskell"

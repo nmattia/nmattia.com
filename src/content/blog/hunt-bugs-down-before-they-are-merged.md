@@ -1,6 +1,7 @@
 ---
 title: Hunt bugs down before they are merged!
 description: "A humorous article about why bugs should be caught sooner rather than later"
+og_image: "/images/bug-hunt.jpg"
 pubDate: 2019-01-08
 ---
 

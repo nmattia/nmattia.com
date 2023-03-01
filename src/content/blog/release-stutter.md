@@ -1,6 +1,7 @@
 ---
 title: "Stutter: the anti-grep"
 description: "The release article for stutter, a tool that takes a regex and tries to generate matching strings"
+og_image: "/images/stutter.jpg"
 pubDate: 2017-05-01
 tags:
   - "haskell"

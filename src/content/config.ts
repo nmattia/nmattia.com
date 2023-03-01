@@ -23,7 +23,7 @@ const blogCollection = defineCollection({
   schema: z.object({
     draft: z.boolean().optional(), // when true, the page is only built in dev mode
     title: z.string(),
-    og_image: z.string().optional(),
+    og_image: z.string(),
     description: z.string(),
     pubDate: z.date(),
     teaser: z.string().optional(),
