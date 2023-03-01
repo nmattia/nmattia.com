@@ -33,6 +33,10 @@ const description =
           <a href={entryPath(blogPostEntry)} style="text-decoration: none;">
             <div class="card">
               <div class="card-container">
+                <img
+                  src={blogPostEntry.data.og_image}
+                  style="margin: auto; display: block; max-height: 630px;"
+                />
                 <h3>
                   <b>{blogPostEntry.data.title}</b>
                 </h3>

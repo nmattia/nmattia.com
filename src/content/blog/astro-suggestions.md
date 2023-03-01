@@ -1,6 +1,7 @@
 ---
 title: "Automatic tag-based article suggestions for blogs and Astro websites"
 description: "An example of how to automatically show relevant article suggestions in astro."
+og_image: /images/article-suggestions.jpg
 pubDate: 2023-02-25
 tags:
   - js

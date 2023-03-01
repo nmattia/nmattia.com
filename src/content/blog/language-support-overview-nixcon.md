@@ -1,6 +1,7 @@
 ---
 title: "NixCon Talk: An Overview of Language Support in Nix"
 description: "This is a link to a talk I gave at NixCon about language support in Nix"
+og_image: /images/nixcon-2019.jpg
 pubDate: 2019-11-12
 tags:
   - "nix"

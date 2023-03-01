@@ -192,10 +192,9 @@ img {
 }
 
 /* small screen */
-@media (max-width: 1112px) {
+@media (max-width: 600px) {
   .content {
     margin: 0;
-    padding: 1em;
   }
 }
 
@@ -280,11 +279,27 @@ footer {
 }
 
 .card {
+  --shadow-baseline: 4px;
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 var(--shadow-baseline) calc(2 * var(--shadow-baseline)) 0
+    rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   margin: 60px 0;
   font-size: 0.8rem;
+}
+
+/* small screen */
+@media (max-width: 600px) {
+  .card {
+    box-shadow: none;
+    margin: 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .card:hover {
+    background-color: #f9f9f9;
+  }
 }
 
 .card h3 {
@@ -293,13 +308,13 @@ footer {
 
 /* On mouse-over, add a deeper shadow */
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  --shadow-baseline: 8px;
   cursor: pointer;
 }
 
 /* Add some padding inside the card container */
 .card-container {
-  padding: 2px 16px;
+  padding: 1em;
 }
 
 .card-container .teaser {
