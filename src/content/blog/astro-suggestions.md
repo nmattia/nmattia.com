@@ -25,7 +25,7 @@ Article suggestions based on the topics "Nix" and "build systems"
 
 These suggestions are generated automatically (and _statically_, using [Astro](http://astro.build)) based on the article's particular tags. The code for my articles looks like this (you can find the full code on [GitHub](https://github.com/nmattia/nmattia.com/blob/2c1523e6920f0aed2ede4ea158ae1031c448a15a/src/pages/posts/%5Bslug%5D.astro)):
 
-<!-- prettier-ignore-start -->
+<!-- prettier-ignore -->
 ``` astro
 ---
 const suggestedTopics = ...
@@ -49,7 +49,6 @@ const suggestedEntries = ...
   ) : undefined
 }
 ```
-<!-- prettier-ignore-end -->
 
 The magic happens when computing `suggestedEntries` (the articles suggested) and `suggestedTopics` (a few topics related to the current article, to pique the reader's interest, like "Nix and build systems" above).
 
@@ -109,6 +108,7 @@ Very good. We now have two articles to suggest for every article we write. These
 
 So instead of just grabbing two articles, let's first make sure the articles include at least one of the tags of the current article:
 
+<!-- prettier-ignore -->
 ```ts
 const allEntries = await getCollection("blog");
 
