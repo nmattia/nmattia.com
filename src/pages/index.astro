@@ -37,9 +37,7 @@ const description =
                   src={blogPostEntry.data.og_image}
                   style="margin: auto; display: block; max-height: 630px;"
                 />
-                <h3>
-                  <b>{blogPostEntry.data.title}</b>
-                </h3>
+                <h3>{blogPostEntry.data.title}</h3>
                 <div class="teaser">
                   <p set:html={teaser(blogPostEntry)} />
                 </div>

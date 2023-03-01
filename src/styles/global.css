@@ -44,8 +44,6 @@ h2 {
 
 h3 {
   font-size: 1.7rem;
-  margin-bottom: 1.4rem;
-  margin-top: 1.5rem;
   line-height: 1.4;
 }
 
@@ -312,6 +310,7 @@ footer {
 
 .card h3 {
   text-align: center;
+  margin-top: 1.5rem;
 }
 
 /* On mouse-over, add a deeper shadow */
