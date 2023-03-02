@@ -277,6 +277,10 @@ img {
   text-decoration: underline;
 }
 
+.header a.no-underline {
+  text-decoration: none;
+}
+
 .header .nav {
   margin: auto;
   max-width: 1012px;
