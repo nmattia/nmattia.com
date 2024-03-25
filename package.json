@@ -22,7 +22,7 @@
     "typescript": "5.1"
   },
   "devDependencies": {
-    "rehype-katex": "^6.0.2",
+    "rehype-katex": "^6.0.3",
     "remark-math": "^5.1.1"
   }
 }
