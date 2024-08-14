@@ -1,13 +1,13 @@
-import type { ElementContent as HastElement } from "hast";
 import type { RehypePlugin } from "@astrojs/markdown-remark";
 import type { Visitor } from "unist-util-visit";
+import type { ElementContent } from "hast";
 import { classnames } from "hast-util-classnames";
 import { isElement } from "hast-util-is-element";
 import { visit } from "unist-util-visit";
 
 /* This is a rehype plugin adding support for shiki "commands". */
 
-export const popCommand = (nodes: HastElement[]): string | undefined => {
+export const popCommand = (nodes: ElementContent[]): string | undefined => {
   const reg = /\[(?<sh>sh_|sh)!\s*(?<command>\w+)]/;
 
   let i = nodes.length;
@@ -50,7 +50,7 @@ export const popCommand = (nodes: HastElement[]): string | undefined => {
   return undefined;
 };
 
-export const transformLineNodes = (lines: HastElement[]) => {
+export const transformLineNodes = (lines: ElementContent[]) => {
   lines.forEach((line) => {
     if (!isElement(line)) {
       return;
@@ -64,7 +64,7 @@ export const transformLineNodes = (lines: HastElement[]) => {
 };
 
 export const rehypeShikiCommands: RehypePlugin = () => {
-  const visitor: Visitor = (node, index, parent) => {
+  const visitor: Visitor = (node, _index, _parent) => {
     if (!isElement(node, "code")) {
       return;
     }
@@ -72,7 +72,7 @@ export const rehypeShikiCommands: RehypePlugin = () => {
     transformLineNodes(node.children);
   };
 
-  return (tree, file) => {
+  return (tree, _file) => {
     visit(tree, visitor);
   };
 };

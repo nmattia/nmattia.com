@@ -1,10 +1,9 @@
 // Simple rss feed
 
 import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
 import { entries, entryPath } from "../blog";
 
-export async function get() {
+export async function GET() {
   const blog = await entries();
   return rss({
     title: "nmattia's blog",

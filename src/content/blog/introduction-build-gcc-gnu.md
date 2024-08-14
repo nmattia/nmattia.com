@@ -106,7 +106,7 @@ If you have another look at the generic build command shown earlier, you can see
 ```bash
 $src/configure \
   --prefix=$out \
-  --build=$platform [sh_! highlight]
+  --build=$platform# [sh! highlight]
 
 make
 make install
