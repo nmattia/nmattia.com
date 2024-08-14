@@ -1,6 +1,6 @@
 # Code for nmattia.com
 
-[🔗](https://nmattia.com)
+Link: [https://nmattia.com](https://nmattia.com)
 
 ## Build
 
