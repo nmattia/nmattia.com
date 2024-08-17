@@ -40,7 +40,7 @@ const allEntries = await entries();
 const similarEntries = allEntries.filter(
   (e) =>
     e.data.pubDate.getTime() < entry.data.pubDate.getTime() &&
-    tags.some((t) => e.data.tags?.includes(t))
+    tags.some((t) => e.data.tags?.includes(t)),
 );
 
 const suggestedEntries = similarEntries.slice(0, 2);

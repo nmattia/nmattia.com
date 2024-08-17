@@ -130,7 +130,7 @@ const allEntries = await getCollection("blog");
 allEntries.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const similarEntries = allEntries.filter(
-  (e) => tags.some((t) => e.data.tags?.includes(t)) && e.slug !== entry.slug // [sh! highlight]
+  (e) => tags.some((t) => e.data.tags?.includes(t)) && e.slug !== entry.slug, // [sh! highlight]
 );
 
 const suggestedEntries = similarEntries.slice(0, 2);
@@ -146,7 +146,7 @@ allEntries.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const similarEntries = allEntries.filter(
   (e) =>
     tags.some((t) => e.data.tags?.includes(t)) &&
-    e.data.pubDate.getTime() < entry.data.pubDate.getTime() // [sh! highlight]
+    e.data.pubDate.getTime() < entry.data.pubDate.getTime(), // [sh! highlight]
 );
 
 const suggestedEntries = similarEntries.slice(0, 2);
