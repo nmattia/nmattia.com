@@ -9,10 +9,10 @@ export const entries = async () => {
   const blogEntries = await getCollection(
     "blog",
     // Only build draft pages in dev mode
-    ({ data }) => import.meta.env.DEV || data.draft !== true
+    ({ data }) => import.meta.env.DEV || data.draft !== true,
   );
   blogEntries.sort(
-    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
   );
   return blogEntries;
 };
