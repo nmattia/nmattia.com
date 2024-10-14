@@ -12,7 +12,7 @@
     "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json"
   },
   "dependencies": {
-    "astro": "4.13.4",
+    "astro": "4.16.1",
     "the-new-css-reset": "^1.8.4"
   },
   "devDependencies": {
