@@ -4,15 +4,15 @@
 import Default from "../../components/Default.astro";
 
 import type { Tag } from "../../content/config";
-import { entries, entryName, entryPath } from "../../blog";
+import { getBlogEntries, blogEntryName, blogEntryPath } from "../../blog";
 import { topics } from "../../content/config";
 
 // Generate a new path for each article
 export async function getStaticPaths() {
-  const blogEntries = await entries();
-  return blogEntries.map((entry) => {
+  const entries = await getBlogEntries();
+  return entries.map((entry) => {
     return {
-      params: { slug: entryName(entry) },
+      params: { slug: blogEntryName(entry) },
       props: { entry },
     };
   });
@@ -35,7 +35,7 @@ const tags: Tag[] = entry.data.tags?.slice(0, 2) ?? [];
 // Some machinery to suggest similar articles (by topics)
 const suggestedTopics = tags?.map((tag) => topics[tag]).join(" and ");
 
-const allEntries = await entries();
+const allEntries = await getBlogEntries();
 
 const similarEntries = allEntries.filter(
   (e) =>
@@ -51,7 +51,7 @@ const suggestedEntries = similarEntries.slice(0, 2);
   description={entry.data.description}
   ogType="article"
   og_image={entry.data.og_image}
-  path={entryPath(entry)}
+  path={blogEntryPath(entry)}
 >
   <article class="blog-article">
     <h1>{entry.data.title}</h1>
@@ -77,7 +77,7 @@ const suggestedEntries = similarEntries.slice(0, 2);
           <ul>
             {suggestedEntries.map((e) => (
               <li>
-                <a href={entryPath(e)}> {e.data.title}</a>
+                <a href={blogEntryPath(e)}> {e.data.title}</a>
               </li>
             ))}
           </ul>

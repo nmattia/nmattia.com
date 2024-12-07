@@ -1,6 +1,8 @@
-// The blog collection with all articles
+// Collections
 
 import { z, defineCollection } from "astro:content";
+
+// The blog collection with all articles
 
 // Topics, from "tag" to "topic name"
 export const topics = {
@@ -9,6 +11,7 @@ export const topics = {
   haskell: "Haskell",
   macos: "macOS",
   js: "JavaScript",
+  webgl: "WebGL",
   frontend: "Front-end development",
   astro: "Astro",
 } as const;
@@ -30,6 +33,21 @@ const blogCollection = defineCollection({
     tags: Tags.array().optional(),
   }),
 });
+
+// The projects
+
+const projectsCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    image: z.string(),
+    pubDate: z.date(),
+    teaser: z.string(),
+    link: z.string(),
+    tags: Tags.array().optional(),
+  }),
+});
+
 export const collections = {
   blog: blogCollection,
+  projects: projectsCollection,
 };

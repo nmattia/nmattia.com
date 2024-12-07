@@ -20,7 +20,7 @@ const markdown = (input: string): Promise<string> =>
     .then((vfile) => String(vfile));
 
 // All blog entries, sorted
-export const entries = async () => {
+export const getBlogEntries = async () => {
   const blogEntries = await getCollection(
     "blog",
     // Only build draft pages in dev mode
@@ -33,7 +33,9 @@ export const entries = async () => {
 };
 
 // The teaser, extracted from article by re-parsing the markdown and stripping links (which misbehave when used inside the card link)
-export const teaser = async (blogPostEntry: CollectionEntry<"blog">) => {
+export const blogPostTeaser = async (
+  blogPostEntry: CollectionEntry<"blog">,
+): Promise<string> => {
   let teaserMd = undefined;
   if (blogPostEntry.data.teaser !== undefined) {
     teaserMd = blogPostEntry.data.teaser;
@@ -53,12 +55,12 @@ export const teaser = async (blogPostEntry: CollectionEntry<"blog">) => {
 };
 
 // The entry name, i.e. basically the filename with date prepended
-export const entryName = (blogPostEntry: CollectionEntry<"blog">) => {
+export const blogEntryName = (blogPostEntry: CollectionEntry<"blog">) => {
   const pubDate = blogPostEntry.data.pubDate.toISOString().split("T")[0];
   return `${pubDate}-${blogPostEntry.slug}`;
 };
 
 // The URL/path for an entry, i.e. basically /posts/<name>
-export const entryPath = (blogPostEntry: CollectionEntry<"blog">) => {
-  return `/posts/${entryName(blogPostEntry)}`;
+export const blogEntryPath = (blogPostEntry: CollectionEntry<"blog">) => {
+  return `/posts/${blogEntryName(blogPostEntry)}`;
 };
