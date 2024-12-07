@@ -2,7 +2,22 @@
 
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
-import { markdown } from "@astropub/md";
+import rehypeDocument from "rehype-document";
+import rehypeFormat from "rehype-format";
+import rehypeStringify from "rehype-stringify";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import { unified } from "unified";
+
+const markdown = (input: string): Promise<string> =>
+  unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeDocument)
+    .use(rehypeFormat)
+    .use(rehypeStringify)
+    .process(input)
+    .then((vfile) => String(vfile));
 
 // All blog entries, sorted
 export const entries = async () => {
