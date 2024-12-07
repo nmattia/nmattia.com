@@ -30,7 +30,11 @@ const description =
     <div class="blog-container">
       {
         blogEntries.map((blogPostEntry) => (
-          <a href={entryPath(blogPostEntry)} style="text-decoration: none;">
+          <a
+            target={!!blogPostEntry.data.redirect ? "_blank" : "_self"}
+            href={blogPostEntry.data.redirect ?? entryPath(blogPostEntry)}
+            style="text-decoration: none;"
+          >
             <div class="card">
               <div class="card-container">
                 <img
