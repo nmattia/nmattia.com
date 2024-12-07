@@ -1,6 +1,8 @@
-// The blog collection with all articles
+// Collections
 
 import { z, defineCollection } from "astro:content";
+
+// The blog collection with all articles
 
 // Topics, from "tag" to "topic name"
 export const topics = {
@@ -29,9 +31,23 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     teaser: z.string().optional(),
     tags: Tags.array().optional(),
-    redirect: z.string().optional(),
   }),
 });
+
+// The projects
+
+const projectsCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    image: z.string(),
+    pubDate: z.date(),
+    teaser: z.string(),
+    link: z.string(),
+    tags: Tags.array().optional(),
+  }),
+});
+
 export const collections = {
   blog: blogCollection,
+  projects: projectsCollection,
 };

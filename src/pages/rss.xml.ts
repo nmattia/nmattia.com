@@ -1,10 +1,10 @@
 // Simple rss feed
 
 import rss from "@astrojs/rss";
-import { entries, entryPath } from "../blog";
+import { getBlogEntries, blogEntryPath } from "../blog";
 
 export async function GET() {
-  const blog = await entries();
+  const blog = await getBlogEntries();
   return rss({
     title: "nmattia's blog",
     site: "https://nmattia.com",
@@ -13,7 +13,7 @@ export async function GET() {
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: entryPath(post),
+      link: blogEntryPath(post),
     })),
   });
 }
