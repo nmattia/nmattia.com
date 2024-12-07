@@ -1,9 +1,5 @@
 @charset "UTF-8";
 
-.nav ul {
-  list-style-type: none;
-}
-
 ul {
   list-style-type: circle;
   margin-left: 2em;
@@ -18,7 +14,7 @@ body {
   line-height: 1;
 }
 
-/* Some global reset reset. */
+/* Some global styles. */
 
 /* Make sure strikethroughs are struckthrough */
 del {
@@ -96,30 +92,10 @@ hr {
   margin: 1em auto;
 }
 
-p.subtitle {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  display: block;
-  line-height: 1;
-}
-
-.danger {
-  color: red;
-}
-
+/* By default, all link should be underlined & have a pointer */
 a:any-link {
   text-decoration: underline;
   cursor: pointer;
-}
-
-article {
-  padding: 5rem 0rem;
-}
-
-section {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 
 p,
@@ -132,8 +108,6 @@ ul {
 p {
   margin-top: 1.4rem;
   margin-bottom: 1.4rem;
-  padding-right: 0;
-  vertical-align: baseline;
 }
 
 blockquote {
@@ -154,20 +128,8 @@ blockquote footer {
   text-align: right;
 }
 
-section > p,
-section > footer,
-section > table {
-  width: 55%;
-}
-
-/* 50 + 5 == 55, to be the same width as paragraph */
-section > ol,
-section > ul {
-  width: 50%;
-  -webkit-padding-start: 5%;
-}
-
-li:not(:first-child) {
+/* Add spacing between list items */
+li + li {
   margin-top: 0.25rem;
 }
 
@@ -193,30 +155,6 @@ figcaption {
   vertical-align: baseline;
   position: relative;
   max-width: 40%;
-}
-
-/* Links: replicate underline that clears descenders */
-a:link,
-a:visited {
-  color: inherit;
-}
-
-a:link::selection,
-a:link::-moz-selection {
-  text-shadow:
-    0.03em 0 #b4d5fe,
-    -0.03em 0 #b4d5fe,
-    0 0.03em #b4d5fe,
-    0 -0.03em #b4d5fe,
-    0.06em 0 #b4d5fe,
-    -0.06em 0 #b4d5fe,
-    0.09em 0 #b4d5fe,
-    -0.09em 0 #b4d5fe,
-    0.12em 0 #b4d5fe,
-    -0.12em 0 #b4d5fe,
-    0.15em 0 #b4d5fe,
-    -0.15em 0 #b4d5fe;
-  background: #b4d5fe;
 }
 
 /* Sidenotes, margin notes, figures, captions */
@@ -286,7 +224,7 @@ img {
   text-decoration: underline;
 }
 
-.header a.no-underline {
+.header .social a {
   text-decoration: none;
 }
 
@@ -294,6 +232,12 @@ img {
   margin: auto;
   max-width: 1012px;
   padding: 1rem 0.5rem;
+}
+
+.header .nav .nav-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
 }
 
 .header .nav .social {
@@ -329,10 +273,6 @@ img {
 
 .blog-article {
   padding: 0 1em;
-}
-
-.centered {
-  text-align: center;
 }
 
 footer {
@@ -466,10 +406,4 @@ pre:hover .clipboard-copy {
 
 .clipboard-copy:active {
   background: white;
-}
-
-svg.ionicon {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
 }
