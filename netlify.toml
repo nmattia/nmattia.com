@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/webgl-shader-template"
+  to = "https://nmattia.github.io/webgl-shader-template/"
+  status = 200 # proxies requests instead of redirect
+  force = true
