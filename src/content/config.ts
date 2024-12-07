@@ -9,6 +9,7 @@ export const topics = {
   haskell: "Haskell",
   macos: "macOS",
   js: "JavaScript",
+  webgl: "WebGL",
   frontend: "Front-end development",
   astro: "Astro",
 } as const;
@@ -28,6 +29,7 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     teaser: z.string().optional(),
     tags: Tags.array().optional(),
+    redirect: z.string().optional(),
   }),
 });
 export const collections = {

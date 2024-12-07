@@ -60,5 +60,9 @@ export const entryName = (blogPostEntry: CollectionEntry<"blog">) => {
 
 // The URL/path for an entry, i.e. basically /posts/<name>
 export const entryPath = (blogPostEntry: CollectionEntry<"blog">) => {
+  if (blogPostEntry.data.redirect !== undefined) {
+    return blogPostEntry.data.redirect;
+  }
+
   return `/posts/${entryName(blogPostEntry)}`;
 };
