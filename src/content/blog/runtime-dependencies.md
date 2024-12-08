@@ -90,7 +90,7 @@ of runtime store paths. If it's a match, we keep it. Otherwise, we discard it.
 Let's look at some code. We'll go top-down, starting with the function creating
 the final string.
 
-![image](/images/runtime-deps.png" style="width:600px)
+![image](/images/runtime-deps.png)
 
 _The "Function Tree". Today we'll follow the red arrow._
 
