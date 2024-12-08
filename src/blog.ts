@@ -64,3 +64,8 @@ export const blogEntryName = (blogPostEntry: CollectionEntry<"blog">) => {
 export const blogEntryPath = (blogPostEntry: CollectionEntry<"blog">) => {
   return `/posts/${blogEntryName(blogPostEntry)}`;
 };
+
+// A (unique) transition name to be used for the post's image
+export const blogEntryTransitionName = (
+  blogPostEntry: CollectionEntry<"blog">,
+) => `blog-transition-${blogEntryName(blogPostEntry)}`;
