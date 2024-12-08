@@ -16,4 +16,6 @@ export default defineConfig({
     remarkPlugins: ["remark-math", remarkGfmAdmonitions],
     rehypePlugins: ["rehype-katex", rehypeRaw, rehypeShikiCommands],
   },
+
+  prefetch: true /* enable prefetching */,
 });
