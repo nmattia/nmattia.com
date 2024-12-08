@@ -208,7 +208,8 @@ img {
 @media (min-width: 1112px) {
   .content {
     max-width: 1012px;
-    margin: 100px auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -280,8 +281,16 @@ img {
 }
 
 .intro {
-  margin: 8vh 0;
   text-align: center;
+  max-width: 30em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8vh;
+  margin-bottom: 8vh;
+}
+
+.intro p + p {
+  margin-top: 1em;
 }
 
 /* Blog */

@@ -5,6 +5,7 @@ import Head from "./Head.astro";
 import GitHubIcon from "./GitHubIcon.astro";
 import LinkedInIcon from "./LinkedInIcon.astro";
 import MailIcon from "./MailIcon.astro";
+import TwitterIcon from "./TwitterIcon.astro";
 
 type Props = Parameters<typeof Head>[0];
 
@@ -31,7 +32,7 @@ const {
     <div class="header">
       <div class="nav">
         <span class="links">
-          <a href="/" class="home">home</a>
+          <a href="/" class="home">Nicolas Mattia</a>
         </span>
         <span class="social">
           <a
@@ -41,6 +42,11 @@ const {
           >
             <GitHubIcon />
           </a>
+          <a
+            href="https://x.com/nasmattia"
+            target="_blank"
+            rel="noopener noreferrer"><TwitterIcon /></a
+          >
           <a
             href="https://www.linkedin.com/in/nicolas-mattia/"
             target="_blank"
