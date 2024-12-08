@@ -310,6 +310,12 @@ img {
   padding: 0 1em;
 }
 
+/* Make paragraphs overflow individually, instead
+ * of taking the whole page along for a ride. */
+.blog-article > p {
+  overflow-x: scroll;
+}
+
 /* Space out all top-level elements */
 .blog-article > * {
   margin-top: 1.6rem; /* rem to avoid element's line-height impacting the spacing */
