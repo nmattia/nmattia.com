@@ -3,7 +3,12 @@
 
 import Default from "../components/Default.astro";
 
-import { blogPostTeaser, getBlogEntries, blogEntryPath } from "../blog";
+import {
+  blogPostTeaser,
+  getBlogEntries,
+  blogEntryPath,
+  blogEntryTransitionName,
+} from "../blog";
 import { getCollection } from "astro:content";
 
 // Common type of entries displayed on the front page
@@ -14,6 +19,7 @@ type Entry = {
   image: string;
   link: string;
   date: Date;
+  transitionName?: string;
 };
 
 // Blog entries
@@ -24,6 +30,7 @@ const blogEntries: Entry[] = (await getBlogEntries()).map((blogEntry) => ({
   image: blogEntry.data.og_image,
   link: blogEntryPath(blogEntry),
   date: blogEntry.data.pubDate,
+  transitionName: blogEntryTransitionName(blogEntry),
 }));
 
 // "Projects"
@@ -72,6 +79,11 @@ const description =
             <div class="card">
               <div class="card-container">
                 <img
+                  style={
+                    entry.transitionName
+                      ? `view-transition-name: ${entry.transitionName};`
+                      : undefined
+                  }
                   src={entry.image}
                   style="margin: auto; display: block; max-height: 630px;"
                 />

@@ -4,7 +4,12 @@
 import Default from "../../components/Default.astro";
 
 import type { Tag } from "../../content/config";
-import { getBlogEntries, blogEntryName, blogEntryPath } from "../../blog";
+import {
+  getBlogEntries,
+  blogEntryTransitionName,
+  blogEntryName,
+  blogEntryPath,
+} from "../../blog";
 import { topics } from "../../content/config";
 
 // Generate a new path for each article
@@ -61,6 +66,7 @@ const suggestedEntries = similarEntries.slice(0, 2);
     {
       entry.data.og_image ? (
         <img
+          style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
           src={entry.data.og_image}
           style="margin: auto; display: block; max-height: 630px;"
         />
