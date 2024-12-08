@@ -23,28 +23,30 @@ export const Tags = z.enum(tags);
 export type Tag = z.infer<typeof Tags>;
 
 const blogCollection = defineCollection({
-  schema: z.object({
-    draft: z.boolean().optional(), // when true, the page is only built in dev mode
-    title: z.string(),
-    og_image: z.string(),
-    description: z.string(),
-    pubDate: z.date(),
-    teaser: z.string().optional(),
-    tags: Tags.array().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      draft: z.boolean().optional(), // when true, the page is only built in dev mode
+      title: z.string(),
+      og_image: image(),
+      description: z.string(),
+      pubDate: z.date(),
+      teaser: z.string().optional(),
+      tags: Tags.array().optional(),
+    }),
 });
 
 // The projects
 
 const projectsCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    image: z.string(),
-    pubDate: z.date(),
-    teaser: z.string(),
-    link: z.string(),
-    tags: Tags.array().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      image: image(),
+      pubDate: z.date(),
+      teaser: z.string(),
+      link: z.string(),
+      tags: Tags.array().optional(),
+    }),
 });
 
 export const collections = {
