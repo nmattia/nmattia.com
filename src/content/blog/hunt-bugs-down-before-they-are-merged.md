@@ -32,11 +32,11 @@ describe individually in the next few sections:
 
 Let's jump right in!
 
-<div class="pop">
+---
 
-You are a frontend engineer for a company that stores online notes. You're
+_You are a frontend engineer for a company that stores online notes. You're
 tasked with writing an autocomplete function allowing the user to find notes
-more quickly:
+more quickly:_
 
 ```
 
@@ -55,28 +55,26 @@ more quickly:
 
 ```
 
-The following HTTP call returns the list of all of a user's notes:
+_The following HTTP call returns the list of all of a user's notes:_
 
 ```
 GET /users/<user>/notes?query=<prefix>
 ```
 
-</div>
+---
 
-### It gets in the way
+### Problem 1: It gets in the way
 
-<div class="pop" style="display: inline-block;">
+![image](/images/peanut_butter_cookies_nola.jpg)
 
-<figure style="float: left;">
-<img src="/images/peanut_butter_cookies_nola.jpg" alt="Rated #1 in NOLA"><figcaption>And #2 in America!</figcaption>
-</figure>
+_And #2 in America._
 
-You've been doing amazing work. You got the flow. Mind like water. You're done
-with your frontend changes. You spin up a local instance of the server.
+_You've been doing amazing work. You got the flow. Mind like water. You're done
+with your frontend changes. You spin up a local instance of the server._
 
-You try it out and realize that the server segfaults when there are no matches.
+_You try it out and realize that the server segfaults when there are no matches._
 
-You despair. There goes your flow. The name of the backend engineers flash
+_You despair. There goes your flow. The name of the backend engineers flash
 before your eyes. You consider not inviting them to your wedding. You make a
 mental list of who's most likely to have introduced the bug. You consider
 quitting your job and becoming a barista in a different country -- maybe even
@@ -85,12 +83,12 @@ kill it with your peanut butter cookies. People will know about them from New
 England to New Mexico. You'll become famous and, in a few years, run for
 president of the United States. Then you consider the logistics: your fiancée
 will need to quit her job, you'll need to hire a moving service, your dog may
-not survive the flight.
+not survive the flight._
 
-You stash your local changes and set out to write a test case reproducing the
-issue.
+_You stash your local changes and set out to write a test case reproducing the
+issue._
 
-</div>
+---
 
 Unless you're a quality analyst, you probably don't go around trying to find
 bugs for fun. Most of us discover bugs while trying to get something done:
@@ -103,26 +101,24 @@ been the person who introduced the faulty behavior, and would have most likely
 been expecting to encounter "some" bug (correct software on the first attempt
 is a myth, sorry).
 
-### It creates noise
+### Problem 2: It creates noise
 
-<div class="pop">
+```
+you> @channel I'm experiencing server crashes when there are no matches on
+`/users/foo/notes?query=bar`, anybody knows anything about this?
 
-> you> @channel I'm experiencing server crashes when there are no matches on
-> `/users/foo/notes?query=bar`, anybody knows anything about this?
->
-> tom> please use @here instead of @channel
->
-> pat> @tom please don't use "at" channel
->
-> jen> @you yes I think this is related to #2551
->
-> mol> @jen #2551 was fixed last week
->
-> jen> okay nevermind, no idea @you :(
->
-> mkt> @channel lunch?
+tom> please use @here instead of @channel
 
-</div>
+pat> @tom please don't use "at" channel
+
+jen> @you yes I think this is related to #2551
+
+mol> @jen #2551 was fixed last week
+
+jen> okay nevermind, no idea @you :(
+
+mkt> @channel lunch?
+```
 
 Whether you are reporting issues on Slack, GitHub, JIRA, you name it, reporting
 a bug creates some noise. Some people will need to label the ticket, will try
@@ -133,26 +129,20 @@ All this can be avoided if bugs are caught before they are merged to master:
 bugs are typically not reported before the code is part of the mainstream
 codebase.
 
-<div style="display: inline-block;">
+### Problem 3: The Hunt
 
-### The Hunt
+![image](/images/mads_the_hunt.jpg)
 
-<figure style="float: right;">
-<img src="/images/mads_the_hunt.jpg" alt="Mads “Hunter” Mikkelsen"><figcaption>Mads “Hunter” Mikkelsen</figcaption>
-</figure>
+_Mads "The Hunter" Mikkelsen_
 
 This one should be pretty straightforward. Finding a bug that's been introduced
 by a diff before merge into the master branch limits the search space to that
 diff only. Trying to find a bug on master means potentially having to consider
 the whole codebase, unless your codebase lends itself to things like bisecting.
 
-</div>
+### Problem 4: Lack of context
 
-### Lack of context
-
-<div class="pop">
-
-The VP of engineering comes to you, in his typical nonchalant tread:
+_The VP of engineering comes to you, in his typical nonchalant tread:_
 
 > VP: You'll need to fix that server crash bug.
 >
@@ -174,11 +164,11 @@ The VP of engineering comes to you, in his typical nonchalant tread:
 >
 > VP: Good luck! Don't forget about Engineering breakfast tomorrow.
 
-As the VP leaves, you sing to yourself:
+_As the VP leaves, you sing to yourself:_
 
 > ... there's a moooooon over bourbon street ...
 
-</div>
+---
 
 Most of the time no one knows where the bug is and who introduced it. This
 means that the odds of picking the right engineer to hunt down a bug are about
@@ -197,31 +187,28 @@ before they've been merged.
 
 ### Moar noise
 
-<div class="pop">
+```
+you> @channel I've got a fix for the server crash issue, anybody care to
+review #2578?
 
-> you> @channel I've got a fix for the server crash issue, anybody care to
-> review #2578?
->
-> tom> please use @here instead of @channel
->
-> pat> @tom please don't use "at" channel
->
-> jen> @you yes I'll have a look in a sec
->
-> mol> @you sure np
->
-> mkt> @channel coffee break?
+tom> please use @here instead of @channel
 
-</div>
+pat> @tom please don't use "at" channel
 
-<div style="display: inline-block;">
-<figure style="float: left;">
-<img src="/images/where_does_it_end.jpg" alt="Where does it end"><figcaption>Where does it end?</figcaption>
-</figure>
-Fixed the issue? A new round of PRs and reviews creates even more noise. At
+jen> @you yes I'll have a look in a sec
+
+mol> @you sure np
+
+mkt> @channel coffee break?
+```
+
+![image](/images/where_does_it_end.jpg)
+
+_Time is a flat circle. Where does it end?_
+
+_Fixed the issue? A new round of PRs and reviews creates even more noise. At
 best this justifies hiring the intern whose job it is to move JIRA tickets
-around. Most likely it's a waste of time for everyone involved.
-</div>
+around. Most likely it's a waste of time for everyone involved._
 
 ### Why the fallacy?
 
@@ -255,8 +242,6 @@ without rebasing on master first (note: some CI systems, like [Travis] and
 on or merged it into master). The following diagram lists three branches,
 `master`, `bob` and `alice`:
 
-<div class="pop">
-
 ```
 
 bob master alice
@@ -282,8 +267,6 @@ bob master alice
 
 ```
 
-</div>
-
 Alice forks a branch and used the function `makeRainbow()`. No bug introduced,
 CI is green, everyone's happy. Around the same time Bob decides to do some
 clean up, forks master, and removes the function `makeRainbow()`. From his
@@ -294,10 +277,7 @@ Alice's feature makes use of a function that doesn't exist in the codebase
 anymore after Bob's changes. The solution to avoid those issues is to always
 rebase a branch before running CI tests:
 
-<div class="pop">
-
 ```
-
 bob master alice
  .    ✓      .   master is green :)
       |
@@ -331,8 +311,6 @@ bob master alice
 
 ```
 
-</div>
-
 The only thing you have to do is to ensure that no branch is merged without
 being strictly on top of master. The simplest solution is to manually keep
 track of the branches that should be merged:
@@ -345,8 +323,6 @@ This is a very tedious process and is better automatized by tools like [bors-ng]
 
 [bors-ng]: https://github.com/bors-ng/bors-ng
 
-<div class="pop">
-
 ### The Poor Man's Merge Queue
 
 Merge queues need not be fancy. The first time we realized that we were wasting
@@ -356,13 +332,9 @@ want to merge? Add it to the right of the list. The left-most PR has either
 been merged or failed CI? Remove it from the list, and rebase the new left-most
 PR.
 
-<div style="display: inline-block;">
-<figure style="float: left;">
-<img src="/images/slack-topic-merge-queue.png" alt="Where does it end"><figcaption>Save some cost! DIY merge queue.</figcaption>
-</figure>
+![image](/images/slack-topic-merge-queue.png)
 
-</div>
-</div>
+_Slack Screenshot_
 
 [Travis]: https://travis-ci.org/
 [CircleCI]: https://circleci.com

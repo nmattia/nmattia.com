@@ -15,13 +15,17 @@ Once a year or so I need to build <abbr title="GNU Compiler Collection">GCC</abb
 
 The goal is to have a `gcc` executable built from source, and we'll take a few detours to better understand some pervasive concepts in the "build" world. And just to be clear, I'm no GCC or build expert! If you see anything suspicious please do reach out.
 
-> Disclaimer: I love Linux but I also love a display that works when I connect it to my laptop. My development machine is an Apple Silicon (M1) MacBook and hence the focus of this article is on macOS, but most of it will apply to Linux and potentially WSL too.
+> [!NOTE]
+>
+> I love Linux but I also love a display that works when I connect it to my laptop. My development machine is an Apple Silicon (M1) MacBook and hence the focus of this article is on macOS, but most of it will apply to Linux and potentially Windows (with WSL) too.
 
 ---
 
 [GCC](https://gcc.gnu.org) is not just a single compiler, but (similar to [clang](https://clang.llvm.org)) it's a compiler collection -- the _GNU_ Compiler Collection. It consists of e.g. `gcc` the C compiler, but also `g++` for C++ and many more.
 
-<img src="/images/gcc_dep_graph.png" style="float: right; max-width: 300px;"/>
+![image](/images/gcc_dep_graph.png)
+
+_GCC dependencies_
 
 Do note that you should only rarely need to build GCC; in most cases you can get a package for your "distribution" (with `apt install` or `brew install`) or download prebuilt executables (for instance you can find some prebuilt GCC bundles for arm on the [arm website](https://developer.arm.com/downloads/search)).
 
@@ -66,12 +70,9 @@ In order to run those two commands successfully (`configure` and `make`), you'll
 
 If you're building on macOS, then run `xcode-select --install`, which will install the "Command-Line Tools" (CLT) from Xcode (but more lightweight). Then you'll have `/usr/bin/cc` and `/usr/bin/make`.
 
-<div style="text-align: center">
-<img src="/images/xcode-select-install.jpg" style="width: 80%; max-width: 600px;"/>
-<p style="font-size: 80%; line-height: 0.6em">
-Install some build tools provided by Apple
-</p>
-</div>
+![image](/images/xcode-select-install.jpg)
+
+_Install some build tools provided by Apple._
 
 And while you might think you've installed GCC, it's a lie:
 
@@ -99,7 +100,9 @@ And that's "all" you need to build GCC!
 
 ## The platforms: build, host & target
 
-<img src="/images/gnu-platform.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
+![image](/images/gnu-platform.png)
+
+_The GNU platform_
 
 If you have another look at the generic build command shown earlier, you can see the following argument to the `configure` script: `--build=$platform`:
 
@@ -114,15 +117,15 @@ make install
 
 Here, you can set `$platform` to the platform you're _building_ GCC on. This in an important concept, because the platform you're _building_ the compiler on (`build`) may not be the same as the platform where it will be used (`host`) and the platform where the executables produced by said compiler will run (`target`). Each platform (build, host, target) can be configured using the corresponding flag (`--build`,`--host`,`--target`) but most often can be left out.
 
-> A NOTE TO APPLE SILICON USERS: you may want to specify the `--build` explicitly since the "Apple Silicon" platform (e.g. `aarch64-apple-darwin13` for Ventura) is fairly recent and some older `configure` scripts will struggle to figure it out). I'll specify `--build` in all snippets since that's the `build` platform I care about.
+> [!NOTE]
+>
+> **Apple Silicon (M1, M2, ...) Users**: you may want to specify the `--build` explicitly since the "Apple Silicon" platform (e.g. `aarch64-apple-darwin13` for Ventura) is fairly recent and some older `configure` scripts will struggle to figure it out). I'll specify `--build` in all snippets since that's the `build` platform I care about.
 
 To clarify the idea of "platforms" further:
 
-<div style="display: flex; align-items: center;"> <img src="/images/build-tools.png" style="max-width: 100px; margin: 0 2em;"/> <p style="display: table-cell; vertical-align: middle;">build: where you want to <em>build</em> the compiler</p></div>
-
-<div style="display: flex; align-items: center;"> <img src="/images/host-computer.png" style="max-width: 100px; margin: 0 2em;"/> <p style="display: table-cell; vertical-align: middle;">host: where the compiler will <em>run</em></p></div>
-
-<div style="display: flex; align-items: center;"> <img src="/images/target-target.png" style="max-width: 100px; margin: 0 2em;"/> <p style="display: table-cell; vertical-align: middle;">target: where the new compiler's <em>output programs</em> will run</p></div>
+- **build**: where you want to _build_ the _compiler_,
+- **host**: where the _compiler_ will _run_, and
+- **target**: where the new compiler's _output_ (programs) will run
 
 Very often the `build`, `host` and `target` platforms will be the same:
 
@@ -143,12 +146,9 @@ my-machine$ ./dist/avr-gcc ~/sample-arduino/main.c -o arduino.hex
 
 Finally you can imagine a situation where the build, host and target platforms are all different. You could for instance have a web platform that allows users to compile firmware for keyboards with `avr` chips. In this case you'd first build GCC on e.g. your Linux laptop (so the `build` platform would be Linux), with the intent of running GCC in the browser (the `host` platform would be [WebAssembly](https://webassembly.org)) and the programs produced by that GCC would be running on your keyboard (the `target` would be the AVR platform).
 
-<div style="text-align: center; padding: 2em;">
-<img src="/images/build-host-target.gif" style="width: 80%; max-width: 600px;"/>
-<p style="font-size: 80%; line-height: 0.6em">
-A compiler built by a computer wizard, used by an app developper, producing an iOS app used by a mere mortal.
-</p>
-</div>
+![image](/images/build-host-target.gif)
+
+_A compiler built by a computer wizard, used by an app developper, producing an iOS app used by a mere mortal._
 
 Now that you understand the concept of "platform" and before we start building `gmp`, the first dependency, it's important to stress this: the libraries we'll be building here, i.e. GCC dependencies, will be built for the "host" platform because GCC will use them for internal stuff as it runs. In some cases however (which we won't get into here) you may also need to compile some libraries for the _target_ platform (like a `libc` used at runtime by GCC-compiled executables).
 
@@ -175,8 +175,6 @@ Finally, you might notice one last argument, `--with-pic`. This configures the b
 Relatively painless, right? Let's move on!
 
 ## Preparation: pkg-config
-
-<img src="/images/pkg-config.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
 
 We'll soon need to configure where to find dependencies (e.g. in the next section we'll be building `mpfr` which depends on `gmp` that we built in the last section). For that we'll use a handy tool: [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/).
 
@@ -264,7 +262,7 @@ We built `gmp`, `mpfr` and `libmpc`, which GCC needs. Let's now build GCC itself
 
 ## Building GCC
 
-<img src="/images/gnu-coding.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
+![image](/images/gnu-coding.png)
 
 Here's one way to build GCC, though there are others:
 
@@ -297,7 +295,7 @@ This is not a short build, so go grab a coffee or a book!
 
 ## Go and build more
 
-<img src="/images/gnu-sunset.png" style="padding: 2em; display: block; margin: auto; max-width: 300px;"/>
+![foo](/images/gnu-sunset.png)
 
 This is where our journey ends, for now at least! You should now have a working `gcc` executable in `$gcc/bin/gcc`.
 

@@ -12,15 +12,11 @@ scheduled builds, [Nix](https://nixos.org/nix) and [niv](https://github.com/nmat
 
 <!--more-->
 
-<div style="text-align: center">
-<img src="/images/autoupdate-notifications.jpg" style="width:350px;padding:50px"/>
-</div>
+![image](/images/autoupdate-notifications.jpg)
 
-But why though?
+_Notifications for automated PRs_
 
-<div style="text-align: center; font-size: 20px;">
-<strong>I <3 AUTOMATION</strong>
-</div>
+But why though? It's simple: **I <3 AUTOMATION**
 
 That aside, it boils down to two facts:
 
@@ -45,9 +41,7 @@ other repository `$repo_name`:
 - ... fork `nmattia/$repo_name`, and create a PR, with GitHub's [hub] tool. All
   checks _after the update_ are handled by `$repo_name`'s CI.
 
-<div style="text-align: center">
-<img src="/images/autoupdate-schema.png" style="width:600px;padding:50px"/>
-</div>
+![image](/images/autoupdate-schema.png)
 
 Here's the plan for the rest of the article.
 

@@ -15,12 +15,9 @@ We really live in the future. Over the past few years I've acquired more and mor
 
 It is the case however for the car, which every few months prompts me to download the latest "software of the touchscreen" (with a French accent). Peugeot makes really good cars but somehow manage to mess up anything that involves software. Dashboard's not really a problem since I can bypass most the Peugeot non-Operating System with Apple CarPlay, but the iPhone app is an endless source of despair, a trait it somewhat shares with the "Peugeot Update" macOS app.
 
-<div style="text-align: center">
-<img src="/images/peugeot-update.png" style="width:600px"/>
-<p style="font-size: 80%">
-Peugeot Update is downloading a big file.
-</p>
-</div>
+![image](/images/peugeot-update.png)
+
+_Peugeot Update is downloading a big file._
 
 In particular, downloads are slow, and if interrupted, have to start over again from the beginning. This means that you can't let your Mac go to sleep unless you enjoy watching the slow 5GB+ download starting from the beginning.
 

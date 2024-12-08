@@ -1,9 +1,6 @@
 @charset "UTF-8";
 
-ul {
-  list-style-type: circle;
-  margin-left: 2em;
-}
+/* Some global styles. */
 
 body {
   font-family: "Nunito", sans-serif;
@@ -14,7 +11,22 @@ body {
   line-height: 1;
 }
 
-/* Some global styles. */
+:root {
+  --list-margin-left: 2em;
+  --blockquote-border-width: 0.25em;
+}
+
+ul {
+  list-style-type: circle;
+  margin-left: var(--list-margin-left);
+}
+
+/* Re-introduce some basics for ordered lists (numbers + spacing) */
+ol li {
+  list-style-type: decimal;
+  margin-left: var(--list-margin-left);
+  padding-left: 1em;
+}
 
 /* Make sure strikethroughs are struckthrough */
 del {
@@ -105,27 +117,50 @@ ul {
   line-height: 1.8rem;
 }
 
-p {
-  margin-top: 1.4rem;
-  margin-bottom: 1.4rem;
-}
-
 blockquote {
+  --blockquote-border-color: hsl(0deg 0% 44.32%);
+
   font-size: 1.4rem;
-  padding-left: 2em;
   border-left-style: solid;
-  border-left-width: 2px;
+  border-color: var(--blockquote-border-color);
+  border-left-width: var(--blockquote-border-width);
+
+  /* left padding (distance to border) */
+  padding-left: 1.6em;
+
+  /* top & bottom padding */
+  --blockquote-padding: 1em;
+  padding-top: var(--blockquote-padding);
+  padding-bottom: var(--blockquote-padding);
 }
 
+/* Work around paragraphs having margins set globally */
 blockquote p {
-  width: 80%;
-  margin-right: 40px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 blockquote footer {
   width: 55%;
   font-size: 1.1rem;
   text-align: right;
+}
+
+/* Special blockquotes marked as admonitions */
+.admonition {
+  --admonition-color: hsl(206 71% 40% / 1);
+  border-color: var(--admonition-color);
+}
+
+.admonition-header {
+  font-weight: bold;
+  color: var(--admonition-color);
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+
+  /* Give the main text some room to breath */
+  margin-bottom: 0.5em;
 }
 
 /* Add spacing between list items */
@@ -275,6 +310,35 @@ img {
   padding: 0 1em;
 }
 
+/* Space out all top-level elements */
+.blog-article > * {
+  margin-top: 1.6rem; /* rem to avoid element's line-height impacting the spacing */
+}
+
+/* When inline math is the only child (i.e. both first & last child) of a (top-level) paragraph,
+ * center it. */
+.blog-article > p:has(code:first-child:last-child.language-math.math-inline) {
+  text-align: center;
+}
+
+/* Center and add margins for all top-level images */
+.blog-article > p > img:first-child:last-child {
+  max-height: 30em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hack since we don't have 'figcaption's (yet): if the paragraph after an image contains a single element, and
+ * that element is an <em>, then make it look like a caption.
+ */
+.blog-article
+  > p:has(img:first-child:last-child)
+  + p:has(> em:first-child:last-child) {
+  text-align: center;
+  font-size: 1em;
+}
+
 footer {
   text-align: center;
   margin: 30px 0;
@@ -336,6 +400,8 @@ footer a:hover {
 
 .card-container .teaser {
   padding: 0 2em;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 /* Code styling */

@@ -92,12 +92,32 @@ Here's a longer quote:
 
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+Here's a note:
+
+> [!NOTE]
+>
+> You should note that attention to detail often makes a significant difference in achieving success and avoiding unnecessary mistakes.
+
 And here's one image:
 
-![Some image](/images/drag-resize-rotate-schema-3.png "rotating stuff")
+![image](/images/drag-resize-rotate-schema-3.png)
 
-... and another one:
+Here's an image, with a caption:
 
-<div style="text-align: center;">
-<img src="/images/drag-resize-rotate-schema-3.png" style="width: 100%" alt="TODO"/>
-</div>
+![image](/images/drag-resize-rotate-schema-3.png)
+
+_Drag, resize, etc_
+
+Here is some math:
+
+$t(v) = \begin{bmatrix} 1 & 0 & v_x \\ 0 & 1 & v_y \\ 0 & 0 & 1 \end{bmatrix}, r(\theta) = \begin{bmatrix} \cos(\theta) & - \sin(\theta) & 0 \\ \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{bmatrix}$
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>

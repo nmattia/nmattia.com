@@ -14,19 +14,11 @@ open my Linear Algebra toolbox.
 
 <!--more-->
 
-A bit of background: for the last year, [David Dal
+A bit of background: for the last year [note: 2019], [David Dal
 Busco](https://daviddalbusco.com/) and I have been developing
 [DeckDeckGo](https://deckdeckgo.com), a tool for creating and sharing
 presentations. There was one particular feature we wanted: being able to add
-elements to any slide and be able to drag it, resize it and rotate it. Here it
-is in action (feel free to use the [open source Web Component](https://docs.deckdeckgo.com/components/drr/)):
-
-<script type="module" src="https://unpkg.com/@deckdeckgo/drag-resize-rotate@1.0.0-beta.3/dist/deckdeckgo-drag-resize-rotate/deckdeckgo-drag-resize-rotate.esm.js"></script>
-<script nomodule="" src="https://unpkg.com/@deckdeckgo/drag-resize-rotate@1.0.0-beta.3/dist/deckdeckgo-drag-resize-rotate/deckdeckgo-drag-resize-rotate.js"></script>
-
-<div style="background-color: #d6d6c7; margin: auto; position: relative; width: 100%; padding-top: 100%;"><deckgo-drr style="--width:25%; --height:40%; --top:40%; --left:25%; --rotate:20deg;" class="draggable hydrated selected"><div style="background: #b3b399;"><img src="/images/mugshot-nasm.jpg"/ style="display: block; margin: auto; max-width:100%; max-height:100%;"><h3 style="text-align: center; color:#fff;">WANTED<br/>10₿</h3></div></deckgo-drr></div>
-
-(check out [David's article](https://daviddalbusco.com/blog/introducing-a-new-web-component-to-drag-resize-and-rotate/) on how the component itself works)
+elements to any slide and be able to drag it, resize it and rotate it. This resulted in an [open source Web Component](https://docs.deckdeckgo.com/components/drr/); see also [David's article](https://daviddalbusco.com/blog/introducing-a-new-web-component-to-drag-resize-and-rotate/) on how the component itself works (here we'll focus on the theory).
 
 In normal times, David is taking care of the frontend, and yours truly is
 taking care of the backend. But this time, we had to join forces, and I even had to
@@ -57,9 +49,7 @@ on one case: the user drags the bottom-right corner, $p'$. That is, the
 bottom-right of the _rotated_ rectangle. We can easily recover its position:
 that's where the user's cursor is when they start dragging!
 
-<div style="text-align: center;">
-<img src="/images/drag-resize-rotate-schema.png" style="width: 100%" alt="TODO"/>
-</div>
+![image](/images/drag-resize-rotate-schema.png)
 
 Here's the million dollar question: when the user moves $q'$ around, how do we
 make sure that $p'$ (the top-left, rotated corner) stays in place?
@@ -73,15 +63,9 @@ move as well...
 
 ## Enter: The Matrix
 
-<br/><br/><br/>
+![image](/images/janos-pach.jpg)
 
-<div style="text-align: center;">
-<figure style="margin: auto;">
-<img src="/images/janos-pach.jpg" alt="Linear Algebra Ahead"><figcaption>János Pach Warned You</figcaption>
-</figure>
-</div>
-
-<br/><br/><br/>
+_János Pach Warned You_
 
 Let's recap. All CSS values, `top`, `left`, $\theta$, `width` and `height` are
 under our control: we can read and write them. Moreover we know where the
@@ -102,9 +86,7 @@ $p$ by angle $\theta$, and then translate it by some $v$? Fine! That's
 
 If you're curious, this is what the matrices actually look like:
 
-<div style="text-align: center;">
-$t(v) = \begin{bmatrix} 1 & 0 & v_x \\ 0 & 1 & v_y \\ 0 & 0 & 1 \end{bmatrix}$,  $r(\theta) = \begin{bmatrix} \cos(\theta) & - \sin(\theta) & 0 \\ \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{bmatrix}$
-</div>
+$t(v) = \begin{bmatrix} 1 & 0 & v_x \\ 0 & 1 & v_y \\ 0 & 0 & 1 \end{bmatrix}, r(\theta) = \begin{bmatrix} \cos(\theta) & - \sin(\theta) & 0 \\ \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{bmatrix}$
 
 > But... that's the rotation around the origin! We want to be like the browser, we want to rotate around $c$ !!! I learned matrices in vaaaaaaain!
 
@@ -115,22 +97,16 @@ rotate around a point that is not the origin, we just have to pretend that
 point is actually the origin for the duration of the rotation. Basically, move
 that point (and everything else) to the origin, rotate, and then move back.
 
-<div style="text-align: center;">
-<img src="/images/drag-resize-rotate-schema-2.png" style="width: 100%" alt="TODO"/>
-</div>
+![image](/images/drag-resize-rotate-schema-2.png)
 
 That means a rotation around a point $c$ is something like this:
 
-<div style="text-align: center;">
 $r(c, \theta) = t(c) \cdot r(\theta) \cdot t(-c)$
-</div>
 
 and the center of the rectangle is simply `(left + width/2, top + height/2)`.
 Congrats, we have $p'$, the-point-that-should-never-move!
 
-<div style="text-align: center;">
 $p' = r(c, \theta) \cdot p$
-</div>
 
 ## Rinse, Repeat
 
@@ -139,16 +115,12 @@ calculate $p$ (which means `top` and `left`) we can simply rotate $p'$ back,
 but this time around the new center of rotation. New? Yes! Because when $q'$
 was dragged, the center of the rectangle moved!
 
-<div style="text-align: center;">
-<img src="/images/drag-resize-rotate-schema-3.png" style="width: 100%" alt="TODO"/>
-</div>
+![image](/images/drag-resize-rotate-schema-3.png)
 
 This new center is simply the point halfway between the new, dragged $q'$ and
 the original, never-to-be-moved top-left corner $p'$. Now the new top-left corner that we should give the browser is:
 
-<div style="text-align: center;">
 $\begin{bmatrix} left \\ top \\ 1 \end{bmatrix} = p = r(c', - \theta) \cdot p' = r(\frac{q' + p'}{2}, - \theta) \cdot p'$
-</div>
 
 What's left to compute? The new width and height. They're kind of tricky to get
 in the rotated rectangle, but if we _unrotate_ the resized rectangle, then the
@@ -156,14 +128,9 @@ width is the horizontal distance between $p$ and $q$, and the height is the
 vertical distance between $p$ and $q$! We just computed $p$, so let's now
 figure out $q$ (bottom-right corner in the unrotated, resized rectangle):
 
-<div style="text-align: center;">
 $q = r(c', - \theta) \cdot q' = r(\frac{q' + p'}{2}, - \theta) \cdot q'$
 
-<br/>
-
 $\begin{bmatrix} w \\ h \\ 1 \end{bmatrix} = q - p$
-
-</div>
 
 And that's it. We computed the new `top` and `left` values ($p$), which we can
 specify when redrawing the resized rectangle, alongside its new width and

@@ -17,7 +17,9 @@ The idea is to use the project lockfile (`package-lock.json`) to tell Nix how to
 
 The idea is not new and I've talked about it before in my [2019 NixCon talk: An Overview of Language Support in Nix](https://nmattia.com/posts/2019-11-12-language-support-overview-nixcon.html). It's the idea powering [naersk](https://github.com/nix-community/naersk) and [napalm](https://github.com/nix-community/napalm).
 
-> **NOTE**: When I first wrote napalm, the `npm cache` command wasn't very stable and hence the solution I describe here is much simpler, more lightweight (i.e. does _not_ require an npm registry written in Haskell ...) and more reliable. Also with time I've come to realize that mileage _does_ vary significantly from project to project, so instead of releasing yet another opinionated library like napalm or naersk I'll just explain the idea and suggest you just copy/paste it to your projects. :)
+> [!NOTE]
+>
+> When I first wrote napalm, the `npm cache` command wasn't very stable and hence the solution I describe here is much simpler, more lightweight (i.e. does _not_ require an npm registry written in Haskell ...) and more reliable. Also with time I've come to realize that mileage _does_ vary significantly from project to project, so instead of releasing yet another opinionated library like napalm or naersk I'll just explain the idea and suggest you just copy/paste it to your projects. :)
 
 ---
 

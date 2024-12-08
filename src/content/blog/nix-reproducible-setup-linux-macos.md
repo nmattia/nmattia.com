@@ -34,10 +34,11 @@ actually works. I'm using a few text files that describe my entire setup, store
 them on GitHub, and don't anymore fear upgrading my system, losing my laptop or
 spawning short-lived development instances. Let me show you how.
 
-_If you've never heard of Nix, worry not, the next section will present its
-main concepts. If you've used Nix before, feel free to [skip ahead](#nixos).
-The sections are mostly independent, pick any one that is most relevant to
-you:_
+> [!NOTE]
+>
+> If you've never heard of Nix, worry not, the next section will present its main concepts. If you've used Nix before, feel free to [skip ahead](#nixos). The sections are mostly independent, pick any one that is most relevant to you.
+
+Here's the plan:
 
 - [Introduction to Nix and NixOS](#nix-and-nixos)
 - [Descriptive package management](#package-management)

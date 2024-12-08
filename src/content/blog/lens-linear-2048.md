@@ -37,13 +37,11 @@ follow along in `ghci`._
 
 ### Preparing the datatypes
 
-We'll represent our board as a $4 \times 4$ matrix from linear:
+We'll represent our board as a 4 by 4 matrix from linear:
 
-<div style="text-align:center">
-``` haskell
+```haskell
 type Board = M44 (Maybe (Sum Integer))
 ```
-</div>
 
 This is a simple, row-major matrix from linear. In order to make our life
 simpler we'll define a function to display the board:
@@ -76,18 +74,15 @@ Alright, nothing too exciting yet. This is simply a board filled with
 representation. A matrix of type `M44` is nothing but a vector of vectors,
 stored in row-major order; a vector of matrix rows:
 
-<div style="text-align:center">
-``` haskell
+```haskell
 type M44 a = V4 (V4 a)  -- Defined in ‘Linear.Matrix’
 ```
-</div>
 
 The library has four very basic lenses for indexing into a vector: `_x`, `_y`,
 `_z` and `_w`. Let's go to the _second row_ (`_y`) of our board and set the
 _fourth element_ (`_w`):
 
 ```haskell
-
 λ: import Control.Lens
 λ: display $ board & _y . _w .~ (Just 2)
 X  X  X  X
@@ -108,13 +103,11 @@ Let's get back to our game. We first need an update function for the
 rows/columns. The game 2048 actually does not care about empty cells, wherever
 they are, it'll just ignore them:
 
-<div style="text-align:center">
 ```
 2 X 2 X             X X X 4
 -------     --->    -------
 X X 2 2             X X X 4
 ```
-</div>
 
 In this small example the user swiped right, and even though the rows differed,
 the result was the same (it's not injective). We'll simply take a list
@@ -131,9 +124,7 @@ non-empty cells. Here are a few examples:
 We'll specify some rules that might not correspond exactly to what the original
 game uses, but that will be good enough for us. When traversing a list:
 
-<div style="text-align:center">
-*If two neighbors are equal, replace them by their sum.*
-</div>
+> If two neighbors are equal, replace them by their sum.
 
 The above is easily translated to Haskell code:
 
@@ -144,13 +135,9 @@ merge (x:xs)              = x : merge xs
 merge []                  = []
 ```
 
-_Note that we've used a slightly more abstract version than `[Int] -> [Int]`.
-This is useful for several reasons. For instance you might not have decided yet
-what type you are going to use to represent your cells (Int? Integer? An
-enumeration of the powers of two?). Also you might want to add a UI. In this
-case you will want to remember which cells were merged together so that you can
-play an animation. Below we will be using `Sum Integer`, the integers with addition
-as the monoidal composition (`<>`). _
+> [!NOTE]
+>
+> We've used a slightly more abstract version than `[Int] -> [Int]`. This is useful for several reasons. For instance you might not have decided yet what type you are going to use to represent your cells (Int? Integer? An enumeration of the powers of two?). Also you might want to add a UI. In this case you will want to remember which cells were merged together so that you can play an animation. Below we will be using `Sum Integer`, the integers with addition as the monoidal composition (`<>`).
 
 There's not much room for error. GHC infers that we have covered all input
 cases, and we only need to make sure that the code reflects the rule above. We
@@ -174,7 +161,7 @@ Now we need to apply `merge` to different parts of the board. This is where the
 [lens](http://hackage.haskell.org/package/lens) library comes in handy. More
 importantly [linear](http://hackage.haskell.org/package/linear)'s good support
 for various types of lenses, particularly `Iso`s and `Traversal`s. Here's my
-(instinctive) understanding of those:
+(intuitive) understanding of those:
 
 - If you need to go back and forth between two datatypes `a` and `b`, you'll
   need an `Iso' a b`.
@@ -192,14 +179,14 @@ rows, wors, cols, locs :: Traversal' (M44 (Maybe  a)) [a]
 
 The various directions are represented here:
 
-<img src="/images/rows-wors-cols-locs.jpg" style="width:512px;padding:15px" />
+![image](/images/rows-wors-cols-locs.jpg)
 
 ### Setting up our lenses
 
 Let's start with `rows`. Once again, the type `M44` is nothing but a vector of
 vectors, or a `V4` of `V4`s.
 
-<img src="/images/v4-v4-m44.jpg" style="width:512px;padding:15px" />
+![image](/images/v4-v4-m44.jpg)
 
 The vector type `V4` is an instance of
 [Traversable](https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Traversable.html)
@@ -212,25 +199,11 @@ traverse :: (Applicative f, Traversable t) => (a -> f b) -> t a -> f (t b)
 
 Simply put, `traverse` says
 
-<div style="text-align:center">
-If your `t` is `Traversable`, I'll give you:
-
-```haskell
-Traversal' (t a) a
-```
-
-</div>
+> If your `t` is `Traversable`, I'll give you `Traversal' (t a) a` for free.
 
 Since `M44 a` is `V4 (V4 a))` it says:
 
-<div style="text-align:center">
-Your `V4` is `Traversable`, so I'll give you:
-
-```haskell
-Traversal' (M44 (Maybe a)) (V4 (Maybe a))
-```
-
-</div>
+> Your `V4` is `Traversable`, so I'll give you `Traversal' (M44 (Maybe a)) (V4 (Maybe a))`.
 
 Good, so now we know how to get/set/act on each row of our board independently.
 Problem is that when traversing it, we are given the rows as `V4 (Maybe a)`s.
@@ -250,11 +223,9 @@ list = iso toList fromList
 We have two operations here: `toList` and `fromList`. The first one simply
 copies all the `Just` values of a `V4` into a list, that is
 
-<div style="text-align:center">
-``` haskell
+```haskell
 toList :: V4 (Maybe a) -> [a]
 ```
-</div>
 
 whereas, on the other hand, `fromList` recreates a vector from a list. Since
 there can be fewer than four values in a list, `fromList` adds as many `Just`s
