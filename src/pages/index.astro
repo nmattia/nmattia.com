@@ -65,6 +65,9 @@ const description =
             target={entry.target}
             href={entry.link}
             style="text-decoration: none;"
+            data-astro-prefetch={
+              "viewport" /* prefetch target when link enters viewport */
+            }
           >
             <div class="card">
               <div class="card-container">

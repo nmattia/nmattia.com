@@ -4,6 +4,8 @@
 import "the-new-css-reset/css/reset.css";
 import "../styles/global.css";
 
+import { ClientRouter } from "astro:transitions";
+
 export type Props = {
   title?: string;
   ogType: "website" | "article";
@@ -35,6 +37,9 @@ if (title !== undefined) {
     name="viewport"
     content="width=device-width, initial-scale=1, shrink-to-fit=no"
   />
+
+  <!-- Use astro view transitions -->
+  <ClientRouter />
 
   <!-- KaTeX for inline math stylesheets -->
   <link
