@@ -33,12 +33,10 @@ job very well for small- to medium-sized project.
 
 We'll take the [homies] repository as an example.
 
-<div class="pop">
-
-[homies] is a Nix-based reproducible environment, you can read about it in the
-[dedicated article][homies-article].
-
-</div>
+> [!NOTE]
+>
+> [homies] is a Nix-based reproducible environment, you can read about it in the
+> [dedicated article][homies-article].
 
 If you checkout the repository you'll see a `nix/` directory with two files:
 `versions.json` and `fetch.nix`. The [`nix/versions.json`] file contains

@@ -90,21 +90,9 @@ of runtime store paths. If it's a match, we keep it. Otherwise, we discard it.
 Let's look at some code. We'll go top-down, starting with the function creating
 the final string.
 
-<div style="text-align: center">
-<img src="/images/runtime-deps.png" style="width:600px"/>
-<p style="font-size: 80%; line-height: 0.6em">
-The "Function Tree". Today we'll follow the red arrow. <br/>
-<span style="font-size: 60%">
-Not sure why "tree". It looks upside down. <br/>
-</span>
-<span style="font-size: 40%">
-Or maybe a weeping willow, from afar. <br/>
-</span>
-<span style="font-size: 20%">
-This is terribly small, you shouldn't be reading this. <br/>
-</span>
-</p>
-</div>
+![image](/images/runtime-deps.png" style="width:600px)
+
+_The "Function Tree". Today we'll follow the red arrow._
 
 ## It's Showtime
 
@@ -174,15 +162,12 @@ buildtimeReports = drv: writeText "${drv.name}-runtime" ( toJSON (
 mkReport = drv: "something interesting with ${drv.meta}, although it will most likely mention Eelco or peti";
 ```
 
-<p style="font-size: 80%">
 > blah blah blah _something about `unsafeDiscardStringContext`_ blah blah blah
 
 _I know, right!?! My cat jumped on my keyboard and somehow typed that in! I
 thought it was gonna break everything but it didn't, instead it just super sped
 up the build when downloading from the binary cache! I really love my cat, ~~I
 can blame anything on it~~ it cares about the size of my /nix/store!_
-
-</p>
 
 This function grabs the `buildtimeDerivations` and creates a report for each.
 It also tags those derivations with their path which, as we'll see in a second,
@@ -195,12 +180,9 @@ As we walk down the tree of functions, we get to the other big piece of the
 puzzle: laying our hands on the original derivations of all the buildtime
 dependencies.
 
-<div style="text-align: center">
-<img src="/images/warning-hack-ahead.png" style="width:600px"/>
-<p style="font-size: 80%">
-My cat is responsible for this as well.
-</p>
-</div>
+![image](/images/warning-hack-ahead.png)
+
+_My cat is responsible for this drawing as well._
 
 This one's called `buildtimeDerivations` and does something very simple. It
 takes the original derivation object (e.g. `pkgs.hello`) and goes through _all_
@@ -274,6 +256,4 @@ below.
 
 ```
 
-<p style="font-size: 80%">
-I lied, there's no comment section. Artwork by Joan G. Stark.
-</p>
+_I lied, there's no comment section. Artwork by Joan G. Stark._

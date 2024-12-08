@@ -1,6 +1,6 @@
 ---
 title: "Parallel Computing with DNA"
-og_image: /images/blueprint.jpg
+og_image: /images/blueprint.png
 description: "An introduction to using DNA to compute"
 pubDate: 2015-04-20
 ---
@@ -14,8 +14,6 @@ bird's DNA to grow an optimal plane out of it. **I thought I would demystify it
 a bit.**
 
 <!--more-->
-
-<img src="/images/blueprint.jpg" style="float:left;width:250px;padding:15px" />
 
 ### A bit of history
 
@@ -40,7 +38,8 @@ call it _The Roadtrip Problem_), and it goes something like this:
 - Take a map
 - Cut out a part of the map, and you'll be left with a few cities, linked by roads
 - Grab a pen. Can you trace a **path** that goes through **every city exactly once**, following the roads?
-  <img src="/images/hamilton.jpg" style="float:right;width:350px"/>
+
+![image](/images/hamilton.jpg)
 
 Roadtrip problem. Alright. The idea is this: **the more cities** you have,
 **the longer** it will take you to find out. And unfortunately, if you double
@@ -52,8 +51,8 @@ once**?
 
 This is basically the reason why computers nowadays have more that one core working at a time. It usually goes from two to eight, the latter more often than the former. Still, if a problem takes one year to be solved on a single core, using 8-cores instead would still take a month and a half. Not that cool if you need the results to do something else, huh? Well, that's why super computers exist, hosting 250k+ cores. Your one-year-problem now takes about two minutes.
 
-<img src="/images/cities-comarison.jpg"
-style="float:left;width:350px;padding:10px"/>
+![image](/images/cities-comarison.jpg)
+
 Sometimes even that is not sufficient (which is kind of a good thing in regards
 to [cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), for
 instance). One of the **fastest algorithms** for solving our roadtrip problem
@@ -93,7 +92,7 @@ character followed by **9** **_A_** characters:
 
 > **_GAAAAAAAAA_**
 
-> _(a DNA strand, not somehow's death throe)_
+_(a DNA strand, not somehow's death throe)_
 
 Alright. Let's call that strand **_N_**. Also, let's print it two thousand
 times. Now let's create an other strand. It is composed of **3** **_T_**
@@ -106,7 +105,7 @@ tiny). Those strands we call **_d_**. Now we'll go to the kitchen, grab a
 bucket, fill it up with water, and throw our twelve thousand DNA strands in it.
 **Congratulations**, you just built and programmed **your first DNA computer**!
 
-<img src="/images/nine-minus-three.jpg" style="width:300px;float:right"/>
+![image](/images/nine-minus-three.jpg)
 
 Let's get that straight, right now: **you won't be running Minecraft on it
 anytime soon**. But what exactly happens in the bucket? First of all, both

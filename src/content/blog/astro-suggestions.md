@@ -17,12 +17,9 @@ If someone is reading a particular article you wrote, chances are they'll be int
 
 If you've read an article on [nmattia.com](https://nmattia.com), you might have noticed this when you reached the end:
 
-<div style="text-align: center">
-<img src="/images/astro-suggestions.png" style="width: 80%; max-width: 600px;"/>
-<p style="font-size: 80%; line-height: 0.6em">
-Article suggestions based on the topics "Nix" and "build systems"
-</p>
-</div>
+![image](/images/astro-suggestions.png)
+
+_Article suggestions based on the topics "Nix" and "build systems"_
 
 These suggestions are generated automatically (and _statically_, using [Astro](http://astro.build)) based on the article's particular tags. The code for my articles looks like this (you can find the full code on [GitHub](https://github.com/nmattia/nmattia.com/blob/2c1523e6920f0aed2ede4ea158ae1031c448a15a/src/pages/posts/%5Bslug%5D.astro)):
 
