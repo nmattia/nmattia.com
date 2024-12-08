@@ -25,6 +25,8 @@ _italic_.
 
 This is a much longer paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dictum, lorem a ornare pharetra, ligula lorem ullamcorper elit, vitae pretium erat sem eget dui. Sed at velit egestas, lobortis ex vitae, fermentum lectus. Phasellus ac ipsum non lectus gravida lacinia eu ac nulla. Duis id libero vitae purus suscipit fermentum in in justo. Quisque ullamcorper eros in commodo molestie. Duis hendrerit consequat metus eu vehicula. Curabitur pulvinar id magna in convallis.
 
+This is a much longer, unbreakable paragraph. Loremipsumdolorsitamet,consecteturadipiscingelit.Vivamusdictum,loremaornarepharetra,ligulaloremullamcorperelit,vitaepretiumeratsemegetdui.Sedatvelitegestas,lobortisexvitae,fermentumlectus.Phasellusacipsumnonlectusgravidalaciniaeuacnulla.Duisidliberovitaepurussuscipitfermentumininjusto.Quisqueullamcorpererosincommodomolestie.Duishendreritconsequatmetuseuvehicula.Curabiturpulvinaridmagnainconvallis.
+
 ### Sub headings (h3)
 
 This is another section. Here are some unordered bullet points:
