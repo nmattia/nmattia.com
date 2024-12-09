@@ -94,7 +94,7 @@ h3 {
   line-height: 1.4;
 }
 
-hr {
+.blog-article > hr {
   display: block;
   height: 1px;
   width: 55%;
@@ -197,50 +197,34 @@ img {
   max-width: 100%;
 }
 
-/* Some content that's supposed to pop out visually */
-.pop {
-  background-color: #d6d6c7;
-  padding: 20px;
-  border-radius: 10px;
+:root {
+  /* Max width for things like header, actual content, etc */
+  --max-content-width: min(1012px, calc(100% - 2 * var(--max-content-gutter)));
+  /* the spacing on each side when max width is reached (in rem to ensure it is consistent across the page.) */
+  --max-content-gutter: 1rem;
 }
 
-/* Big screens */
-@media (min-width: 1112px) {
-  .content {
-    max-width: 1012px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.content {
+  max-width: var(--max-content-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* small screen */
-@media (max-width: 600px) {
-  .content {
-    margin: 0;
-  }
+.header {
+  max-width: var(--max-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  /* Size the header as 1.8 rem by default, though scale down to ~5% of width
+   * if the width is too small. But never below 1rem. */
+  font-size: max(min(1.8rem, 5vw), 1rem);
 }
 
-@media (min-width: 1112px) {
-  .header {
-    margin: auto;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    font-size: 1.8rem;
-  }
-}
-
-/* small screen */
-@media (max-width: 1112px) {
-  .header {
-    margin: auto;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    font-size: 1.4rem;
-  }
+.header-divider {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
 }
 
 .header .links a {
-  padding: 0 0.8rem;
   text-transform: uppercase;
 }
 
@@ -266,8 +250,8 @@ img {
 
 .header .nav {
   margin: auto;
-  max-width: 1012px;
-  padding: 1rem 0.5rem;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 .header .nav .nav-icon {
@@ -293,6 +277,15 @@ img {
   margin-top: 1em;
 }
 
+/* Divide between intro snippet & articles */
+.intro-divider {
+  height: 1px;
+  max-width: 55%;
+  border-top: 1px solid #ccc;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Blog */
 
 .blog {
@@ -304,19 +297,16 @@ img {
 }
 
 .blog-container {
+  /* The minimum card width: hardcoded for big screens, and full width
+     * on small screens. */
+  --min-card-width: min(400px, 100%);
   display: grid;
-  grid-template-columns: 50% 50%;
-}
+  /* Autofit cards, with a gap when there's 2+ columns */
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr));
 
-/* medium screen and below */
-@media (max-width: 1112px) {
-  .blog-container {
-    grid-template-columns: 100%;
-  }
-}
-
-.blog-article {
-  padding: 0 1em;
+  /* the gap between cards, vertical & horizontal */
+  --blog-container-grid-gap: 1em;
+  gap: var(--blog-container-grid-gap);
 }
 
 /* Make paragraphs overflow individually, instead
@@ -375,18 +365,25 @@ footer a:hover {
   /* Add shadows to create the "card" effect */
   box-shadow: var(--shadow-baseline);
   transition: 0.3s;
-  margin: 2em;
   font-size: 0.8rem;
   border-radius: 0.5em;
   background-color: hsl(60deg, 100%, 99%);
   border: 1px solid hsl(60deg, 60%, 85%);
+
+  /* ensure all cards are the same height when side by side */
+  height: 100%;
 }
 
-/* small screen */
+/* on very small screens, drop the gap and make the cards fill the screen */
 @media (max-width: 600px) {
+  .blog-container {
+    --blog-container-grid-gap: 0;
+  }
+
   .card {
     box-shadow: none;
-    margin: 0;
+    margin-left: calc(-1 * var(--max-content-gutter));
+    margin-right: calc(-1 * var(--max-content-gutter));
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-radius: 0;
