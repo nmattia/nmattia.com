@@ -428,9 +428,16 @@ pre {
   position: relative;
 }
 
-pre > code {
+pre .code-wrapper {
+  overflow-x: scroll;
+}
+
+pre .code-wrapper code {
   border-radius: 5px;
   line-height: 1.2em;
+
+  /* Ensures the element extends horizontally otherwise the highlight
+   * lines are truncated */
   display: inline-block;
   min-width: 100%;
 }
@@ -457,15 +464,17 @@ pre > code {
 }
 
 /* Everything clipboard related */
-pre .clipboard-copy {
-  fill: transparent;
+pre.astro-code > .clipboard-copy {
+  --clipboard-copy-fill-color: transparent;
+  fill: var(--clipboard-copy-fill-color);
 }
 
-pre:hover .clipboard-copy {
-  fill: white;
+pre.astro-code:hover > .clipboard-copy {
+  --clipboard-copy-fill-color: white;
 }
 
-.clipboard-copy {
+pre.astro-code > .clipboard-copy {
+  --clipboard-copy-outline-color: transparent;
   transition: fill 300ms;
   transition: background 100ms;
   position: absolute;
@@ -474,14 +483,15 @@ pre:hover .clipboard-copy {
 
   margin: 0.5em;
   padding: 0.5em;
-  border: 1px solid transparent;
+  border: 1px solid var(--clipboard-copy-outline-color);
   border-radius: 5px;
+  cursor: pointer;
 }
 
-.clipboard-copy:hover {
-  border: 1px solid white;
+pre.astro-code > .clipboard-copy:hover {
+  --clipboard-copy-outline-color: white;
 }
 
-.clipboard-copy:active {
-  background: white;
+pre.astro-code > .clipboard-copy:active {
+  background: var(--clipboard-copy-fill-color);
 }
