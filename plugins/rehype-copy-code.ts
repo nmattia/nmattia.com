@@ -102,7 +102,9 @@ export const rehypeCopyCodeIntegration = (): AstroIntegration => {
         // add a click listener to them that reads the innerText of their copyTarget (through
         // data-code-node-id).
         const f = () =>
-          window.addEventListener("load", () => {
+          // Event dispatched by the ClientRouter on page load:
+          // https://docs.astro.build/en/guides/view-transitions/#astropage-load
+          document.addEventListener("astro:page-load", () => {
             const copyButtons = document.querySelectorAll(
               '[data-action="copy"]',
             );
