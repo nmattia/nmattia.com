@@ -475,8 +475,13 @@ pre.astro-code:hover > .clipboard-copy {
 
 pre.astro-code > .clipboard-copy {
   --clipboard-copy-outline-color: transparent;
-  transition: fill 300ms;
-  transition: background 100ms;
+
+  /* Used to animate the button on click; when :active, the transition is
+   * unset so that it flashes and then transitions back to normal */
+  --clipboard-copy-extra-transition: background 1.5s;
+  transition:
+    fill 300ms,
+    var(--clipboard-copy-extra-transition);
   position: absolute;
   top: 0;
   right: 0;
@@ -493,5 +498,6 @@ pre.astro-code > .clipboard-copy:hover {
 }
 
 pre.astro-code > .clipboard-copy:active {
+  --clipboard-copy-extra-transition: background 0;
   background: var(--clipboard-copy-fill-color);
 }
