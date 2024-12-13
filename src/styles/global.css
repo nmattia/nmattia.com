@@ -434,7 +434,8 @@ pre .code-wrapper {
 
 pre .code-wrapper code {
   border-radius: 5px;
-  line-height: 1.2em;
+  font-size: 1em;
+  line-height: 1.5em;
 
   /* Ensures the element extends horizontally otherwise the highlight
    * lines are truncated */
