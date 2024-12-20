@@ -1,0 +1,64 @@
+---
+// Component that (1) creates a remark42 div and (2) registers an intersection observer to load
+// remark42 when the remark42 div is in the viewport.
+//
+// Adapted from: https://remark42.com/docs/configuration/frontend/
+---
+
+<div id="remark42"></div>
+<script>
+  declare global {
+    interface Window {
+      remark_config: { host: string; site_id: string };
+    }
+  }
+
+  // Needed by the "embed" remark42 component
+  window.remark_config = {
+    host: "https://comments.nmattia.com",
+    site_id: "remark" /* default */,
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    const remark42Elem = document.querySelector("#remark42");
+    if (!remark42Elem) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry || !entry.isIntersecting) {
+          return;
+        }
+
+        // Copied from https://remark42.com/docs/configuration/frontend/ and prettified + simplified
+        // (only loads the "embed" component)
+        const r = document.createElement("script");
+        let ext = ".js";
+        if ("noModule" in r) {
+          r.type = "module";
+          ext = ".mjs";
+        }
+        const d = document.head || document.body;
+
+        r.async = true;
+        r.defer = true;
+
+        r.src = window.remark_config.host + "/web/embed" + ext;
+
+        d.appendChild(r);
+
+        // Once we've loaded remark42, we can stop observing
+        observer.disconnect();
+      },
+      {
+        /* Watch the viewport and trigger as soon as the remark42 div enters */
+        root: null,
+        rootMargin: "0px",
+        threshold: 0,
+      },
+    );
+    observer.observe(remark42Elem);
+  });
+</script>
