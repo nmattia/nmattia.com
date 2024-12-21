@@ -8,8 +8,8 @@ tags:
 ---
 
 This is a convention for using third-party packages in Nix. It has a simple
-directory structure, whick makes using the packages straightforward, and allows
-updates to be automated.
+directory structure, whick makes using the packages straightforward, and makes
+automated package updates super simple.
 
 <!--more-->
 
@@ -21,6 +21,10 @@ package get its own directory with a `default.nix` and a `spec.src.json`? Or
 maybe the specs should only exist at call site, potentially duplicated if the
 package is used in different places? I settled on a simple convention which
 I've been using for a year across all my personal and work Nix projects.
+
+> [!NOTE]
+>
+> I've now turned this into [niv](https://github.com/nmattia/niv), a standalone executable optimized for convenience and UX. It does everything decribed here -- and then some. Similar functionality is now also provided by [flakes](https://nixos.wiki/wiki/Flakes).
 
 The idea is to use a single JSON file to store all versions rather than having
 each package in a directory defining its URL and version separately (I tend to
