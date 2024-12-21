@@ -10,6 +10,7 @@
   declare global {
     interface Window {
       remark_config: { host: string; site_id: string };
+      feature_remark?: boolean;
     }
   }
 
@@ -27,6 +28,12 @@
 
     const observer = new IntersectionObserver(
       (entries) => {
+        /* For now, only load comments if the remark feature flag is on */
+        const remarkEnabled = !!window.feature_remark;
+        if (!remarkEnabled) {
+          return;
+        }
+
         const entry = entries[0];
         if (!entry || !entry.isIntersecting) {
           return;
