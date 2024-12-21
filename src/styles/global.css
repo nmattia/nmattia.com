@@ -416,6 +416,12 @@ footer a:hover {
   margin-bottom: 2em;
 }
 
+.card-container h3.card-title {
+  --line-height: 1.4;
+  line-height: var(--line-height);
+  min-height: calc(3 * var(--line-height) * 1em);
+}
+
 /* Code styling */
 
 /* inline code */
