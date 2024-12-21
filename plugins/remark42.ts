@@ -35,41 +35,54 @@ export const remark42Integration = (): AstroIntegration => {
               return;
             }
 
-            const observer = new IntersectionObserver(
-              (entries) => {
-                const entry = entries[0];
-                if (!entry || !entry.isIntersecting) {
-                  return;
-                }
+            const loadRemark = () => {
+              // Copied from https://remark42.com/docs/configuration/frontend/ and prettified + simplified
+              // (only loads the "embed" component)
+              const r = document.createElement("script");
+              let ext = ".js";
+              if ("noModule" in r) {
+                r.type = "module";
+                ext = ".mjs";
+              }
+              const d = document.head || document.body;
 
-                // Copied from https://remark42.com/docs/configuration/frontend/ and prettified + simplified
-                // (only loads the "embed" component)
-                const r = document.createElement("script");
-                let ext = ".js";
-                if ("noModule" in r) {
-                  r.type = "module";
-                  ext = ".mjs";
-                }
-                const d = document.head || document.body;
+              r.async = true;
+              r.defer = true;
 
-                r.async = true;
-                r.defer = true;
+              r.src = window.remark_config.host + "/web/embed" + ext;
 
-                r.src = window.remark_config.host + "/web/embed" + ext;
+              d.appendChild(r);
+            };
 
-                d.appendChild(r);
+            if (window.location.hash) {
+              // If a hash is set, this might be a link to a comment, so load straight away and go to hash
+              loadRemark();
+              const h = window.location.hash;
+              window.location.hash = "";
+              window.location.hash = h;
+            } else {
+              // Otherwise delay until user reaches the remark42 div
+              const observer = new IntersectionObserver(
+                (entries) => {
+                  const entry = entries[0];
+                  if (!entry || !entry.isIntersecting) {
+                    return;
+                  }
 
-                // Once we've loaded remark42, we can stop observing
-                observer.disconnect();
-              },
-              {
-                /* Watch the viewport and trigger as soon as the remark42 div enters */
-                root: null,
-                rootMargin: "0px",
-                threshold: 0,
-              },
-            );
-            observer.observe(remark42Elem);
+                  loadRemark();
+
+                  // Once we've loaded remark42, we can stop observing
+                  observer.disconnect();
+                },
+                {
+                  /* Watch the viewport and trigger as soon as the remark42 div enters */
+                  root: null,
+                  rootMargin: "0px",
+                  threshold: 0,
+                },
+              );
+              observer.observe(remark42Elem);
+            }
           });
         };
 
