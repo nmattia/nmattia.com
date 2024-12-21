@@ -2,7 +2,6 @@
 // The articles (from the "blog" collection) rendered
 
 import Default from "../../components/Default.astro";
-import Comments from "../../components/Comments.astro";
 
 import type { Tag } from "../../content/config";
 import {
@@ -92,5 +91,5 @@ const suggestedEntries = similarEntries.slice(0, 2);
       ) : undefined
     }
   </article>
-  <Comments />
+  <div id="remark42"></div>
 </Default>
