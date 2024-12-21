@@ -130,7 +130,7 @@ export const rehypeCopyCodeIntegration = (): AstroIntegration => {
             });
           });
 
-        injectScript("page", `(${f.toString()})()`);
+        injectScript("page", `(${f.toString()})();`);
       },
     },
   };
