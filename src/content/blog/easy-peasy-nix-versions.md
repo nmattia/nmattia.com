@@ -8,8 +8,8 @@ tags:
 ---
 
 This is a convention for using third-party packages in Nix. It has a simple
-directory structure, makes using the packages straightforward and automatizes
-updates.
+directory structure, whick makes using the packages straightforward, and allows
+updates to be automated.
 
 <!--more-->
 
