@@ -7,8 +7,7 @@ import type { AstroIntegration } from "astro";
 
 declare global {
   interface Window {
-    remark_config: { host: string; site_id: string };
-    remark_enabled?: boolean;
+    remark_config: { host: string; site_id: string; no_footer?: boolean };
   }
 }
 
@@ -25,8 +24,9 @@ export const remark42Integration = (): AstroIntegration => {
           window.remark_config = {
             host: "https://comments.nmattia.com",
             site_id: "remark" /* default */,
+            no_footer:
+              true /* the remark42 footer clashes with existing footer */,
           };
-          window.remark_enabled = false; // Set to help with autocomplete in console
           // Event dispatched by the ClientRouter on page load:
           // https://docs.astro.build/en/guides/view-transitions/#astropage-load
           document.addEventListener("astro:page-load", () => {
@@ -37,12 +37,6 @@ export const remark42Integration = (): AstroIntegration => {
 
             const observer = new IntersectionObserver(
               (entries) => {
-                /* For now, only load comments if the remark feature flag is on */
-                const remarkEnabled = !!window.remark_enabled;
-                if (!remarkEnabled) {
-                  return;
-                }
-
                 const entry = entries[0];
                 if (!entry || !entry.isIntersecting) {
                   return;

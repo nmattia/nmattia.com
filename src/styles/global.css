@@ -502,3 +502,17 @@ pre.astro-code > .clipboard-copy:active {
   --clipboard-copy-extra-transition: background 0;
   background: var(--clipboard-copy-fill-color);
 }
+
+/* Comments */
+
+/* This overrides padding introduced by remark42 so that it's aligned & consistent with the rest of the content */
+#remark42 {
+  --remark-padding: 6px; /* from remark42's default style */
+  overflow-x: hidden;
+}
+
+#remark42 > iframe {
+  margin-left: calc(-1 * var(--remark-padding)) !important;
+  margin-top: calc(-1 * var(--remark-padding)) !important;
+  width: calc(100% + 2 * var(--remark-padding)) !important;
+}
