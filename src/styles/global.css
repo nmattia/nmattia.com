@@ -312,7 +312,7 @@ img {
 /* Make paragraphs overflow individually, instead
  * of taking the whole page along for a ride. */
 .blog-article > p {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 /* Space out all top-level elements */
