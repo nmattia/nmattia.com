@@ -185,6 +185,7 @@ containing the information about the first 592 bytes of the partition (header)
 (have a look at the [`LUKS` specification
 document](http://tomb.dyne.org/Luks_on_disk_format.pdf) for more information):
 
+```
 | start offset | field name      | length | data type | description                                         |
 | -----------: | --------------- | -----: | --------- | --------------------------------------------------- |
 |            0 | magic           |      6 | byte[]    | magic for `LUKS` partition header, see `LUKS_MAGIC` |
@@ -203,6 +204,7 @@ document](http://tomb.dyne.org/Luks_on_disk_format.pdf) for more information):
 |          ... | ...             |    ... | ...       | ...                                                 |
 |          544 | key-slot-8      |     48 | key slot  | key slot 8                                          |
 |          592 | total phdr size |
+```
 
 After the partition header, `LUKS` stores the (encrypted) "key material", and
 then the "bulk data". The "key material" is basically keys used to encrypt the
