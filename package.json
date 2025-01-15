@@ -12,6 +12,7 @@
     "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.0.3",
     "astro": "^5.0.8",
     "the-new-css-reset": "1.11.3"
   },
@@ -30,7 +31,7 @@
     "rehype-format": "^5.0.1",
     "rehype-katex": "^6.0.3",
     "rehype-raw": "7.0.0",
-    "remark-math": "6.0.0",
+    "remark-math": "^6.0.0",
     "typescript": "5.5",
     "unist-util-visit": "^5.0.0"
   }
