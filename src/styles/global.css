@@ -315,6 +315,11 @@ img {
   overflow-x: auto;
 }
 
+/* ... and work around mathjax containers that overflow vertically */
+.blog-article > p:has(code.math-inline) {
+  overflow-y: hidden;
+}
+
 /* Space out all top-level elements */
 .blog-article > * {
   margin-top: 1.6rem; /* rem to avoid element's line-height impacting the spacing */

@@ -41,7 +41,12 @@ export const blogPostTeaser = async (
     teaserMd = blogPostEntry.data.teaser;
   } else {
     const content = blogPostEntry.body;
-    const teaserStart = content.indexOf("<!--more-->");
+    let teaserStart = content.indexOf("<!--more-->");
+    /* Slightly different handling for MDX comments */
+    if (teaserStart === -1) {
+      teaserStart = content.indexOf("{/* more */}");
+    }
+
     teaserMd = content.substring(0, teaserStart);
   }
 

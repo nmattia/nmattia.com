@@ -26,16 +26,6 @@ involve cryptography researcher [Bogdan
 Warinschi](https://www.bristol.ac.uk/people/person/Bogdan-Warinschi-65c61a03-5030-4d74-a164-c1b524269868/) (thanks Bogdan).
 We had a lot of fire power. Nothing is ever easy in the JavaScript world.
 
-<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-});
-</script>
-
 ## The Problem
 
 Say you have an HTML element (like a `<div>`). The browser draws a nice
