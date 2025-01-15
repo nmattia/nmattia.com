@@ -13,6 +13,31 @@ This is an _example post_ showcasing [nmattia.com](https://nmattia.com)'s styles
 
 {/* more */}
 
+## Colors
+
+export function Box(props) {
+  return (
+    <div
+      title={props.color}
+      style={`background-color: ${props.color}; width: 3em; aspect-ratio: 1; outline: 2px solid black;`}
+    ></div>
+  );
+}
+
+<div style={"display: flex; gap: 1em;"}>
+  {[
+    <Box color="var(--col-1)" />,
+    <Box color="var(--col-2)" />,
+    <Box color="var(--col-3)" />,
+    <Box color="var(--col-4)" />,
+    <Box color="var(--col-5)" />,
+    <Box color="var(--col-6)" />,
+    <Box color="var(--col-7)" />,
+    <Box color="var(--col-8)" />,
+    <Box color="var(--col-9)" />,
+  ]}
+</div>
+
 ## Headings
 
 This is a paragraph.
