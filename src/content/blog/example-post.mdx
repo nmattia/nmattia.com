@@ -62,17 +62,6 @@ This is another section. Here are some unordered bullet points:
 
 This paragraph includes some links: Lorem [ipsum](#) dolor [sit](#) amet, [consectetur adipiscing elit](#). Vivamus dictum.
 
-How about a table:
-
-| start offset | field name      | length | data type | description                                         |
-| -----------: | --------------- | -----: | --------- | --------------------------------------------------- |
-|            0 | magic           |      6 | byte[]    | magic for `LUKS` partition header, see `LUKS_MAGIC` |
-|            6 | version         |      2 | uint16_t  | `LUKS` version                                      |
-|            8 | cipher-name     |     32 | char[]    | cipher name specification                           |
-|          ... | ...             |    ... | ...       | ...                                                 |
-|          544 | key-slot-8      |     48 | key slot  | key slot 8                                          |
-|          592 | total phdr size |
-
 ## Code
 
 Here are some code snippets:
