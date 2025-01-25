@@ -4,6 +4,7 @@ import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
+import { fixMdx } from "./plugins/fix-mdx";
 import { rehypeShikiCommands } from "./plugins/rehype-shiki-commands";
 import { rehypeCopyCodeIntegration } from "./plugins/rehype-copy-code";
 import { remarkGfmAdmonitions } from "./plugins/remark-gfm-admonitions";
@@ -20,6 +21,7 @@ export default defineConfig({
     },
     remarkPlugins: [remarkMath, remarkGfmAdmonitions],
     rehypePlugins: [
+      fixMdx,
       rehypeKatex as any /* something is off in the types but everything works fine */,
       rehypeRaw,
       rehypeShikiCommands,
