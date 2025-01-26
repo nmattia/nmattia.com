@@ -1,0 +1,50 @@
+---
+const { fragShader, beforeRender, afterSetup } = Astro.props;
+---
+
+<style>
+  canvas {
+    width: 600px;
+    max-width: 100%;
+  }
+</style>
+
+<canvas
+  data-fragment-shader={fragShader}
+  data-before-render={beforeRender?.toString()}
+  data-after-setup={afterSetup?.toString()}></canvas>
+
+<script>
+  import { attach } from "quad-shader";
+  import type { Opts } from "quad-shader";
+
+  const canvases = document.querySelectorAll("canvas");
+  // TODO: astro:page-load
+  Array.from(canvases).forEach((canvas) => {
+    const fragShader = canvas.dataset.fragmentShader!;
+    const beforeRender = canvas.dataset.beforeRender;
+
+    let opts: Opts = {};
+
+    if (beforeRender) {
+      // TODO: use Function constructor? https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!
+      const f = eval(beforeRender);
+      /* TODO: check type? */
+      opts.beforeRender = f;
+    }
+
+    // TODO: this should also return 'state' or at least 'program'
+    // TODO: this should handle removing the element (dettaching)
+    const gl = attach(canvas, fragShader, opts);
+
+    // TODO: how to delete element when going away from page?
+    const afterSetup = canvas.dataset.afterSetup;
+
+    if (afterSetup) {
+      const f = eval(afterSetup);
+
+      /* TODO: check type? */
+      f(gl);
+    }
+  });
+</script>

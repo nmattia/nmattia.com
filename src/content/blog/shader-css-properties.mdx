@@ -1,0 +1,322 @@
+---
+title: "Set WebGL shader colors with CSS"
+description: "A short guide on how to influence WebGL shaders with CSS values."
+og_image: /images/spheres.png
+pubDate: 2024-12-31
+tags:
+  - js
+  - astro
+  - frontend
+---
+
+WebGL shaders rendered to `canvas` elements are a great way to add interesting visuals to a website. Unfortunately, unlike HTML, they do not natively integrate with CSS. This post shows a way to work around this limitation and influence WebGL graphics from CSS.
+
+{/* more */}
+
+import Shader from "../../components/Shader.astro";
+
+> [!NOTE]
+>
+> WebGL shaders are programs that the browser runs on the GPU. They are generally used for graphics, which is what we're focusing on here; in particular we'll be looking at rendering quads (rectangles) with _fragment_ shaders. For more information I recommend https://webglfundamentals.org/ and the [MDN WebGL tutorial](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial). Finally, a lot of what's happening here is implemented in my [`quad-shader` WebGL library/template](https://github.com/nmattia/quad-shader).
+
+## What we are aiming for
+
+The sphere below (full code [here](https://github.com/nmattia/quad-shader/blob/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl)) has colors derived from the styling of the website. Try toggling dark mode on or off, or even opening the webtools and changing the `color` or `accent-color` properties on the `<canvas>` element.
+
+export const sphereShader = await fetch(
+  "https://raw.githubusercontent.com/nmattia/webgl-shader-template/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl",
+).then((resp) => resp.text());
+
+<Shader fragShader={sphereShader} beforeRender={ (gl, state) => {
+
+            // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
+            // (r, g, b & a between 0 and 1)
+            const parseRGBA = ( computed) => {
+                const rgb = computed.match(
+                        /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
+                        ).groups;
+
+                return {
+                   r: Number(rgb.r) / 255,
+                   g: Number(rgb.g) / 255,
+                   b: Number(rgb.b) / 255,
+                   a: Number(rgb.a ?? 1),
+                };
+            };
+
+            const primary = parseRGBA(getComputedStyle(state.canvas).color);
+            gl.uniform4f(
+              gl.getUniformLocation(state.program, "uColPrimary"),
+              primary.r, primary.g, primary.b, 1,
+            );
+
+
+            const pop = parseRGBA(getComputedStyle(state.canvas).accentColor);
+            gl.uniform4f(
+              gl.getUniformLocation(state.program, "uColPop"),
+              pop.r, pop.g, pop.b, 1,
+            );
+
+}
+
+}/>
+
+The colors used in the (fragment) shader (used to draw the animation) are read from the page's styles. This allows fancy WebGL animations to blend in smoothly in websites, be derived from design systems, and react to changes (like dark mode).
+
+This is not a given and will take a bit of work. After a quick recap on how to specify a color as an input to the shader, we'll then figure out how to politely ask the browser to resolve CSS colors in a format that we can understand (before passing it as an input to the shader). Then we'll see a couple of niceties with this approach, like out-of-the-box support for CSS transitions.
+
+Let's go!
+
+## WebGL does not care about CSS
+
+To understand the problem, look at the following image:
+
+export const fragShader = `
+
+precision highp float;
+
+varying vec2 vPosition;
+uniform vec4 uColor;
+
+void main() {
+if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
+gl_FragColor = uColor;
+}
+}
+`
+
+<Shader
+  fragShader={fragShader}
+  beforeRender={(gl, state) => {
+    // TODO: need 'program', should be 'afterSetup'
+    gl.uniform4f(gl.getUniformLocation(state.program, "uColor"), 0, 0, 0, 1);
+  }}
+/>
+
+This image (which is much simpler than the sphere above, for clarity) is _also_ created using a WebGL shader. Though, unlike the sphere, it will not react to changes in the styles -- toggling dark mode on or off will not affect it. And as a matter of fact, if your browser (or system) currently has dark mode enabled, you might not even be able to see the image. This is because -- as mentioned above -- WebGL shaders are not affected by CSS (and black-on-black is not very readable).
+
+This simple image above might be implemented as follows:
+
+```glsl
+// shader.glsl
+
+varying vec2 vPosition;
+
+void main() {
+    vec4 color = vec4(0., 0., 0., 1.); // black
+
+    /* alternate between colors, otherwise leave transparent */
+    if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
+        gl_FragColor = color;
+    }
+}
+```
+
+It is a fairly simple [fragment (or pixel) shader](https://www.khronos.org/opengl/wiki/Fragment_Shader). It is executed for every pixel (technically, fragment) in the `<canvas>` element. Depending on the position of the pixel, it will either render `color` (hardcoded to black here) or return without setting a color for the pixel (effectively leaving the pixel as transparent).
+
+> [!NOTE]
+>
+> The `vPosition` is a [varying](https://thebookofshaders.com/glossary/?search=varying) variable, though what exactly this means is _not important_ here. What is somewhat relevant to know is that it is set up (somewhere else) to range between -1 and 1 (or similary between - and + the aspect ratio).
+>
+> Do also note: in real life, avoid if/else branches in shaders. They make everything very slow.
+
+Now we need a way to specify inputs to inject colors from the outside, i.e. from JavaScript.
+
+## Setting shader inputs from JavaScript
+
+We pass data from JavaScript to the shader by setting a [_uniform_](https://thebookofshaders.com/glossary/?search=uniform) variable, which will be the same for every evaluation of the shader (i.e. the variable can be read (and will be constant for at least one render), whenever the shader is run to determine the color of a pixel.
+
+This is done by removing the local `color` variable and instead using a new variable (well, identifier) `uColor`, marked as `uniform`:
+
+```glsl
+// shader.glsl
+
+uniform vec4 uColor; // [sh! highlight]
+varying vec2 vPosition;
+
+void main() {
+
+    /* alternate between colors, otherwise leave transparent */
+    if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
+        gl_FragColor = uColor; // [sh! highlight]
+    }
+}
+```
+
+> [!NOTE]
+>
+> The leading `u` in `uColor` is a convention, `u` stands for "uniform". Similarly, the `v` in `vPosition` stands for "varying".
+
+Using uniform variables is the simplest way to set data that should be the same across every execution of the shader. Uniforms can be set from JavaScript like so:
+
+```ts
+// index.ts
+
+const color = { r: 0, g: 0, b: 0, a: 1 }; // Black
+gl.uniform4f(
+  gl.getUniformLocation(program, "uColor"), // [sh! highlight]
+  color.r,
+  color.g,
+  color.b,
+  color.a,
+);
+```
+
+Here `gl` is the [`WebGLRenderingContext`](https://developer.mozilla.org/de/docs/Web/API/WebGLRenderingContext) that would be attached to the `<canvas>` rendering the shader, and `program` is the [`WebGLProgram`](https://developer.mozilla.org/en-US/docs/Web/API/WebGLProgram) resulting from compiling the shader(s).
+
+The [`uniform4f` method](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform) on the `gl` context allows us to specify values for the uniform: we look up an identifier from the program (`uColor`) and pass in the data. Because we declared `uColor` as a `vec4` in the shader -- a vector of 4 elements -- we have to pass 4 floats (and hence the `4f` in the method name) between `0` and `1` (and _not_ between `0` and `255`, for instance. Shader stuff, not CSS.).
+
+This was simple enough, now let's figure out how to get the color value from CSS in a way that is practical to work with.
+
+## Getting the color from CSS
+
+A naive solution (with some drawbacks as we'll see later) is to directly get the value from e.g. a custom CSS property:
+
+```js
+> getComputedStyle(document.body).getPropertyValue("--col-1")
+'#ff0053'
+```
+
+The hex value of the color represents the red (`ff`), green (`00`) and blue (`53`) components of `--col-1`. As we saw above, in order to use `uniform4f` to write to `uColor` we need red, green and blue as values between `0` and `1.`, which we could achieve using e.g. `parseInt("ff", 16)`.
+
+Unfortunately we have no way to guarantee that all custom properties will return a hex value. Let's assume that `--col-1` was indeed specified using hex notation, but that `--col-2` is using `hsl` notation:
+
+```css
+/* main.css */
+
+:root {
+  --col-1: #ff0053;
+  --col-2: hsl(60deg, 100%, 97%);
+}
+```
+
+In this case we see that looking up the value of a property returns the value _verbatim_, as it was set:
+
+```js
+> getComputedStyle(document.body).getPropertyValue("--col-2")
+'hsl(60deg, 100%, 97%)'
+```
+
+This means we would have to parse every possible way the color may be specified, of which there is [a ton](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax).
+
+Instead, we can rely on the fact that once the color is attached to an element, and if that element is attached to the DOM, the browser will return the value in easy-to-parse RGB format. Let's set the body's `color` to `--col-1`:
+
+```css
+/* main.css */
+
+:root {
+  --col-1: #ff0053;
+}
+
+body {
+  color: var(--col-1);
+}
+```
+
+```js
+> getComputedStyle(document.body).color
+'rgb(255, 0, 83)'
+```
+
+Now it's fairly easy to set the `uColor` value in our shader to the element's `color` property:
+
+```ts
+
+// index.ts
+
+// turns 'rgb(...)' or 'rgba(...)' into { r: ..., g: ..., b: ..., a: ... }
+//
+// full implementation further down
+const parseRGBA = (color) => { ...} ;
+
+const color = parseRGBA(getComputedStyle(document.body).color);
+gl.uniform4f(
+    gl.getUniformLocation(program, "uColor"),
+    color.r, color.g, color.b, color.a,
+);
+```
+
+And as we'll see below there are some extra benefits to reading the color from a rendered element's CSS property, instead of reading it from a custom property like `--col-1`.
+
+The implementation of `parseRGBA` is pretty straightforward, though note that the browser may return the string as either `rgb(r,g,b)` or `rgba(r,g,b,a)`:
+
+```ts
+// index.ts
+
+// Parse an 'rgb(R, G, B)' (incl. alpha variation) string into numbers
+const parseRGBA = (
+  color: string,
+): { r: number; g: number; b: number; a: number } => {
+  const rgb = color.match(
+    /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
+  )!.groups as any as { r: string; g: string; b: string; a?: string };
+
+  return {
+    r: Number(rgb.r) / 255,
+    g: Number(rgb.g) / 255,
+    b: Number(rgb.b) / 255,
+    a: Number(rgb.a ?? 1),
+  };
+};
+```
+
+Circling back to our simple shader, we can now see that the colors are derived from the styles (the "black" is not really black anymore but whatever the page uses as primary color, be it a dark grey or a white-ish white; for greater effect try toggling dark mode on/off).
+
+<Shader
+    fragShader={fragShader}
+
+    beforeRender={(gl, state) => {
+            // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
+            // (r, g, b & a between 0 and 1)
+            const parseRGBA = ( computed) => {
+                const rgb = computed.match(
+                        /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
+                        ).groups;
+
+                return {
+                   r: Number(rgb.r) / 255,
+                   g: Number(rgb.g) / 255,
+                   b: Number(rgb.b) / 255,
+                   a: Number(rgb.a ?? 1),
+                };
+            };
+
+            const primary = parseRGBA(getComputedStyle(document.body).color);
+            gl.uniform4f(
+              gl.getUniformLocation(state.program, "uColor"),
+              primary.r, primary.g, primary.b, 1,
+            );
+
+        }
+    } />
+
+And fortunately for us, parsing the color is pretty fast, meaning we can potentially run this on every render without a huge performance hit:
+
+```ts
+> console.time("rgba");
+> const colPrimary = parseRGBA(getComputedStyle(document.body).color);
+> console.timeEnd("rgba");
+
+ rgba: 0.02001953125 ms
+```
+
+## Going beyond `color` and `document.body`
+
+As alluded to earlier, there is one extra benefit: the shader inputs do react to transitions as well! If the stylesheet specifies `transition: color 1s linear;` then the shader will progressively change color over the course of a second (if the `color` changes).
+
+And we can actually go one step further. Instead of looking up the value on the body, we can directly target our `<canvas>` element when looking up the color.
+
+Finally, we can even use more than one value; the value just has to be "color"-like so that the browser actually returns a color in RGB format, that means you could for instance specify an `accent-color` or `background-color` on your `canvas` and use `getComputedStyle(canvas).accentColor` if you need more than just one `color`/`uColor`.
+
+```js
+> let canvas = document.querySelector("canvas")
+> Object.values(getComputedStyle(canvas)).filter(x => x.endsWith("color"))
+
+ ['accent-color', 'background-color', 'color', ...]
+```
+
+The CSS property (`color`, `accent-color`, etc) _must_ however be understood by the browser as a color (this is not the case for e.g. the `width` or `color-scheme` CSS properties); additionally, the HTML element must be attached to the DOM (though may be `display: none;`).
+
+## Conclusion
+
+Hopefully this gave you a good overview of the technique, which is also implemented in [`quad-shader`](https://github.com/nmattia/quad-shader/blob/6d1ba7b3b70801b0d03bfdf5b04f8984eb743be6/index.ts#L14-L38). Enjoy and don't hesitate to reach out for questions & feedback!
