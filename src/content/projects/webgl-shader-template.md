@@ -6,7 +6,7 @@ tags:
   - "js"
   - "webgl"
   - "frontend"
-link: "https://nmattia.github.io/webgl-shader-template/"
+link: "https://nmattia.github.io/quad-shader/"
 teaser: |
   Boilerplate for creating WebGL-based applications using Vite and TypeScript. Whether you're just getting started with WebGL or looking for a quick way to bootstrap your shader projects, this template should serve as a solid foundation.
 ---
