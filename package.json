@@ -9,7 +9,7 @@
     "build": "astro check && tsc --noEmit && astro build --force",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json"
+    "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json --ignore-path '*.mdx'"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.7",

@@ -15,13 +15,11 @@ WebGL shaders rendered to `canvas` elements are a great way to add interesting v
 
 import Shader from "../../components/Shader.astro";
 
-> [!NOTE]
->
-> WebGL shaders are programs that the browser runs on the GPU. They are generally used for graphics, which is what we're focusing on here; in particular we'll be looking at rendering quads (rectangles) with _fragment_ shaders. For more information I recommend https://webglfundamentals.org/ and the [MDN WebGL tutorial](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial). Finally, a lot of what's happening here is implemented in my [`quad-shader` WebGL library/template](https://github.com/nmattia/quad-shader).
+WebGL shaders are programs that the browser runs on the GPU. They are generally used for graphics, which is what we're focusing on here; in particular we'll be looking at rendering quads (rectangles) with _fragment_ shaders. For more information I recommend https://webglfundamentals.org/ and the [MDN WebGL tutorial](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial). Finally, a lot of what's happening here is implemented in my [`quad-shader` WebGL library/template](https://github.com/nmattia/quad-shader).
 
 ## What we are aiming for
 
-The sphere below (full code [here](https://github.com/nmattia/quad-shader/blob/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl)) has colors derived from the styling of the website. Try toggling dark mode on or off, or even opening the webtools and changing the `color` or `accent-color` properties on the `<canvas>` element.
+The sphere below (full code [here](https://github.com/nmattia/quad-shader/blob/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl)) has colors derived from the styling of the website. Try toggling dark mode on or off, or even opening the webtools and changing the `color` or `accent-color` properties on the `<canvas>` element. Dark colors will turn light, and vice versa.
 
 export const sphereShader = await fetch(
   "https://raw.githubusercontent.com/nmattia/webgl-shader-template/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl",
@@ -126,7 +124,7 @@ Now we need a way to specify inputs to inject colors from the outside, i.e. from
 
 We pass data from JavaScript to the shader by setting a [_uniform_](https://thebookofshaders.com/glossary/?search=uniform) variable, which will be the same for every evaluation of the shader (i.e. the variable can be read (and will be constant for at least one render), whenever the shader is run to determine the color of a pixel.
 
-This is done by removing the local `color` variable and instead using a new variable (well, identifier) `uColor`, marked as `uniform`:
+This is done by replacing the local `color` variable and instead using a new variable (well, identifier) `uColor`, marked as `uniform`:
 
 ```glsl
 // shader.glsl
@@ -149,16 +147,14 @@ void main() {
 
 Using uniform variables is the simplest way to set data that should be the same across every execution of the shader. Uniforms can be set from JavaScript like so:
 
+{/* prettier-ignore */}
 ```ts
 // index.ts
 
 const color = { r: 0, g: 0, b: 0, a: 1 }; // Black
 gl.uniform4f(
   gl.getUniformLocation(program, "uColor"), // [sh! highlight]
-  color.r,
-  color.g,
-  color.b,
-  color.a,
+  color.r, color.g, color.b, color.a,
 );
 ```
 
@@ -197,7 +193,7 @@ In this case we see that looking up the value of a property returns the value ex
 'hsl(60deg, 100%, 97%)'
 ```
 
-Browsers can interpret CSS colors in various formats (e.g., #hex, hsl, rgb, [etc](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax)na.), and custom properties return these values verbatim. However, when a color is applied to a rendered element (e.g., color, background-color, or accent-color), the browser resolves the value into an easy-to-parse RGB format, regardless of how the color was originally specified. This makes it a reliable and consistent source for WebGL inputs.
+Browsers can interpret CSS colors in various formats (e.g., #hex, hsl, rgb, [etc](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax)), and custom properties return these values verbatim. However, when a color is applied to a rendered element (e.g., color, background-color, or accent-color), the browser resolves the value into an easy-to-parse RGB format, regardless of how the color was originally specified. This makes it a reliable and consistent source for WebGL inputs.
 
 Let's set the body's `color` to `--col-1`:
 
