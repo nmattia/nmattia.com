@@ -1,4 +1,12 @@
 ---
+import type { Opts, Attached } from "quad-shader";
+
+interface Props {
+  fragShader: string;
+  beforeRender?: Opts["beforeRender"];
+  afterSetup?: (attached: Attached) => void;
+}
+
 const { fragShader, beforeRender, afterSetup } = Astro.props;
 ---
 
@@ -18,33 +26,38 @@ const { fragShader, beforeRender, afterSetup } = Astro.props;
   import { attach } from "quad-shader";
   import type { Opts } from "quad-shader";
 
-  const canvases = document.querySelectorAll("canvas");
-  // TODO: astro:page-load
-  Array.from(canvases).forEach((canvas) => {
-    const fragShader = canvas.dataset.fragmentShader!;
-    const beforeRender = canvas.dataset.beforeRender;
+  const listener = () => {
+    const canvases = document.querySelectorAll("canvas");
+    Array.from(canvases).forEach((canvas) => {
+      const fragShader = canvas.dataset.fragmentShader!;
+      const beforeRender = canvas.dataset.beforeRender;
 
-    let opts: Opts = {};
+      let opts: Opts = {};
 
-    if (beforeRender) {
-      // TODO: use Function constructor? https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!
-      const f = eval(beforeRender);
-      /* TODO: check type? */
-      opts.beforeRender = f;
+      if (beforeRender) {
+        const f = eval?.(`(${beforeRender})`);
+        opts.beforeRender = f;
+      }
+
+      const attached = attach(canvas, fragShader, opts);
+      const afterSetup = canvas.dataset.afterSetup;
+
+      if (afterSetup) {
+        const f = eval?.(`(${afterSetup})`);
+        f(attached);
+      }
+    });
+  };
+
+  // Workaround for TODO: link
+  declare global {
+    interface Window {
+      i_was_here?: true;
     }
+  }
 
-    // TODO: this should also return 'state' or at least 'program'
-    // TODO: this should handle removing the element (dettaching)
-    const gl = attach(canvas, fragShader, opts);
-
-    // TODO: how to delete element when going away from page?
-    const afterSetup = canvas.dataset.afterSetup;
-
-    if (afterSetup) {
-      const f = eval(afterSetup);
-
-      /* TODO: check type? */
-      f(gl);
-    }
-  });
+  if (!window.i_was_here) {
+    window.i_was_here = true;
+    document.addEventListener("astro:page-load", listener);
+  }
 </script>

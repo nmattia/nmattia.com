@@ -2,7 +2,7 @@
 title: "Set WebGL shader colors with CSS"
 description: "A short guide on how to influence WebGL shaders with CSS values."
 og_image: /images/spheres.png
-pubDate: 2024-12-31
+pubDate: 2025-01-28
 tags:
   - js
   - astro
@@ -25,39 +25,9 @@ export const sphereShader = await fetch(
   "https://raw.githubusercontent.com/nmattia/webgl-shader-template/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl",
 ).then((resp) => resp.text());
 
-<Shader fragShader={sphereShader} beforeRender={ (gl, state) => {
+import Sphere from "./shader-css-properties/Sphere.astro";
 
-            // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
-            // (r, g, b & a between 0 and 1)
-            const parseRGBA = ( computed) => {
-                const rgb = computed.match(
-                        /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
-                        ).groups;
-
-                return {
-                   r: Number(rgb.r) / 255,
-                   g: Number(rgb.g) / 255,
-                   b: Number(rgb.b) / 255,
-                   a: Number(rgb.a ?? 1),
-                };
-            };
-
-            const primary = parseRGBA(getComputedStyle(state.canvas).color);
-            gl.uniform4f(
-              gl.getUniformLocation(state.program, "uColPrimary"),
-              primary.r, primary.g, primary.b, 1,
-            );
-
-
-            const pop = parseRGBA(getComputedStyle(state.canvas).accentColor);
-            gl.uniform4f(
-              gl.getUniformLocation(state.program, "uColPop"),
-              pop.r, pop.g, pop.b, 1,
-            );
-
-}
-
-}/>
+<Sphere />
 
 The colors used in the fragment shader (responsible for drawing the animation) are dynamically tied to the page's styles. This means the shader responds in real-time to CSS changes, such as toggling dark mode, applying transitions, or altering properties via the browser’s dev tools. This ensures WebGL visuals adapt seamlessly to your design system without needing manual updates.
 
@@ -69,27 +39,9 @@ Let's go!
 
 To understand the problem, look at the following image:
 
-export const fragShader = `
+import Example from "./shader-css-properties/Example.astro";
 
-precision highp float;
-
-varying vec2 vPosition;
-uniform vec4 uColor;
-
-void main() {
-if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
-gl_FragColor = uColor;
-}
-}
-`
-
-<Shader
-  fragShader={fragShader}
-  beforeRender={(gl, state) => {
-    // TODO: need 'program', should be 'afterSetup'
-    gl.uniform4f(gl.getUniformLocation(state.program, "uColor"), 0, 0, 0, 1);
-  }}
-/>
+<Example color="static" />
 
 This image (which is much simpler than the sphere above, for clarity) is _also_ created using a WebGL shader. Though, unlike the sphere, it will not react to changes in the styles -- toggling dark mode on or off will not affect it. And as a matter of fact, if your browser (or system) currently has dark mode enabled, you might not even be able to see the image. This is because -- as mentioned above -- WebGL shaders are not affected by CSS (and black-on-black is not very readable).
 
@@ -260,33 +212,7 @@ const parseRGBA = (
 
 Circling back to our simple shader, we can now see that the colors are derived from the styles (the "black" is not really black anymore but whatever the page uses as primary color, be it a dark grey or a white-ish white; for greater effect try toggling dark mode on/off).
 
-<Shader
-    fragShader={fragShader}
-
-    beforeRender={(gl, state) => {
-            // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
-            // (r, g, b & a between 0 and 1)
-            const parseRGBA = ( computed) => {
-                const rgb = computed.match(
-                        /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
-                        ).groups;
-
-                return {
-                   r: Number(rgb.r) / 255,
-                   g: Number(rgb.g) / 255,
-                   b: Number(rgb.b) / 255,
-                   a: Number(rgb.a ?? 1),
-                };
-            };
-
-            const primary = parseRGBA(getComputedStyle(document.body).color);
-            gl.uniform4f(
-              gl.getUniformLocation(state.program, "uColor"),
-              primary.r, primary.g, primary.b, 1,
-            );
-
-        }
-    } />
+<Example color="dynamic" />
 
 And fortunately for us, parsing the color is pretty fast, meaning we can potentially run this on every render without a huge performance hit:
 

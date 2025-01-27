@@ -1,0 +1,69 @@
+---
+import Shader from "../../../components/Shader.astro";
+
+interface Props {
+  color: "static" | "dynamic";
+}
+
+const { color } = Astro.props;
+
+const fragShader = `
+
+precision highp float;
+
+varying vec2 vPosition;
+uniform vec4 uColor;
+
+void main() {
+if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
+gl_FragColor = uColor;
+}
+}
+`;
+---
+
+{
+  color === "static" ? (
+    <Shader
+      fragShader={fragShader}
+      afterSetup={({ gl, state }) => {
+        gl.uniform4f(
+          gl.getUniformLocation(state.program, "uColor"),
+          0,
+          0,
+          0,
+          1,
+        );
+      }}
+    />
+  ) : (
+    <Shader
+      fragShader={fragShader}
+      beforeRender={({ gl, state }) => {
+        // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
+        // (r, g, b & a between 0 and 1)
+        const parseRGBA = (computed: string) => {
+          const rgb = computed.match(
+            /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
+          )!.groups as any as { r: string; g: string; b: string; a?: string };
+
+          return {
+            r: Number(rgb.r) / 255,
+            g: Number(rgb.g) / 255,
+            b: Number(rgb.b) / 255,
+            a: Number(rgb.a ?? 1),
+          };
+        };
+
+        const primary = parseRGBA(getComputedStyle(document.body).color);
+        gl.uniform4f(
+          gl.getUniformLocation(state.program, "uColor"),
+          primary.r,
+          primary.g,
+          primary.b,
+          1,
+        );
+      }}
+    />
+  )
+}
