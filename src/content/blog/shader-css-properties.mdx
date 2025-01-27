@@ -61,7 +61,7 @@ export const sphereShader = await fetch(
 
 }/>
 
-The colors used in the (fragment) shader (used to draw the animation) are read from the page's styles. This allows fancy WebGL animations to blend in smoothly in websites, be derived from design systems, and react to changes (like dark mode).
+The colors used in the fragment shader (responsible for drawing the animation) are dynamically tied to the page's styles. This means the shader responds in real-time to CSS changes, such as toggling dark mode, applying transitions, or altering properties via the browser’s dev tools. This ensures WebGL visuals adapt seamlessly to your design system without needing manual updates.
 
 This is not a given and will take a bit of work. After a quick recap on how to specify a color as an input to the shader, we'll then figure out how to politely ask the browser to resolve CSS colors in a format that we can understand (before passing it as an input to the shader). Then we'll see a couple of niceties with this approach, like out-of-the-box support for CSS transitions.
 
@@ -190,16 +190,16 @@ Unfortunately we have no way to guarantee that all custom properties will return
 }
 ```
 
-In this case we see that looking up the value of a property returns the value _verbatim_, as it was set:
+In this case we see that looking up the value of a property returns the value exactly as it was set:
 
 ```js
 > getComputedStyle(document.body).getPropertyValue("--col-2")
 'hsl(60deg, 100%, 97%)'
 ```
 
-This means we would have to parse every possible way the color may be specified, of which there is [a ton](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax).
+Browsers can interpret CSS colors in various formats (e.g., #hex, hsl, rgb, [etc](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax)na.), and custom properties return these values verbatim. However, when a color is applied to a rendered element (e.g., color, background-color, or accent-color), the browser resolves the value into an easy-to-parse RGB format, regardless of how the color was originally specified. This makes it a reliable and consistent source for WebGL inputs.
 
-Instead, we can rely on the fact that once the color is attached to an element, and if that element is attached to the DOM, the browser will return the value in easy-to-parse RGB format. Let's set the body's `color` to `--col-1`:
+Let's set the body's `color` to `--col-1`:
 
 ```css
 /* main.css */
@@ -237,6 +237,8 @@ gl.uniform4f(
 ```
 
 And as we'll see below there are some extra benefits to reading the color from a rendered element's CSS property, instead of reading it from a custom property like `--col-1`.
+
+By re-specifying the `uniform` on every frame, this method ensures real-time updates: any CSS changes, like toggling dark mode or modifying styles via dev tools, will immediately propagate to the shader.
 
 The implementation of `parseRGBA` is pretty straightforward, though note that the browser may return the string as either `rgb(r,g,b)` or `rgba(r,g,b,a)`:
 
@@ -319,4 +321,4 @@ The CSS property (`color`, `accent-color`, etc) _must_ however be understood by 
 
 ## Conclusion
 
-Hopefully this gave you a good overview of the technique, which is also implemented in [`quad-shader`](https://github.com/nmattia/quad-shader/blob/6d1ba7b3b70801b0d03bfdf5b04f8984eb743be6/index.ts#L14-L38). Enjoy and don't hesitate to reach out for questions & feedback!
+Hopefully this gave you a good overview of how to dynamically integrate CSS styling into WebGL shaders. By reading color values from rendered elements and regularly syncing those values with the shader, you ensure your shaders react in real-time to CSS changes. This opens up possibilities for seamless design integration, responsive animations, and even advanced interactions like transitioning WebGL visuals alongside CSS. If you have questions or feedback, feel free to reach out or explore [quad-shader](https://github.com/nmattia/quad-shader/blob/6d1ba7b3b70801b0d03bfdf5b04f8984eb743be6/index.ts#L14-L38) for inspiration. Enjoy!
