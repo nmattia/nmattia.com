@@ -9,11 +9,12 @@
     "build": "astro check && tsc --noEmit && astro build --force",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json"
+    "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json --ignore-path '*.mdx'"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.7",
     "astro": "^5.1.10",
+    "quad-shader": "^0.0.1",
     "the-new-css-reset": "1.11.3"
   },
   "devDependencies": {

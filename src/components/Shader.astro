@@ -1,0 +1,75 @@
+---
+import type { Opts, Attached } from "quad-shader";
+
+interface Props {
+  fragShader: string;
+  beforeRender?: Opts["beforeRender"];
+  afterSetup?: (attached: Attached) => void;
+}
+
+const { fragShader, beforeRender, afterSetup } = Astro.props;
+---
+
+<style>
+  canvas {
+    width: 600px;
+    max-width: 100%;
+  }
+</style>
+
+<canvas
+  data-fragment-shader={fragShader}
+  data-before-render={beforeRender?.toString()}
+  data-after-setup={afterSetup?.toString()}></canvas>
+
+<script>
+  import { attach } from "quad-shader";
+  import type { Opts } from "quad-shader";
+
+  // Ensure all canvases (with shaders) have callbacks set up
+  const hydrateCanvases = () => {
+    const canvases = document.querySelectorAll("canvas");
+    Array.from(canvases).forEach((canvas) => {
+      // because of astro's view transition handling, we don't know for sure
+      // that the function will be called exactly once, so we keep track of which
+      // canvases have been processed
+      if (canvas.dataset.quadHydrated === "true") {
+        return;
+      }
+      const fragShader = canvas.dataset.fragmentShader!;
+      const beforeRender = canvas.dataset.beforeRender;
+
+      let opts: Opts = {};
+
+      if (beforeRender) {
+        const f = eval?.(`(${beforeRender})`);
+        opts.beforeRender = f;
+      }
+
+      const attached = attach(canvas, fragShader, opts);
+      const afterSetup = canvas.dataset.afterSetup;
+
+      if (afterSetup) {
+        const f = eval?.(`(${afterSetup})`);
+        f(attached);
+      }
+
+      canvas.dataset.quadHydrated = "true";
+    });
+  };
+
+  // Again, because of astro's handling of view transitions, we need to
+  // figure out if we've registered the callback or not
+  declare global {
+    interface Window {
+      i_was_here?: true;
+    }
+  }
+  if (!window.i_was_here) {
+    window.i_was_here = true;
+    document.addEventListener("astro:page-load", hydrateCanvases);
+    // On safari, the callback is registered too late (after the event fired) so
+    // we call the function manually
+    hydrateCanvases();
+  }
+</script>

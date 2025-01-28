@@ -1,0 +1,45 @@
+---
+import Shader from "../../../components/Shader.astro";
+
+export const sphereShader = await fetch(
+  "https://raw.githubusercontent.com/nmattia/webgl-shader-template/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl",
+).then((resp) => resp.text());
+---
+
+<Shader
+  fragShader={sphereShader}
+  beforeRender={({ gl, state }) => {
+    // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
+    // (r, g, b & a between 0 and 1)
+    const parseRGBA = (computed: string) => {
+      const rgb = computed.match(
+        /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
+      )!.groups as any as { r: string; g: string; b: string; a?: string };
+
+      return {
+        r: Number(rgb.r) / 255,
+        g: Number(rgb.g) / 255,
+        b: Number(rgb.b) / 255,
+        a: Number(rgb.a ?? 1),
+      };
+    };
+
+    const primary = parseRGBA(getComputedStyle(state.canvas).color);
+    gl.uniform4f(
+      gl.getUniformLocation(state.program, "uColPrimary"),
+      primary.r,
+      primary.g,
+      primary.b,
+      1,
+    );
+
+    const pop = parseRGBA(getComputedStyle(state.canvas).accentColor);
+    gl.uniform4f(
+      gl.getUniformLocation(state.program, "uColPop"),
+      pop.r,
+      pop.g,
+      pop.b,
+      1,
+    );
+  }}
+/>

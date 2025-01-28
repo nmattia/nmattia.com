@@ -52,6 +52,9 @@ body {
   color: var(--col-fg);
   counter-reset: sidenote-counter;
   line-height: 1;
+
+  /* used as an accent color in quad shaders */
+  accent-color: var(--col-5);
 }
 
 :root {
@@ -379,6 +382,15 @@ img {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.blog-article > canvas {
+  max-height: 40em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5em;
+  margin-bottom: 5em;
 }
 
 /* Hack since we don't have 'figcaption's (yet): if the paragraph after an image contains a single element, and
