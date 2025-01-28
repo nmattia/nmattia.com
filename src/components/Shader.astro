@@ -26,9 +26,16 @@ const { fragShader, beforeRender, afterSetup } = Astro.props;
   import { attach } from "quad-shader";
   import type { Opts } from "quad-shader";
 
-  const listener = () => {
+  // Ensure all canvases (with shaders) have callbacks set up
+  const hydrateCanvases = () => {
     const canvases = document.querySelectorAll("canvas");
     Array.from(canvases).forEach((canvas) => {
+      // because of astro's view transition handling, we don't know for sure
+      // that the function will be called exactly once, so we keep track of which
+      // canvases have been processed
+      if (canvas.dataset.quadHydrated === "true") {
+        return;
+      }
       const fragShader = canvas.dataset.fragmentShader!;
       const beforeRender = canvas.dataset.beforeRender;
 
@@ -46,18 +53,23 @@ const { fragShader, beforeRender, afterSetup } = Astro.props;
         const f = eval?.(`(${afterSetup})`);
         f(attached);
       }
+
+      canvas.dataset.quadHydrated = "true";
     });
   };
 
-  // Workaround for TODO: link
+  // Again, because of astro's handling of view transitions, we need to
+  // figure out if we've registered the callback or not
   declare global {
     interface Window {
       i_was_here?: true;
     }
   }
-
   if (!window.i_was_here) {
     window.i_was_here = true;
-    document.addEventListener("astro:page-load", listener);
+    document.addEventListener("astro:page-load", hydrateCanvases);
+    // On safari, the callback is registered too late (after the event fired) so
+    // we call the function manually
+    hydrateCanvases();
   }
 </script>

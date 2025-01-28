@@ -53,7 +53,7 @@ body {
   counter-reset: sidenote-counter;
   line-height: 1;
 
-  /* TODO: explain */
+  /* used as an accent color in quad shaders */
   accent-color: var(--col-5);
 }
 
