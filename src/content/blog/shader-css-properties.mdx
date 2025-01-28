@@ -2,10 +2,10 @@
 title: "Set WebGL shader colors with CSS"
 description: "A short guide on how to influence WebGL shaders with CSS values."
 og_image: /images/spheres.png
-pubDate: 2025-01-28
+pubDate: 2025-01-29
 tags:
   - js
-  - astro
+  - webgl
   - frontend
 ---
 
@@ -66,7 +66,7 @@ It is a fairly simple [fragment (or pixel) shader](https://www.khronos.org/openg
 
 > [!NOTE]
 >
-> The `vPosition` is a [varying](https://thebookofshaders.com/glossary/?search=varying) variable, though what exactly this means is _not important_ here. What is somewhat relevant to know is that it is set up (somewhere else) to range between -1 and 1 (or similary between - and + the aspect ratio).
+> The `vPosition` is a [varying](https://thebookofshaders.com/glossary/?search=varying) variable, though what exactly this means is _not important_ here. What is somewhat relevant to know is that it is set up (somewhere else) to range between -1 and 1 (or similarly between - and + the aspect ratio).
 >
 > Do also note: in real life, avoid if/else branches in shaders. They make everything very slow.
 
@@ -97,7 +97,7 @@ void main() {
 >
 > The leading `u` in `uColor` is a convention, `u` stands for "uniform". Similarly, the `v` in `vPosition` stands for "varying".
 
-Using uniform variables is the simplest way to set data that should be the same across every execution of the shader. Uniforms can be set from JavaScript like so:
+Using uniform variables is the simplest way to set data that should be the same across every execution of the shader. Uniforms can be set from JavaScript as follows:
 
 {/* prettier-ignore */}
 ```ts
@@ -188,7 +188,7 @@ And as we'll see below there are some extra benefits to reading the color from a
 
 By re-specifying the `uniform` on every frame, this method ensures real-time updates: any CSS changes, like toggling dark mode or modifying styles via dev tools, will immediately propagate to the shader.
 
-The implementation of `parseRGBA` is pretty straightforward, though note that the browser may return the string as either `rgb(r,g,b)` or `rgba(r,g,b,a)`:
+The implementation of `parseRGBA` is pretty straightforward, though note that the browser may return the string as either `rgb(r,g,b)` or `rgba(r,g,b,a)` (even though modern CSS syntax allows skipping the commas, the value returned from the browser has commas between the `r`, `g`, `b` and `a` values):
 
 ```ts
 // index.ts
@@ -239,7 +239,7 @@ Finally, we can even use more than one value; the value just has to be "color"-l
  ['accent-color', 'background-color', 'color', ...]
 ```
 
-The CSS property (`color`, `accent-color`, etc) _must_ however be understood by the browser as a color (this is not the case for e.g. the `width` or `color-scheme` CSS properties); additionally, the HTML element must be attached to the DOM (though may be `display: none;`).
+The CSS property (`color`, `accent-color`, etc) _must_ however be understood by the browser as a color (this is not the case for e.g. the `width` or `color-scheme` CSS properties); additionally, the HTML element must be attached to the DOM (though it may be `display: none;`).
 
 ## Conclusion
 
