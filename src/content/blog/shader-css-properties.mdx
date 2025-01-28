@@ -4,8 +4,8 @@ description: "A short guide on how to influence WebGL shaders with CSS values."
 og_image: /images/spheres.png
 pubDate: 2025-01-29
 tags:
-  - js
   - webgl
+  - js
   - frontend
 ---
 
@@ -55,18 +55,19 @@ varying vec2 vPosition;
 void main() {
     vec4 color = vec4(0., 0., 0., 1.); // black
 
-    /* alternate between colors, otherwise leave transparent */
+    // Render the color only for fragments within a grid-like pattern,
+    // otherwise leave the fragment transparent
     if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
         gl_FragColor = color;
     }
 }
 ```
 
-It is a fairly simple [fragment (or pixel) shader](https://www.khronos.org/opengl/wiki/Fragment_Shader). It is executed for every pixel (technically, fragment) in the `<canvas>` element. Depending on the position of the pixel, it will either render `color` (hardcoded to black here) or return without setting a color for the pixel (effectively leaving the pixel as transparent).
+It is a short [fragment (or pixel) shader](https://www.khronos.org/opengl/wiki/Fragment_Shader). It is executed for every pixel (technically, fragment) in the `<canvas>` element. Depending on the position of the pixel, it will either render `color` (hardcoded to black here) or return without setting a color for the pixel (effectively leaving the pixel as transparent).
 
 > [!NOTE]
 >
-> The `vPosition` is a [varying](https://thebookofshaders.com/glossary/?search=varying) variable, though what exactly this means is _not important_ here. What is somewhat relevant to know is that it is set up (somewhere else) to range between -1 and 1 (or similarly between - and + the aspect ratio).
+> The `vPosition` is a [varying](https://thebookofshaders.com/glossary/?search=varying) variable, though what exactly this means is _not important_ here. What is somewhat relevant to know is that it is set up (somewhere else) so that `vPosition.x` and `vPosition.y` range between -1 and 1 (or similarly between - and + the aspect ratio).
 >
 > Do also note: in real life, avoid if/else branches in shaders. They make everything very slow.
 
@@ -74,7 +75,7 @@ Now we need a way to specify inputs to inject colors from the outside, i.e. from
 
 ## Setting shader inputs from JavaScript
 
-We pass data from JavaScript to the shader by setting a [_uniform_](https://thebookofshaders.com/glossary/?search=uniform) variable, which will be the same for every evaluation of the shader (i.e. the variable can be read (and will be constant for at least one render), whenever the shader is run to determine the color of a pixel.
+We pass data from JavaScript to the shader by setting a [_uniform_](https://thebookofshaders.com/glossary/?search=uniform) variable. A uniform variable remains constant for every pixel during a single render pass.
 
 This is done by replacing the local `color` variable and instead using a new variable (well, identifier) `uColor`, marked as `uniform`:
 
@@ -86,7 +87,8 @@ varying vec2 vPosition;
 
 void main() {
 
-    /* alternate between colors, otherwise leave transparent */
+    // Render the color only for fragments within a grid-like pattern,
+    // otherwise leave the fragment transparent
     if (mod(vPosition.x + .1, .5) > .2 && mod(vPosition.y + .1,.5) > .2) {
         gl_FragColor = uColor; // [sh! highlight]
     }
@@ -114,11 +116,11 @@ Here `gl` is the [`WebGLRenderingContext`](https://developer.mozilla.org/de/docs
 
 The [`uniform4f` method](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/uniform) on the `gl` context allows us to specify values for the uniform: we look up an identifier from the program (`uColor`) and pass in the data. Because we declared `uColor` as a `vec4` in the shader -- a vector of 4 elements -- we have to pass 4 floats (and hence the `4f` in the method name) between `0` and `1` (and _not_ between `0` and `255`, for instance. Shader stuff, not CSS.).
 
-This was simple enough, now let's figure out how to get the color value from CSS in a way that is practical to work with.
+Now let's figure out how to get the color value from CSS in a way that is practical to work with.
 
 ## Getting the color from CSS
 
-A naive solution (with some drawbacks as we'll see later) is to directly get the value from e.g. a custom CSS property:
+A naive solution (with some drawbacks as we'll see in a sec) is to directly get the value from e.g. a custom CSS property:
 
 ```js
 > getComputedStyle(document.body).getPropertyValue("--col-1")
@@ -127,14 +129,14 @@ A naive solution (with some drawbacks as we'll see later) is to directly get the
 
 The hex value of the color represents the red (`ff`), green (`00`) and blue (`53`) components of `--col-1`. As we saw above, in order to use `uniform4f` to write to `uColor` we need red, green and blue as values between `0` and `1.`, which we could achieve using e.g. `parseInt("ff", 16)`.
 
-Unfortunately we have no way to guarantee that all custom properties will return a hex value. Let's assume that `--col-1` was indeed specified using hex notation, but that `--col-2` is using `hsl` notation:
+Unfortunately we have no way to guarantee that all custom properties will return a hex value. Let's assume we have another custom property, with a different CSS color notation:
 
 ```css
 /* main.css */
 
 :root {
   --col-1: #ff0053;
-  --col-2: hsl(60deg, 100%, 97%);
+  --col-2: hsl(60deg, 100%, 97%); /* [sh! highlight]
 }
 ```
 
@@ -145,7 +147,9 @@ In this case we see that looking up the value of a property returns the value ex
 'hsl(60deg, 100%, 97%)'
 ```
 
-Browsers can interpret CSS colors in various formats (e.g., #hex, hsl, rgb, [etc](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax)), and custom properties return these values verbatim. However, when a color is applied to a rendered element (e.g., color, background-color, or accent-color), the browser resolves the value into an easy-to-parse RGB format, regardless of how the color was originally specified. This makes it a reliable and consistent source for WebGL inputs.
+Browsers can interpret CSS colors in various formats (e.g., #hex, hsl, rgb, [etc](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#syntax)), and -- unfortunately for our use case -- custom properties return these values verbatim.
+
+However, when a color is applied to a rendered element (e.g., color, background-color, or accent-color), the browser resolves the value into an easy-to-parse RGB format, regardless of how the color was originally specified. This makes it a reliable and consistent source for WebGL inputs.
 
 Let's set the body's `color` to `--col-1`:
 
@@ -166,7 +170,9 @@ body {
 'rgb(255, 0, 83)'
 ```
 
-Now it's fairly easy to set the `uColor` value in our shader to the element's `color` property:
+Notice how the browser returned `rgb(...)` even though the color was specified in `hex` format (`rgb(...)` would also be returned if the custom property was specified with `hsl()`, for instance).
+
+Now it's fairly straightforward to set the `uColor` value in our shader to the element's `color` property:
 
 ```ts
 
@@ -184,11 +190,13 @@ gl.uniform4f(
 );
 ```
 
-And as we'll see below there are some extra benefits to reading the color from a rendered element's CSS property, instead of reading it from a custom property like `--col-1`.
+And as we'll see below there are some extra benefits to reading the color from a rendered element's CSS property, instead of reading it from a custom property like `--col-1`. When called on every frame, this method ensures real-time updates: any CSS change (toggling dark mode, modifying styles via dev tools, etc) will immediately propagate to the shader.
 
-By re-specifying the `uniform` on every frame, this method ensures real-time updates: any CSS changes, like toggling dark mode or modifying styles via dev tools, will immediately propagate to the shader.
+> [!NOTE]
+>
+> The browser may return the string as either `rgb(r,g,b)` or `rgba(r,g,b,a)`. Also, even though modern CSS syntax allows skipping the commas, the value returned from the browser has commas between the `r`, `g`, `b` and `a` values.
 
-The implementation of `parseRGBA` is pretty straightforward, though note that the browser may return the string as either `rgb(r,g,b)` or `rgba(r,g,b,a)` (even though modern CSS syntax allows skipping the commas, the value returned from the browser has commas between the `r`, `g`, `b` and `a` values):
+Here is the implementation of `parseRGBA` using a regex match:
 
 ```ts
 // index.ts
@@ -243,4 +251,6 @@ The CSS property (`color`, `accent-color`, etc) _must_ however be understood by 
 
 ## Conclusion
 
-Hopefully this gave you a good overview of how to dynamically integrate CSS styling into WebGL shaders. By reading color values from rendered elements and regularly syncing those values with the shader, you ensure your shaders react in real-time to CSS changes. This opens up possibilities for seamless design integration, responsive animations, and even advanced interactions like transitioning WebGL visuals alongside CSS. If you have questions or feedback, feel free to reach out or explore [quad-shader](https://github.com/nmattia/quad-shader/blob/6d1ba7b3b70801b0d03bfdf5b04f8984eb743be6/index.ts#L14-L38) for inspiration. Enjoy!
+Hopefully this gave you a good overview of how to dynamically integrate CSS styling into WebGL shaders. By reading color values from rendered elements and regularly syncing those values with the shader, you ensure your shaders react in real-time to CSS changes.
+
+This opens up possibilities for seamless design integration, responsive animations, and even advanced interactions like transitioning WebGL visuals alongside CSS. If you have questions or feedback, feel free to reach out or explore [quad-shader](https://github.com/nmattia/quad-shader) for inspiration. Enjoy!
