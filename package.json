@@ -12,14 +12,14 @@
     "format": "prettier --write astro.config.ts package.json plugins public README.md src tsconfig.json"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.0.3",
-    "astro": "^5.0.8",
+    "@astrojs/mdx": "^4.0.7",
+    "astro": "^5.1.10",
     "the-new-css-reset": "1.11.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/markdown-remark": "^6.0.0",
-    "@astrojs/rss": "^4.0.10",
+    "@astrojs/markdown-remark": "^6.0.2",
+    "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
     "@types/hast": "^3.0.4",
     "hast-util-classnames": "^3.0.0",
