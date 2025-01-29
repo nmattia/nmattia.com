@@ -174,7 +174,7 @@ Notice how the browser returned `rgb(...)` even though the color was specified i
 
 > [!NOTE]
 >
-> With more exotic colorspaces like `oklch()` you may get a different string.
+> With more exotic colorspaces like `oklch()` you may get a different string. For a less efficient but more robust solution, see the [Appendix](#appendix).
 
 Now it's fairly straightforward to set the `uColor` value in our shader to the element's `color` property:
 
@@ -258,3 +258,35 @@ The CSS property (`color`, `accent-color`, etc) _must_ however be understood by 
 Hopefully this gave you a good overview of how to dynamically integrate CSS styling into WebGL shaders. By reading color values from rendered elements and regularly syncing those values with the shader, you ensure your shaders react in real-time to CSS changes.
 
 This opens up possibilities for seamless design integration, responsive animations, and even advanced interactions like transitioning WebGL visuals alongside CSS. If you have questions or feedback, feel free to reach out or explore [quad-shader](https://github.com/nmattia/quad-shader) for inspiration. Enjoy!
+
+---
+
+### Appendix
+
+The `getComputedStyle()` method in JavaScript returns the computed styles of an element, including color properties. Traditionally, it has returned colors in the `rgb(r, g, b)` or `rgba(r, g, b, a)` formats, as mentioned earlier. However, with the introduction of new color models in CSS, such as `oklch()`, browsers may now return colors in these newer formats.
+
+One way to add support for those new colorspaces is to actually write the data to a new `<canvas>` element that will take care of converting it to RGB for us. This will return the RGBA values regardless of whether the color was originally specified in `rgb`, `oklch`, etc:
+
+```ts
+const parseRGBA = (
+  color: string,
+): { r: number; g: number; b: number; a: number } => {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, 1, 1);
+  const data = ctx.getImageData(0, 0, 1, 1).data;
+  const [r, g, b, a] = Array.from(data).map((x) => x / 255);
+  return { r, g, b, a };
+};
+```
+
+This unfortunately takes orders of magnitude longer:
+
+```ts
+> console.time("rgba");
+> parseRGBA("oklch(1 2 3)")
+> console.timeEnd("rgba")
+
+ rgb: 3.34716796875 ms
+```
