@@ -172,6 +172,10 @@ body {
 
 Notice how the browser returned `rgb(...)` even though the color was specified in `hex` format (`rgb(...)` would also be returned if the custom property was specified with `hsl()`, for instance).
 
+> [!NOTE]
+>
+> With more exotic colorspaces like `oklch()` you may get a different string.
+
 Now it's fairly straightforward to set the `uColor` value in our shader to the element's `color` property:
 
 ```ts
