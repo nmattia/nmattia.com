@@ -74,7 +74,25 @@ const suggestedEntries = similarEntries.slice(0, 2);
     }
     <Content />
 
-    <hr style="margin: 5em auto;" />
+    <p>
+      <em>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://bsky.app/profile/nmattia.bsky.social">Let me know</a
+        ></em
+      > if you enjoyed this article or
+      <em>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/nmattia/nmattia.com/issues/new"
+          >raise an issue</a
+        >
+      </em>if something doesn't look right!
+    </p>
+
+    <hr />
 
     {
       suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
