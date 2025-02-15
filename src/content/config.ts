@@ -14,6 +14,8 @@ export const topics = {
   webgl: "WebGL",
   frontend: "Front-end development",
   astro: "Astro",
+  ["3dp"]: "3D printing",
+  ops: "Ops",
 } as const;
 
 // Zod schema/inference machinery
