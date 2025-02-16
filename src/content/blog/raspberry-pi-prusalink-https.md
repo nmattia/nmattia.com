@@ -2,7 +2,7 @@
 title: How to Secure PrusaLink (or any Raspberry Pi web service) with HTTPS
 description: "This guide explains how to set up HTTPS for a Raspberry Pi using Let's Encrypt and nginx, with PrusaLink as an example."
 og_image: /images/raspberrypi-prusalink-https/raspberries-lock.png
-pubDate: 2025-02-20
+pubDate: 2025-02-17
 tags:
   - "3dp"
   - "ops"
@@ -60,7 +60,7 @@ If you are using ssh, run this command:
 ssh <username>@<hostname>.local
 ```
 
-If you use a keyboard, you should see a screen prompting you for a username and password.
+If you're using a keyboard, you'll be prompted to enter a username and password.
 
 The username and password will vary depending on the OS flavor you are using: for PrusaLink, the username is `jo` and the password is `raspberry`. For Raspberry Pi OS, the username is `pi` and the password is `raspberry`.
 
@@ -86,7 +86,7 @@ sudo nano /etc/ssh/sshd_config
 
 > [!NOTE]
 >
-> There may be additional configuration files in `/etc/ssh/sshd_config.d/`, do check there to ensure no other settings take precedence.
+> Check `/etc/ssh/sshd_config.d/` to ensure no other settings override your changes.
 
 and find and modify (or add) these lines (if they exist and are commented out, remove the leading `#` character):
 
@@ -129,7 +129,7 @@ Let's start by explicitly allowing all _outgoing_ traffic (we don't want to bloc
 sudo ufw default allow outgoing
 ```
 
-The idea is to eventually deny incoming traffic by default. This means no SSH, no HTTP access (for e.g. the PrusaLink webpage). Even the `<hostname>.local` address lookup will fail at this point (because the query broadcast by the router is also denied entry). So before we disable all incoming traffic by default, let's allow specific incoming traffic for SSH, HTTP and also mDNS (the address lookup):
+The idea is to eventually deny incoming traffic by default. This means no SSH, no HTTP access (for e.g. the PrusaLink webpage). At this stage, even `<hostname>.local` may stop resolving, as mDNS queries (the address lookup using broadcast) will also be blocked by the firewall. So before we disable all incoming traffic by default, let's allow specific incoming traffic for SSH, HTTP and also mDNS:
 
 ```bash
 sudo ufw allow 22/tcp # for SSH, equivalent to 'ufw allow SSH'
