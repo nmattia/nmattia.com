@@ -1,7 +1,7 @@
 ---
 title: How to Secure PrusaLink (or any Raspberry Pi web service) with HTTPS
-description: "hello"
-og_image: "/images/stutter.jpg"
+description: "This guide explains how to set up HTTPS for a Raspberry Pi using Let's Encrypt and nginx, with PrusaLink as an example."
+og_image: /images/raspberrypi-prusalink-https/raspberries-lock.png
 pubDate: 2025-02-20
 tags:
   - "3dp"
