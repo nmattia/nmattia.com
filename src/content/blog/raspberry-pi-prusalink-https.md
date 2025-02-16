@@ -8,7 +8,7 @@ tags:
   - "ops"
 ---
 
-This guide explains how to set up HTTPS for a Raspberry Pi using Let's Encrypt and nginx, with PrusaLink as an example. This setup works without exposing the Raspberry Pi to the internet.
+Without HTTPS, credentials like Basic Auth are ineffective for security as they can be intercepted by any device on the network. This guide explains how to set up HTTPS for a Raspberry Pi using Let's Encrypt and nginx, with PrusaLink as an example. This setup works without exposing the Raspberry Pi to the internet.
 
 <!--more-->
 
