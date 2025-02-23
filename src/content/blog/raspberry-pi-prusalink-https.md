@@ -6,6 +6,7 @@ pubDate: 2025-02-17
 tags:
   - "3dp"
   - "ops"
+discussion: "https://www.reddit.com/r/prusa3d/comments/1irfyi7/notes_on_how_to_secure_prusalink_with_https/"
 ---
 
 Without HTTPS, credentials like Basic Auth are ineffective for security as they can be intercepted by any device on the network. This guide explains how to set up HTTPS for a Raspberry Pi using Let's Encrypt and nginx, with PrusaLink as an example. This setup works without exposing the Raspberry Pi to the internet.
