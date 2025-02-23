@@ -33,6 +33,7 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     teaser: z.string().optional(),
     tags: Tags.array().optional(),
+    discussion: z.string().optional(),
   }),
 });
 

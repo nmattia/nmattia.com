@@ -37,6 +37,8 @@ const prettyDate = (d: Date) => {
 
 const tags: Tag[] = entry.data.tags?.slice(0, 2) ?? [];
 
+const discussion: string | undefined = entry.data.discussion;
+
 // Some machinery to suggest similar articles (by topics)
 const suggestedTopics = tags?.map((tag) => topics[tag]).join(" and ");
 
@@ -81,13 +83,27 @@ const suggestedEntries = similarEntries.slice(0, 2);
           rel="noopener noreferrer"
           href="https://bsky.app/profile/nmattia.bsky.social">Let me know</a
         ></em
-      > if you enjoyed this article or
+      >
+      {
+        discussion ? (
+          <>
+            or
+            <em>
+              <a target="_blank" rel="noopener noreferrer" href={discussion}>
+                join the discussion
+              </a>
+            </em>{" "}
+          </>
+        ) : undefined
+      }
+
+      if you enjoyed this article and
       <em>
         <a
           target="_blank"
           rel="noopener noreferrer"
           href="https://github.com/nmattia/nmattia.com/issues/new"
-          >raise an issue</a
+          >report an issue</a
         >
       </em>if something doesn't look right!
     </p>
