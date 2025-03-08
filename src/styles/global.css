@@ -354,9 +354,10 @@ img {
   gap: var(--blog-container-grid-gap);
 }
 
-/* Make paragraphs overflow individually, instead
+/* Make some elements overflow individually, instead
  * of taking the whole page along for a ride. */
-.blog-article > p {
+.blog-article > p,
+.blog-article > blockquote {
   overflow-x: auto;
 }
 
