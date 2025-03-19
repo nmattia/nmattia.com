@@ -569,3 +569,8 @@ pre.astro-code > .clipboard-copy:active {
   --clipboard-copy-extra-transition: background 0;
   background: var(--clipboard-copy-fill-color);
 }
+
+.bluesky-embed {
+  margin-left: auto;
+  margin-right: auto;
+}
