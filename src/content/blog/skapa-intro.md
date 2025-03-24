@@ -10,7 +10,7 @@ tags:
   - 3dp
 ---
 
-This is a mini-release for Skapa, an app I made for generating 3D-printable models for IKEA Skadis pegboards. This post goes through some of the UI & UX decisions and gives an overview of the tech used for model generation and rendering (with Three.js).
+This is a mini-release for [Skapa](https://skapa.build), an app I made for generating 3D-printable models for IKEA Skadis pegboards. This post goes through some of the UI & UX decisions and gives an overview of the tech used for model generation and rendering (with Three.js).
 
 <!--more-->
 
@@ -40,15 +40,15 @@ _Nu kör vi!_ (let's go!)
 >
 > Big disclaimer: This is a side project where I decided to explore every possible rabbit hole and allowed myself to obsess over potentially irrelevant details. I've been learning a ton in the process. If something doesn't look right, [let me know](https://github.com/nmattia/nmattia.com/issues/new)!
 
-The base idea (and hopefully most obvious design choice) was to make the app look like an IKEA manual. This was done by sticking to black and white, have a big blocky title with an **Å**, and have strong, black outlines (more on how this is achieved later).
+The base idea (and hopefully most obvious design choice) was to make the app look like an IKEA manual. This was done by sticking to black and white, using big blocky letters with an **Å**, and showing strong, black outlines (more on how this is achieved later).
 
 ![IKEA billy manual](/images/skapa-intro/billy.png)
 
 _The first page of an IKEA Billy shelf manual_
 
-There are a couple of notable differences. The font is _not_ the IKEA font (IKEA Sans) but "Kanit", which is about as far as I'll go to try and avoid being sued (IKEA, do reach out if you want to partner though). Another big visual difference is that IKEA uses perspective drawings (at least on the first page) whereas Skapa uses orthographic projection (I just like it more).
+There are a couple of notable differences between Skapa and an actual IKEA manual. First, the app is not paper. Then, the font is _not_ the IKEA font (IKEA Sans) but "Kanit", which is about as far as I'll go to try and avoid being sued (IKEA, do reach out if you want to partner though). Another big visual difference is that IKEA uses perspective drawings (at least on the first page of their manuals) whereas Skapa uses orthographic projection (I just like it more).
 
-The goal was to have an interface as minimal as possible, so I just spent a lot of time removing buttons and features from the original implementation.
+Another goal was to have an interface as minimal as possible, so I just spent a lot of time removing buttons and features from the original implementation.
 
 ![Evolution of the UI over time](/images/skapa-intro/skapa-evolution.gif)
 
@@ -56,9 +56,11 @@ _The evolution of the UI over time_
 
 ### Camera Controls
 
-At some point, someone I showed the app said "So cool! Is that an SVG?". It's terribly frustrating to hear someone ask which 2D graphics format you're using, _when you poured hours into making a 3D rendering pipeline_. So I decided to make sure the user could interact with the model a bit to see it was -- actually -- 3D. I wanted to avoid full control over the model (no zooming in/out, panning camera, etc). I find those sorts of controls confusing at best, dizzying at worst.
+At some point, someone I showed the app said "So cool! Is that an SVG?". It's terribly frustrating to hear someone ask which 2D graphics format you're using _when you poured hours into making a 3D rendering pipeline_. So I decided to make sure the user could interact with the model a bit to see it was -- actually -- 3D. I wanted to avoid full control over the model (no zooming in/out, panning camera, etc). I find those sorts of controls confusing at best, dizzying at worst.
 
-I settled on simple, vertical rotation when the user drags the part, with the part snapping between two different orientations (try it [here](https://skapa.build/)) as well as the part rotating 180 degrees (π rads, for those in the know) when clicked. This surfaced some issues on mobile, where the part can take up most of the real estate; by capturing the mouse & touch events to rotate the part, it sometimes became impossible to scroll the page up and down because the "click" would always land on the `canvas` element (where the part is rendered) and be captured by the rotation "gesture"!
+I settled on simple, vertical rotation when the user drags the part, with the part snapping between two different orientations (try it [here](https://skapa.build/)) as well as the part rotating 180 degrees (π rads, for those in the know) when clicked.
+
+This surfaced some issues on mobile, where the part can take up most of the real estate; by capturing the mouse & touch events to rotate the part, it sometimes became impossible to scroll the page up and down because the "click" would always land on the `canvas` element (where the part is rendered) and be captured by the rotation "gesture"!
 
 The workaround here was to only capture events if they landed _on the part itself_, but not if the event was inside the `canvas` but _not_ on the part. So satisfying.
 
@@ -100,7 +102,7 @@ export async function base(
 
 The part (with clips) can be exported as a list of vertices, but they still need to be rendered. For this I decided to go with the venerable [Three.js library](https://threejs.org/).
 
-Unfortunately Three.js' "outline" material didn't allow me to render the part exactly as I wanted; in particular it gave me no control over the thickness of the outline and did not actually add outlines everywhere (see image above with missing outlines on the sides).
+Unfortunately Three.js' "outline" material didn't allow me to render the part exactly as I wanted; in particular it gave me no control over the thickness of the outline and did not actually add outlines everywhere.
 
 ![Three.js' native outline rendering](/images/skapa-intro/skapa-3js-outline-mat.png)
 
