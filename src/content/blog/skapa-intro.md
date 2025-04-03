@@ -8,6 +8,7 @@ tags:
   - webgl
   - frontend
   - 3dp
+discussion: "https://lobste.rs/s/srwduz/notes_on_building_app_looks_like_ikea"
 ---
 
 This is a mini-release for [Skapa](https://skapa.build), an app I made for generating 3D-printable models for IKEA Skadis pegboards. This post goes through some of the UI & UX decisions and gives an overview of the tech used for model generation and rendering (with Three.js).
