@@ -153,4 +153,8 @@ I'd also like to add more controls to tweak the generated model's bottom and wal
 
 Finally, there are some 3D printing-specific things that could be improved in the current model. One of them is that the generated model requires supports under the clips (most 3D printers, if not all, can't print in thin air and need something to print _on_, and 3D printing experts on the internet will reach for the pitchforks when "supports" are mentioned). I have some ideas on how to solve this but changes take more time to implement in code than e.g. in WYSIWYG CAD software.
 
+> [!NOTE]
+>
+> Update: The parts can now be printed [without supports](https://github.com/nmattia/skapa/pull/30)!
+
 Again, code on [GitHub](http://github.com/nmattia/skapa), and printing instructions on [Printables](https://www.printables.com/model/1133217-parametric-ikea-skadis-boxes-skadis-pegboard).
