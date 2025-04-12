@@ -1,0 +1,38 @@
+---
+title: "Todo"
+description: "Todo"
+og_image: /images/spheres.png
+pubDate: 2025-04-29
+tags:
+  - webgl
+  - js
+  - frontend
+---
+
+hello hello
+
+{/* more */}
+
+world world
+
+import Shader from "../../components/Shader.astro";
+
+import fragShader from "./airpods-hearing-test-animation/frag.glsl?raw";
+
+<Shader
+    fragShader={ fragShader }
+
+    afterSetup={ ({gl, state}) => {
+            gl.uniform1f(
+                gl.getUniformLocation(state.program, "uLastTouch"),
+                -100,
+            );
+            state.canvas.addEventListener("click",  () => {
+
+                gl.uniform1f(
+                    gl.getUniformLocation(state.program, "uLastTouch"),
+                    performance.now()/1000,
+                );
+            });
+        }
+    }/>

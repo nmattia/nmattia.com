@@ -386,7 +386,7 @@ img {
 }
 
 .blog-article > canvas {
-  max-height: 40em;
+  max-height: 80em;
   display: block;
   margin-left: auto;
   margin-right: auto;
