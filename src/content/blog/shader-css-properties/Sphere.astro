@@ -8,38 +8,12 @@ export const sphereShader = await fetch(
 
 <Shader
   fragShader={sphereShader}
-  beforeRender={({ gl, state }) => {
-    // Parse an 'rgb(R, G, B)' (incl. alpha variations) string into numbers
-    // (r, g, b & a between 0 and 1)
-    const parseRGBA = (computed: string) => {
-      const rgb = computed.match(
-        /rgb(a?)\((?<r>\d+), (?<g>\d+), (?<b>\d+)(, (?<a>\d(.\d+)?))?\)/,
-      )!.groups as any as { r: string; g: string; b: string; a?: string };
-
-      return {
-        r: Number(rgb.r) / 255,
-        g: Number(rgb.g) / 255,
-        b: Number(rgb.b) / 255,
-        a: Number(rgb.a ?? 1),
-      };
-    };
-
-    const primary = parseRGBA(getComputedStyle(state.canvas).color);
-    gl.uniform4f(
-      gl.getUniformLocation(state.program, "uColPrimary"),
-      primary.r,
-      primary.g,
-      primary.b,
-      1,
+  quadShaderSetup={(qs, utils) => {
+    qs.uniform4f("uColPrimary", () =>
+      utils.getComputedStylePropRGBA(qs.state.canvas, "color"),
     );
-
-    const pop = parseRGBA(getComputedStyle(state.canvas).accentColor);
-    gl.uniform4f(
-      gl.getUniformLocation(state.program, "uColPop"),
-      pop.r,
-      pop.g,
-      pop.b,
-      1,
+    qs.uniform4f("uColPop", () =>
+      utils.getComputedStylePropRGBA(qs.state.canvas, "accent-color"),
     );
   }}
 />
