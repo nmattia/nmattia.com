@@ -1,13 +1,13 @@
 ---
-import type { Opts, Attached } from "quad-shader";
+import type { QuadShader } from "quad-shader";
 
+type QuadShaderUtils = typeof import("quad-shader");
 interface Props {
   fragShader: string;
-  beforeRender?: Opts["beforeRender"];
-  afterSetup?: (attached: Attached) => void;
+  quadShaderSetup: (quadShader: QuadShader, q: QuadShaderUtils) => void;
 }
 
-const { fragShader, beforeRender, afterSetup } = Astro.props;
+const { fragShader, quadShaderSetup } = Astro.props;
 ---
 
 <style>
@@ -19,33 +19,27 @@ const { fragShader, beforeRender, afterSetup } = Astro.props;
 
 <canvas
   data-fragment-shader={fragShader}
-  data-before-render={beforeRender?.toString()}
-  data-after-setup={afterSetup?.toString()}></canvas>
+  data-quad-shader-setup={quadShaderSetup}></canvas>
 
 <script>
-  import { attach } from "quad-shader";
-  import type { Opts } from "quad-shader";
+  import * as qsUtils from "quad-shader";
+  import { animate } from "quad-shader";
 
   // Ensure all canvases (with shaders) have callbacks set up
   const hydrateCanvases = () => {
     const canvases = document.querySelectorAll("canvas");
     Array.from(canvases).forEach((canvas) => {
       const fragShader = canvas.dataset.fragmentShader!;
-      const beforeRender = canvas.dataset.beforeRender;
+      const quadShaderSetup = canvas.dataset.quadShaderSetup;
 
-      let opts: Opts = {};
+      const qs = animate(canvas, fragShader);
 
-      if (beforeRender) {
-        const f = eval?.(`(${beforeRender})`);
-        opts.beforeRender = f;
-      }
-
-      const attached = attach(canvas, fragShader, opts);
-      const afterSetup = canvas.dataset.afterSetup;
-
-      if (afterSetup) {
-        const f = eval?.(`(${afterSetup})`);
-        f(attached);
+      if (quadShaderSetup) {
+        const f = Function(
+          "qsUtils",
+          `"use strict"; return (qs => (${quadShaderSetup})(qs, qsUtils))`,
+        )(qsUtils);
+        f(qs);
       }
     });
   };
