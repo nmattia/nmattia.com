@@ -33,7 +33,7 @@ gl_FragColor = uColor;
       fragShader={fragShader}
       quadShaderSetup={(qs, utils) => {
         qs.uniform4f("uColor", () =>
-          utils.getComputedStylePropRGBA(qs.state.canvas, "color"),
+          utils.getComputedStylePropRGBA(qs.canvas, "color"),
         );
       }}
     />

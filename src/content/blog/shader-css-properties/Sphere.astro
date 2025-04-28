@@ -10,10 +10,10 @@ export const sphereShader = await fetch(
   fragShader={sphereShader}
   quadShaderSetup={(qs, utils) => {
     qs.uniform4f("uColPrimary", () =>
-      utils.getComputedStylePropRGBA(qs.state.canvas, "color"),
+      utils.getComputedStylePropRGBA(qs.canvas, "color"),
     );
     qs.uniform4f("uColPop", () =>
-      utils.getComputedStylePropRGBA(qs.state.canvas, "accent-color"),
+      utils.getComputedStylePropRGBA(qs.canvas, "accent-color"),
     );
   }}
 />
