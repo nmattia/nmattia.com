@@ -1,0 +1,21 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  uniforms={[{ name: "uDist", min: 0.0, max: 1.0, value: 0.66 }]}
+  main={`
+        float radius = .3;
+        const int nSideDots = 1;
+
+        float alpha_prod = 1.; // current product result
+
+        for (int i = -nSideDots; i <= nSideDots; i ++) {
+            vec2 delta = vec2(float(i)*uDist, 0.);
+            float alpha_this = .5 * (1. - step(radius, length(uv + delta)));
+            alpha_prod *= (1. - alpha_this);
+        }
+
+        return 1. - alpha_prod;
+`}
+/>

@@ -1,0 +1,9 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  main={`
+        return 1. - step(1., length(uv));
+`}
+/>

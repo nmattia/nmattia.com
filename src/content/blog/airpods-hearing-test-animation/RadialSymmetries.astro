@@ -1,0 +1,16 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  uniforms={[{ name: "uSymmetries", min: 1, max: 8, value: 3 }]}
+  main={`
+        float a = TAU/uSymmetries;
+
+        float theta = atan(uv.y, uv.x); // between -TAU/2 and TAU/2
+
+        theta = mod(theta, a);
+
+        return theta/a;
+`}
+/>

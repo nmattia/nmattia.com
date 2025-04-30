@@ -1,0 +1,199 @@
+---
+title: "Todo"
+description: "Todo"
+og_image: /images/airpods/airpods-hearing-test.png
+pubDate: 2025-04-29
+tags:
+  - webgl
+  - js
+  - frontend
+---
+
+This is an article on how to reproduce an iPhone animation with WebGL.
+
+{/* more */}
+
+Blah blah blah
+
+import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
+
+<BlueSky />
+
+![image](/images/airpods/simplified.png)
+
+## Disc
+
+The simplest thing to do is start with a disc. In WebGL, the shader program is run once for
+every pixel. So we have to put ourselves in the Pixel's shoes.
+
+Let's start simple: let's draw a disc. If we're inside the disc, the pixel turns on. Otherwise, it stays off.
+
+![image](/images/airpods/disc.png)
+
+Let's write a function `get_opacity` that takes the the position as `vec2 uv`, where `uv.x` and `uv.y` range from `-1` to `1`, and returns a `float` between `0.` and `1.`, where `0.` is transparent, and `1.` is opaque. Then we can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
+
+If we use `length(uv)` as `v`, then `step(edge, length(uv))` will be `0.` if `uv` is inside the unit circle, and `1.` otherwise.
+
+We will set the opacity depending on this value, so we invert the result with `1. - result` (where `result = step(...)`), so that if `result` is `1.` we get `0.`, and if `result` is `0.` we get `1.`:
+
+```glsl
+float get_opacity(vec2 uv) {
+    return 1. - step(1., length(uv));
+}
+```
+
+This gives us the following beautiful disc of radius `1.`:
+
+import DiscStatic from "./airpods-hearing-test-animation/DiscStatic.astro";
+
+<DiscStatic />
+
+Now let's do something a bit more difficult. Let's change the size of the disc and move the disc around.
+
+![image](/images/airpods/transform.png)
+
+When drawing using an axis plotter, ThreeJS, SVG, etc, our reference is "the canvas" for some definition of "canvas". Here in shader world, we see everything from the pixel's point of view (since the shader program is run once for each pixel, where `uv` contains the position of the pixel).
+
+Let's say we want to draw a scaled down disc (`uScale = .5`). The shader program is evaluated for one particular pixel, and it's not like we can move the pixel. But the pixel can say "if I was a pixel half as close to the origin, would I be within the disc?".
+
+So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first scale ourselves down (or scale the canvas up, depending on how you look at it). Effectively this adds one step: `uv /= uScale`.
+
+Same with translation:
+
+```glsl
+float get_opacity(vec2 uv) {
+    uv -= vec2(uShift, 0.); // [sh! highlight]
+    uv /= uScale; // [sh! highlight]
+    return 1. - step(1., length(uv));
+}
+```
+
+Note how we use _subtraction_ for a _positive_ translation, and _division_ for scale. This is all to say "what if I were another pixel". The actual operation is actually done by the positioning of the pixel on the screen. Play with the values in the animation below to get a sense of what's happening.
+
+import Disc from "./airpods-hearing-test-animation/Disc.astro";
+
+<Disc />
+
+Mental model: instead of specifying the position of objects of vertices, we instead have to perform "checks" to know if we're within an object or not. It's often easier to define checks around the origin, so we moves the current pixel to the origin, and then the GPU will "move it back" by drawing the result on our original location. See also: https://iquilezles.org/articles/distfunctions2d/
+
+Note this is similar to e.g. Matrix stuff where matrix rot is defined around the origin, and we translate, rotate, and translate back; except here the "translate back" is done by the GPU. asdasd
+
+## Radial Symmetries
+
+Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. In generate we want repeating patterns, and in the world of shaders we can actually have any number of repetitions for free.
+
+For our animations, we can take advantage of the fact that it's raidally symmetric. So let's try a radial symmetry. We'll use polar coordinates:
+
+![image](/images/airpods/slice.png)
+
+$$\theta = atan(y,x), \rho = \sqrt{x^2 + y^2}$$
+
+The trick is to define a general pattern (a gradient to start simple) in terms of $\theta$, and then lie about $\theta$ and repeat it.
+
+If we `mod` the value of theta, pixels with $\theta \in [0, \alpha]$ will get the regular gradient. But then, the gradient will repeat for $\theta \in [\alpha, 2\alpha]$.
+
+```glsl
+float a = TAU/uSymmetries;
+
+float theta = atan(uv.y, uv.x);
+theta = mod(theta, a); // make theta repeat between 0 and a
+
+float opacity = theta/a; // create the gradient
+gl_FragColor = opacity * vec4(rgb, 1.);
+```
+
+Using this we can repeat the pattern any number of times with constant complexity ($O(1)$) in the number of repetitions.
+
+import RadialSymmetries from "./airpods-hearing-test-animation/RadialSymmetries.astro";
+
+<RadialSymmetries />
+
+## Radial Discs
+
+Gradients are pretty, but we're here to draw dots. We use the same trick to make $\theta$ repeat, and we use the checks from earlier to figure out if the pixel lands in a dot/disc.
+
+```glsl
+float radius = .2;
+
+float a = TAU/uSymmetries;
+float a2 = a/2.;
+
+float theta = atan(uv.y, uv.x);
+float rho = length(uv);
+
+// find the slice this pixel is in (slice 0 around theta == 0*a, slice 1 around theta == 1*a, etc)
+float slice_ix = floor(mod(theta + a2 + TAU, TAU) / a);
+
+// move theta up by half alpha to avoid being cut in half, and repeat
+theta = mod(theta + a2, a)-a2;
+
+uv = vec2(rho*cos(theta), rho*sin(theta));
+uv += vec2(-.8, 0.);
+
+// as before check if we're inside the unit disc and change the opacity depending
+// on which slice (slice_ix) the pixel is in
+return (1. - step(radius, length(uv))) * (1. - .8 * slice_ix / uSymmetries);
+```
+
+One added thing here is `slice_ix`, which is the index of the slice the current pixel is in. This is useful if you want to vary a parameter based on _which_ slice you're in (if you just used $\theta$ the value would vary within the same slice). This is used in this snippet to give each dot a different opacity.
+
+import RadialDiscs from "./airpods-hearing-test-animation/RadialDiscs.astro";
+
+<RadialDiscs />
+
+## discs-bad
+
+Now that we have a pattern that we can repeat radially, let's figure out how we might create repeating dots within a slice.
+
+![image](/images/airpods/discs.png)
+
+The `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue:
+
+import AlphaDiscsBad from "./airpods-hearing-test-animation/AlphaDiscsBad.astro";
+
+<AlphaDiscsBad />
+
+The pattern is repeated exactly and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots are smaller than the slices, this is ok
+
+Let's see how we can resolve this.
+
+## discs
+
+Here unfortunately there is no way to do this in constant time. While there would be workarounds if we had overlapping opaque discs of different colors, there is no workaround when the opacity is changing. For this we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
+
+Simple multiplying the opacity does not work. The reason is that two discs have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
+
+The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. TODO: explain in terms of probability of light going through a material?
+
+Let's say in general transparency is $t = 1 - o$. Let's say all the different layers have transparency $t_0, t_1, ...$. Then $o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) = 1 - \prod_i t_i = 1 - \prod (1 - o_i)$
+
+This gives us the following:
+
+```glsl
+float radius = .3;
+int nSideDots = 1;
+
+float alpha_prod = 1.; // current product result
+
+for (int i = -nSideDots; i <= nSideDots; i ++) {
+    vec2 delta = vec2(float(i)*uDist, 0.);
+    float alpha_this = .5 * (1. - step(radius, length(uv + delta)));
+    alpha_prod *= (1. - alpha_this);
+}
+
+return 1. - alpha_prod;
+```
+
+Note that this operation is commutative, so it doesn't matter what order we look at the dots -- though this would be different if we were mixing colors as well.
+
+import AlphaDiscs from "./airpods-hearing-test-animation/AlphaDiscs.astro";
+
+<AlphaDiscs />
+
+## final
+
+Putting everything together we get the following. Since everything is rendered in real time, we can animate it based on time, as we as make it react to user interaction (clicks).
+
+import AirpodsHearingTest from "./airpods-hearing-test-animation/AirpodsHearingTest.astro";
+
+<AirpodsHearingTest />
