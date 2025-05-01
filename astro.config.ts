@@ -6,6 +6,7 @@ import rehypeKatex from "rehype-katex";
 
 import { fixMdx } from "./plugins/fix-mdx";
 import { rehypeShikiCommands } from "./plugins/rehype-shiki-commands";
+import { rehypeMathjaxEquation } from "./plugins/rehype-mathjax-equation";
 import { rehypeCopyCodeIntegration } from "./plugins/rehype-copy-code";
 import { remarkGfmAdmonitions } from "./plugins/remark-gfm-admonitions";
 
@@ -25,6 +26,7 @@ export default defineConfig({
       rehypeKatex as any /* something is off in the types but everything works fine */,
       rehypeRaw,
       rehypeShikiCommands,
+      rehypeMathjaxEquation,
     ],
   },
 

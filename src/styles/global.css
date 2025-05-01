@@ -371,10 +371,11 @@ img {
   margin-top: 1.6rem; /* rem to avoid element's line-height impacting the spacing */
 }
 
-/* When inline math is the only child (i.e. both first & last child) of a (top-level) paragraph,
- * center it. */
-.blog-article > p:has(code:first-child:last-child.language-math.math-inline) {
+/* special handling for equations */
+.blog-article > p.math-equation-paragraph {
   text-align: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 /* Center and add margins for all top-level images */
