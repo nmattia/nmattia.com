@@ -354,11 +354,11 @@ img {
   gap: var(--blog-container-grid-gap);
 }
 
-/* Make some elements overflow individually, instead
- * of taking the whole page along for a ride. */
+/* Break long words instead of creating horizontal scroll
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_text/Wrapping_breaking_text#breaking_long_words */
 .blog-article > p,
 .blog-article > blockquote {
-  overflow-x: auto;
+  overflow-wrap: break-word;
 }
 
 /* ... and work around mathjax containers that overflow vertically */
@@ -497,6 +497,13 @@ pre {
 /* Make elements within the code-wrapper from rehype-copy-code scroll */
 pre .code-wrapper {
   overflow-x: scroll;
+
+  /* let the code breath a bit */
+  /* padding left & right is handled on the line level becau
+e we need
+   * the highlighting to go end to end */
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 pre code {
@@ -511,15 +518,6 @@ pre code {
 }
 
 /* Code line highlighting */
-
-.line:nth-child(1) {
-  padding-top: 1em;
-}
-
-.line:last-child {
-  padding-bottom: 1em;
-}
-
 .line {
   display: inline-block;
   min-width: 100%;
