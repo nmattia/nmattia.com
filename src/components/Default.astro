@@ -83,46 +83,50 @@ const {
   </body>
 </html>
 <script>
-  // inspired by https://timneubauer.dev/blog/copy-code-button-in-astro/
-  const pres = document.querySelectorAll("pre.astro-code");
-  pres.forEach((pre) => {
-    if (!(pre instanceof HTMLElement)) {
-      return;
-    }
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("code-wrapper");
+  // Event dispatched by the ClientRouter on page load:
+  // https://docs.astro.build/en/guides/view-transitions/#astropage-load
+  document.addEventListener("astro:page-load", () => {
+    // inspired by https://timneubauer.dev/blog/copy-code-button-in-astro/
+    const pres = document.querySelectorAll("pre.astro-code");
+    pres.forEach((pre) => {
+      if (!(pre instanceof HTMLElement)) {
+        return;
+      }
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("code-wrapper");
 
-    /* insert the wrapper around the pre */
-    pre.parentElement?.insertBefore(wrapper, pre);
-    wrapper.append(pre);
+      /* insert the wrapper around the pre */
+      pre.parentElement?.insertBefore(wrapper, pre);
+      wrapper.append(pre);
 
-    const button = document.createElement("button");
-    button.classList.add("clipboard-copy");
+      const button = document.createElement("button");
+      button.classList.add("clipboard-copy");
 
-    const svgNS = "http://www.w3.org/2000/svg";
+      const svgNS = "http://www.w3.org/2000/svg";
 
-    // Create the <svg> element
-    const svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("aria-hidden", "true");
-    svg.setAttribute("height", "16");
-    svg.setAttribute("viewBox", "0 0 16 16");
-    svg.setAttribute("version", "1.1");
-    svg.setAttribute("width", "16");
+      // Create the <svg> element
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("height", "16");
+      svg.setAttribute("viewBox", "0 0 16 16");
+      svg.setAttribute("version", "1.1");
+      svg.setAttribute("width", "16");
 
-    // Re-use the top-level defined clipboard copy icon
-    const use = document.createElementNS(svgNS, "use");
-    use.setAttributeNS(
-      "http://www.w3.org/1999/xlink",
-      "href",
-      "#clipboard-copy",
-    );
+      // Re-use the top-level defined clipboard copy icon
+      const use = document.createElementNS(svgNS, "use");
+      use.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "href",
+        "#clipboard-copy",
+      );
 
-    // Append <use> into <svg>
-    svg.appendChild(use);
+      // Append <use> into <svg>
+      svg.appendChild(use);
 
-    button.append(svg);
+      button.append(svg);
 
-    wrapper.append(button);
-    button.onclick = () => navigator.clipboard.writeText(pre.innerText);
+      wrapper.append(button);
+      button.onclick = () => navigator.clipboard.writeText(pre.innerText);
+    });
   });
 </script>
