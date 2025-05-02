@@ -491,13 +491,14 @@ code {
 }
 
 pre {
+  margin: 0;
   border-radius: 5px;
   position: relative;
 }
 
-/* Make elements within the code-wrapper from rehype-copy-code scroll */
-pre .code-wrapper {
-  overflow-x: scroll;
+pre code {
+  font-size: 1em;
+  line-height: 1.5em;
 
   /* let the code breath a bit */
   /* padding left & right is handled on the line level becau
@@ -505,12 +506,6 @@ e we need
    * the highlighting to go end to end */
   padding-top: 1em;
   padding-bottom: 1em;
-}
-
-pre code {
-  border-radius: 5px;
-  font-size: 1em;
-  line-height: 1.5em;
 
   /* Ensures the element extends horizontally otherwise the highlight
    * lines are truncated */
@@ -530,17 +525,22 @@ pre code {
   background: rgba(255, 255, 255, 0.15);
 }
 
+.code-wrapper {
+  position: relative; /* anchor for clipboard-copy button */
+  overflow-x: scroll; /* ensure only the inners scroll and not the whole page */
+}
+
 /* Everything clipboard related */
-pre.astro-code > .clipboard-copy {
+.code-wrapper > .clipboard-copy {
   --clipboard-copy-fill-color: transparent;
   fill: var(--clipboard-copy-fill-color);
 }
 
-pre.astro-code:hover > .clipboard-copy {
+.code-wrapper:hover > .clipboard-copy {
   --clipboard-copy-fill-color: white;
 }
 
-pre.astro-code > .clipboard-copy {
+.code-wrapper > .clipboard-copy {
   --clipboard-copy-outline-color: transparent;
 
   /* Used to animate the button on click; when :active, the transition is
@@ -560,11 +560,11 @@ pre.astro-code > .clipboard-copy {
   cursor: pointer;
 }
 
-pre.astro-code > .clipboard-copy:hover {
+.code-wrapper > .clipboard-copy:hover {
   --clipboard-copy-outline-color: white;
 }
 
-pre.astro-code > .clipboard-copy:active {
+.code-wrapper > .clipboard-copy:active {
   --clipboard-copy-extra-transition: background 0;
   background: var(--clipboard-copy-fill-color);
 }
