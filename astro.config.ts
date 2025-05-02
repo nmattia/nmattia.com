@@ -7,7 +7,6 @@ import rehypeKatex from "rehype-katex";
 import { fixMdx } from "./plugins/fix-mdx";
 import { rehypeShikiCommands } from "./plugins/rehype-shiki-commands";
 import { rehypeMathjaxEquation } from "./plugins/rehype-mathjax-equation";
-import { rehypeCopyCodeIntegration } from "./plugins/rehype-copy-code";
 import { remarkGfmAdmonitions } from "./plugins/remark-gfm-admonitions";
 
 import mdx from "@astrojs/mdx";
@@ -15,7 +14,7 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   site: "https://nmattia.com",
-  integrations: [sitemap(), rehypeCopyCodeIntegration(), mdx()],
+  integrations: [sitemap(), mdx()],
   markdown: {
     shikiConfig: {
       theme: "dark-plus",
