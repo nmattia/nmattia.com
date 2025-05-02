@@ -32,6 +32,7 @@
     "rehype-format": "^5.0.1",
     "rehype-katex": "^6.0.3",
     "rehype-raw": "7.0.0",
+    "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "typescript": "5.5",
     "unist-util-visit": "^5.0.0"

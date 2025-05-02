@@ -4,6 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import rehypeDocument from "rehype-document";
 import rehypeFormat from "rehype-format";
+import remarkGfm from "remark-gfm";
 import rehypeStringify from "rehype-stringify";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
@@ -12,6 +13,7 @@ import { unified } from "unified";
 const markdown = (input: string): Promise<string> =>
   unified()
     .use(remarkParse)
+    .use(remarkGfm)
     .use(remarkRehype)
     .use(rehypeDocument)
     .use(rehypeFormat)
