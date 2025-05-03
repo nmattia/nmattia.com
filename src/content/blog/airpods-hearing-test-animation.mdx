@@ -9,38 +9,42 @@ tags:
   - frontend
 ---
 
-This is an article on how to reproduce an iPhone animation with WebGL.
+This is an article on how to reproduce an iPhone animation with WebGL. [mention which concepts will be visited]
 
 {/* more */}
 
-Blah blah blah
+[back story]
 
 import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
 <BlueSky />
 
-If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). We'll use a simplified version to explain the various things necessary to draw it: first draw a disc, then radial symmetries, and finally overlapping discs with alpha.
+If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). We'll use a simplified version to explain the various things necessary to draw it: first draw a dot, then radial symmetries, and finally overlapping dots with alpha. [clarify simplifications, and introduce slices and dot bars]
 
 ![image](/images/airpods/simplified.png)
 
 _Simplified representation of the Hearing Test animation dots_
 
-## Disc
+[brief outline: first single dot, then slices & symmetries, then alpha]
 
-The simplest thing to do is start with a disc. In WebGL, the shader program is run once for
-every pixel. So we have to put ourselves in the Pixel's shoes.
+## Drawing a single Dot
+
+The simplest thing to do is start with a single dot. In WebGL, the shader program is run once for
+every pixel.
 
 > [!NOTE]
 >
 > Technically we need to talk about "fragments" though for simplicity we'll use "pixels"
 
-Let's start simple: let's draw a disc. If we're inside the disc, the pixel is opaque. Otherwise, it is transparent.
+Let's start simple: let's draw a dot.
 
-![image](/images/airpods/disc.png)
+![image](/images/airpods/single-dot.png)
 
 _Only pixels within the unit circle will be opaque_
 
 Let's write a function `get_opacity` that takes the the position as `vec2 uv` and returns a `float` between `0.` and `1.`, where `0.` is transparent, and `1.` is opaque. For simplicity, let's assume `uv.x` and `uv.y` range from `-1` to `1`.
+
+[explain each pixel is like a small computer running the program and setting its color depending on the result]
 
 We can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
 
@@ -74,88 +78,76 @@ uv := vec2(0., 0.)
 
 Positions inside: `uv = vec2(0., 0.)`, `uv = vec2(.9, 0.)`, `uv = vec2(.5, .5)`; positions outside: `uv = vec2(1., 1.)`, `uv = vec2(10., 0.)`, etc.
 
-This gives us the disc of radius `1.` shown below.
+This gives us the dot shown below.
 
-import DiscStatic from "./airpods-hearing-test-animation/DiscStatic.astro";
+import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
 
-<DiscStatic />
+<StaticDot />
 
-Now let's do something a bit more difficult. Let's change the size of the disc and move the disc around.
+Now let's do something a bit more difficult. Let's change the size of the dot.
 
 ![image](/images/airpods/transform.png)
 
-_Two of the many pixels rendering a disc of radius `r` centered at `c`_
+_Two of the many pixels rendering a dot (disc) of radius `r` centered at `c`_
 
 When drawing using an axis plotter, ThreeJS, SVG, etc, our reference is "the canvas" for some definition of "canvas". Here in shader world, we see everything from the pixel's point of view (since the shader program is run once for each pixel, where `uv` contains the position of the pixel).
 
-Let's say we want to draw a scaled down disc (`uScale = .5`). The shader program is evaluated for one particular pixel, and it's not like we can move the pixel. But the pixel can say "if I was a pixel half as close to the origin, would I be within the disc?".
+So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first move.
 
-So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first scale ourselves down (or scale the canvas up, depending on how you look at it). Blah blah step(radius, length(uv)).
+import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
 
-Note how we use _subtraction_ for a _positive_ translation, and _division_ for scale. This is all to say "what if I were another pixel". The actual operation is actually done by the positioning of the pixel on the screen. Play with the values in the animation below to get a sense of what's happening.
-
-import Disc from "./airpods-hearing-test-animation/Disc.astro";
-
-<Disc />
+<MovingDot />
 
 Mental model: instead of specifying the position of objects of vertices, we instead have to perform "checks" to know if we're within an object or not. It's often easier to define checks around the origin, so we moves the current pixel to the origin, and then the GPU will "move it back" by drawing the result on our original location. See also: https://iquilezles.org/articles/distfunctions2d/
 
 Note this is similar to e.g. Matrix stuff where matrix rot is defined around the origin, and we translate, rotate, and translate back; except here the "translate back" is done by the GPU. asdasd
 
-## Radial Symmetries
+## Repeating dots for free
 
-Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. In generate we want repeating patterns, and in the world of shaders we can actually have any number of repetitions for free.
+Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. In general we want repeating patterns, and in the world of shaders we can actually have any number of repetitions for free.
 
-For our animations, we can take advantage of the fact that it's raidally symmetric. So let's try a radial symmetry. We'll use polar coordinates:
+For our animations, we can take advantage of the fact that it's [radially symmetric](https://en.wikipedia.org/wiki/Rotational_symmetry).
+
+In order to simplify things we will work with [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system). As a quick refresher, polar coordinates are a way of representing a point as $(\rho, \theta)$ where $\rho$ is the distance to the origin $[0,0]$ and $\theta$ [explain theta].
+
+$$\theta = arctan(y,x), \rho = \sqrt{x^2 + y^2}$$
+
+In GLSL we can use the following primitives:
+
+```glsl
+float theta = atan(uv.y, uv.x)
+float rho = length(uv)
+```
+
+The trick is to define a general pattern (a gradient to start simple) in terms of $\theta$, and then lie about $\theta$ and repeat it.
 
 ![image](/images/airpods/slice.png)
 
 _The slice that is described once and repeated N times_
 
-$$\theta = atan(y,x), \rho = \sqrt{x^2 + y^2}$$
-
-The trick is to define a general pattern (a gradient to start simple) in terms of $\theta$, and then lie about $\theta$ and repeat it.
+> [!NOTE]
+>
+> To simplifiy calculations we work with $\tau = 2 \pi$, referred to as `TAU` in the code. See also [The Tau Manifest](https://www.tauday.com/tau-manifesto). Bottom line: one full rotation is one $\tau$.
 
 If we `mod` the value of theta, pixels with $\theta \in [0, \alpha]$ will get the regular gradient. But then, the gradient will repeat for $\theta \in [\alpha, 2\alpha]$.
 
-Using this we can repeat the pattern any number of times with constant complexity ($O(1)$) in the number of repetitions.
+Using this we can repeat the pattern any number of times with constant -- $O(1)$ -- complexity w.r.t the number of repetitions.
 
 import RadialSymmetries from "./airpods-hearing-test-animation/RadialSymmetries.astro";
 
 <RadialSymmetries />
 
-## Radial Discs
+This means that, as long as we can describe a pattern in terms of `theta` and `rho`, we can repeat that pattern radially as many times as we want without any extra resource usage.
 
-Gradients are pretty, but we're here to draw dots. We use the same trick to make $\theta$ repeat, and we use the checks from earlier to figure out if the pixel lands in a dot/disc.
+## Radially Repeating Dots
 
-```glsl
-float radius = .2;
+Gradients are pretty, but we're here to draw dots. We use the same trick to make $\theta$ repeat, and we use the checks from earlier to figure out if the pixel lands in a dot.
 
-float a = TAU/uSymmetries;
-float a2 = a/2.;
+import RadialDots from "./airpods-hearing-test-animation/RadialDots.astro";
 
-float theta = atan(uv.y, uv.x);
-float rho = length(uv);
-
-// find the slice this pixel is in (slice 0 around theta == 0*a, slice 1 around theta == 1*a, etc)
-float slice_ix = floor(mod(theta + a2 + TAU, TAU) / a);
-
-// move theta up by half alpha to avoid being cut in half, and repeat
-theta = mod(theta + a2, a)-a2;
-
-uv = vec2(rho*cos(theta), rho*sin(theta));
-uv += vec2(-.8, 0.);
-
-// as before check if we're inside the unit disc and change the opacity depending
-// on which slice (slice_ix) the pixel is in
-return (1. - step(radius, length(uv))) * (1. - .8 * slice_ix / uSymmetries);
-```
+<RadialDots />
 
 One added thing here is `slice_ix`, which is the index of the slice the current pixel is in. This is useful if you want to vary a parameter based on _which_ slice you're in (if you just used $\theta$ the value would vary within the same slice). This is used in this snippet to give each dot a different opacity.
-
-import RadialDiscs from "./airpods-hearing-test-animation/RadialDiscs.astro";
-
-<RadialDiscs />
 
 ## discs-bad
 
@@ -163,7 +155,7 @@ Now that we have a pattern that we can repeat radially, let's figure out how we 
 
 ![image](/images/airpods/discs.png)
 
-_Dots described for a single slice and separated by distance `d`_
+_Dots separated by distance `d`_
 
 The `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue:
 
@@ -181,7 +173,7 @@ Here unfortunately there is no way to do this in constant time. While there woul
 
 Simple multiplying the opacity does not work. The reason is that two discs have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
 
-The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. TODO: explain in terms of probability of light going through a material?
+The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. [explain in terms of probability of light going through a material]
 
 Let's say in general transparency is $t = 1 - o$. Let's say all the different layers have transparency $t_0, t_1, ...$. Then $o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) = 1 - \prod_i t_i = 1 - \prod (1 - o_i)$
 
