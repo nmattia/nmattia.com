@@ -185,9 +185,9 @@ We saw earlier that we could leverage the modulo operator to repeat patterns. Th
 
 Can you spot it before playing with the animation below?
 
-import AlphaDiscsBad from "./airpods-hearing-test-animation/AlphaDiscsBad.astro";
+import OverlappingDots from "./airpods-hearing-test-animation/OverlappingDots.astro";
 
-<AlphaDiscsBad />
+<OverlappingDots />
 
 The pattern is repeated exactly and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots are smaller than the slices, this is ok.
 
@@ -217,9 +217,9 @@ $$o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) \\ = 1 - \prod t_i \\ = 1 - \prod (1
 
 The implementation would look something like this:
 
-import AlphaDiscs from "./airpods-hearing-test-animation/AlphaDiscs.astro";
+import CompositedDots from "./airpods-hearing-test-animation/CompositedDots.astro";
 
-<AlphaDiscs />
+<CompositedDots />
 
 Note that this operation is commutative, so it doesn't matter what order we look at the dots -- though this would be different if we were mixing colors as well.
 
@@ -228,6 +228,12 @@ Note that this operation is commutative, so it doesn't matter what order we look
 ## Final Result & Conclusion
 
 Putting everything together we get the following. Since everything is rendered in real time, we can animate it based on time, as we as make it react to user interaction (clicks).
+
+import SimplifiedHearingTest from "./airpods-hearing-test-animation/SimplifiedHearingTest.astro";
+
+<SimplifiedHearingTest />
+
+[note: glsl has no dynamic control flow -> cannot configure number of dots]
 
 import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
