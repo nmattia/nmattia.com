@@ -4,8 +4,8 @@ import QuadShaderMain from "./QuadShaderMain.astro";
 
 <QuadShaderMain
   uniforms={[
-    { name: "uSymmetries", min: 1, max: 8, value: 3, step: 1 },
-    { name: "uDist", min: 0.0, max: 0.2, value: 0.066 },
+    { name: "uSymmetries", min: 1, max: 8, value: 8, step: 1 },
+    { name: "uDist", min: 0.0, max: 0.2, value: 0.1 },
   ]}
   main={`
 float radius = .1;
@@ -37,9 +37,12 @@ const int nSideDots = 1;
 
 float product = 1.; /* current product result */
 
+float period = 5.; /* period of 2 seconds */
+    float dist = uDist + uDist/5. * sin(TAU/period * uTime + slice_ix);
+
 for (int i = -nSideDots; i <= nSideDots; i ++) {
     float opacity = .5; /* any dot's opacity */
-    vec2 shift = vec2(float(i)*uDist, 0.); /* position over dot */
+    vec2 shift = vec2(float(i)*dist, 0.); /* position over dot */
     opacity *= 1. - step(radius, length(uv + shift)); /* only consider current dot */
     product *= (1. - opacity);
 }
