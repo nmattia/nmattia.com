@@ -13,9 +13,9 @@ void main() {
         vec3 rgb = uColor.rgb;
         vec2 uv = vPosition.xy;
 
-        float r = .007;
+        float r = .01;
 
-        float uSymmetries = 256.;
+        float uSymmetries = 200.;
 
         float a = TAU/uSymmetries;
         float a2 = a/2.;
@@ -29,8 +29,8 @@ void main() {
         // _around_ // theta = 0 and not _starting at_ theta = 0
         float slice_ix = floor(mod(theta + a2 + TAU, TAU) / a);
 
-        float uDist = .005;
-        uDist += .003 * sin(3./17. * uTime * TAU + slice_ix/uSymmetries * TAU);
+        float uDist = .007;
+        uDist += .002 * sin(3./17. * uTime * TAU + slice_ix/uSymmetries * TAU);
         uDist += .005 * sin(1./11. * uTime * TAU + slice_ix/uSymmetries * TAU);
 
         uDist = mix(uDist, 1./32., uExtra);
@@ -45,7 +45,7 @@ void main() {
 
         float opacity = 0.;
 
-        const int nSideDots = 7;
+        const int nSideDots = 8;
 
         for (int i = -nSideDots; i <= nSideDots; i ++) {
             vec2 delta = vec2(float(i)*uDist, 0.);
