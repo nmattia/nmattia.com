@@ -13,7 +13,7 @@ const int nSideDots = 1;
 float product = 1.; /* current product result */
 
 for (int i = -nSideDots; i <= nSideDots; i ++) {
-    float opacity = .5; /* any dot's opacity */
+    float opacity = .5; /* dot opacity */
     vec2 shift = vec2(float(i)*uDist, 0.); /* position over dot */
     opacity *= 1. - step(radius, length(uv + shift)); /* only consider current dot */
     product *= (1. - opacity);

@@ -13,25 +13,29 @@ This article explores how to reproduce an iPhone animation I really liked, using
 
 {/* more */}
 
+import AirpodsHearingTest from "./airpods-hearing-test-animation/AirpodsHearingTest.astro";
+
+<AirpodsHearingTest />
+
 You may have seen this animation in iOS (or iPadOS) if you've tried AirPods' hearing test. It’s fluid, elegant, and deceptively simple. On closer inspection, it’s made up of thousands of small fading dots. Recreating this animation isn't just fun—it’s also a great way to learn how GPU-based rendering works at a low level using GLSL.
 
-import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
+## Anatomy of an Animation
 
-<BlueSky />
+If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). That's a lot of dots. If you were to draw them one-by-one, imperative style (like creating `div`s on a page) it would be terribly inefficient. With WebGL however we can leverage the GPU's many, many cores and by using a couple of tricks, we'll make the animation resource usage be the same whether we're drawing 5 dots or 3'000 dots.
 
-If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). To make it manageable, we’ll first work through a simplified version with fewer elements. We’ll explore how to draw a single dot, create repeated radial patterns (like pizza slices), and handle overlapping semi-transparent elements (like a row of dots).
+For clarity we'll use a simplified version with fewer elements -- though going to the full animation will just be a matter of changing a few parameters.
 
 ![image](/images/airpods/simplified.png)
 
 _Simplified representation of the Hearing Test animation dots_
 
-In short, we will **start with one dot**, then leverage the animation's **radial symmetry** to render lots of dots for free, and finally learn how to blend overlapping dots with **alpha transparency**.
+We’ll first explore how to draw a single dot, then we'll see how we can create repeated radial patterns (like pizza slices) at no extra computing cost by leveraging its radial symmetry, and finally handle overlapping semi-transparent elements (like a row of dots).
 
 ## Drawing a single Dot
 
 In WebGL, a fragment shader runs once per pixel. Think of each pixel as a mini processor that decides its own color based on math -- though all pixels share the same program, and the only variation is the pixel's position passed as an input.
 
-Here we will simplify and use a single, known color and only vary the _opacity_ of the pixels.
+Here we will keep things simple and use a single, constant color and we'll focus on varying the _opacity_ of the pixels.
 
 ```glsl
 float get_opacity(vec2 uv) {
@@ -47,36 +51,35 @@ void main() {
 
 > [!NOTE]
 >
-> The shader programs we write here technically run once for every "fragment" though we simplify with pixels. It is every pixel of the canvas bc of quad-shader. Also they take their position as input, also because of quad-shader.
-> [todo: add link to webglfundamentals or something]
+> The shader programs technically run once for every "fragment" and not for every "pixel". In this article however I'll use [`quad-shader`](https://github.com/nmattia/quad-shader), an experimental WebGL library I'm developing for this blog, which pretty much maps fragments to pixels. We'll also assume the pixel position is passed in as an argument to the program when it runs for said pixel -- this is also specific to `quad-shader`.
 
-So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that all pixels together draw a dot?
+So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that a dot is displayed as a result? As mentioned above, all pixels execute the same program, and only the position (which we'll denote with `uv` here) changes between pixels.
+
+Let's assume we draw a dot of radius `1.`. The most straightforward way is to check if we -- the pixel -- are at most at distance `1.` of the origin.
 
 ![image](/images/airpods/single-dot.png)
 
 _Only pixels within the unit circle will be opaque_
 
-We'll define the opacity for each pixel based on how close it is to the origin $(0,0)$. If it’s within a distance (or radius) $1$, it’s opaque. Otherwise, it’s transparent.
+If the pixel's distance to the origin is less than `1.`, the pixel should be opaque. Otherwise, it should be transparent.
 
 ```glsl
 float get_opacity(vec2 uv) {
     if(sqrt(uv.x * uv.x + uv.y * uv.y) < 1.) {
-        return 1.;
+        return 1.; // fully opaque
     } else {
-        return 0.;
+        return 0.; // transparent
     }
 }
 
 ...
 ```
 
-[TODO: add codepen]
-
 Here we calculate the distance of the pixel to the origin using Pythagoras' formula of $d = \sqrt{x^2 + y^2}$ and, if $d < 1$, set the pixel to fully opaque (`1.`) and otherwise fully transparent (`0.`). This code is very explicit bordering on verbose, though we can leverage two built-in GLSL constructs: [`length()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/length.xhtml) and [`step()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/step.xhtml).
 
 > [!NOTE]
 >
-> `step(edge, v)` returns `1.` if `edge < v`, and 0. otherwise. Therefore, `1. - step(1., distance)` gives `1.` when inside the circle and `0.` outside. The value of `1. - step(edge, v)` is the same as `step(v, edge)` (arguments swapped) though I find it easier to remember that `edge` is always the first argument; hence the `1. - ...` part.
+> `step(edge, v)` returns `1.` if `edge < v`, and `0.` otherwise. Therefore, `1. - step(1., distance)` gives `1.` when inside the circle and `0.` outside. The value of `1. - step(edge, v)` is the same as `step(v, edge)` (arguments swapped) though I find it easier to remember that `edge` is always the first argument; hence the `1. - ...` part.
 
 Using `length()` and `step()` we can simplify the code, and the implementation of `get_opacity` might look like this:
 
@@ -84,20 +87,28 @@ import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
 
 <StaticDot />
 
-Try calculating a few values manually to build intuition:
+> [!NOTE]
+>
+> I've created a [CodePen](https://codepen.io/nmattia/pen/GggxdBM) where you can experiment with various implementations of `get_opacity()`. Open `index.html` and modify the `get_opacity` implementation if you want to follow along.
+
+Try calculating a few values manually if you need to build intuition:
 
 ```
-uv := vec2(0., 0.)
-=> length(uv) =
-    sqrt(uv.x*uv.x + uv.y*uv.y) =
-    sqrt(0.*0. + 0.*0.) = 0.
-=> length(uv) = 0. => length(uv) < 1.
-=> step(1., length(uv)) = 0.
-=> get_opacity(uv) = 1. - 0. = 1.
-=> pixel is opaque
+let uv := vec2(0., 0.)
+  -> length(uv) =
+      sqrt(uv.x*uv.x + uv.y*uv.y) =
+      sqrt(0.*0. + 0.*0.) = 0.
+  -> length(uv) = 0. -> length(uv) < 1.
+  -> step(1., length(uv)) = 0.
+  -> get_opacity(uv) = 1. - 0. = 1.
+  -> pixel is opaque
 ```
 
 Drawing a dot with a given radius was easy enough, let's now move the dot!
+
+### Moving the Dot
+
+[todo: add intro like "we now know how to draw a dot around the origin; how do we draw it elsewhere? First: change the position; then do as before]
 
 ![image](/images/airpods/transform.png)
 
@@ -190,15 +201,21 @@ Here unfortunately there is no way to do this in constant time, like with the ra
 
 If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
 
+To get an idea of how we'll solve this, let's take the real world as an example. Odd, right? Though after all, even though we are modeling a virtual animation, our expectations come from experiences "IRL".
+
+Let's assume we have three sheets of the same material which is slightly opaque, and let's say one sheet of the material lets 20% of the light through. We'll say this material is 80% opaque (I have no idea if this is scientifically correct but works as a mental model). Now let's picture a photon (light particle) that has to go through all three sheets of the material.
+
 ![image](/images/airpods/photon.png)
 
-The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. [explain in terms of probability of light going through a material]
+_Photon going through sheets of material_
 
-Let's say in general transparency is $t = 1 - o$. Let's say all the different layers have transparency $t_0, t_1, ...$. Here's how we calculate the total opacity:
+Wave-particular duality notwithstanding, what is the probability that the photon will come out the other side? If one sheet of material -- on average -- blocks 80% of the light, let's say that the photon has 20% chance of going through the first sheet; in other words the probability is $0.2$. The probability of the photon going through _both_ the first sheet and the second sheet would then be $0.2 \cdot 0.2 = 0.04$ and finally the probability woould be $0.008$ for going through all three sheets. The probability that the photon will hit any of the three sheets is then $1 - 0.008 = 0.992$, meaning the resulting _opacity_ is 99.2% (for this definition of opacity).
+
+Using the "transparency" (or one minus the opacity) for the sheets allowed us to multiple the individual tranparency values. Let's say in general transparency is $t = 1 - o$ where $o$ is the opacity. Let's say all the different layers have transparency $t_0, t_1, ...$. Following the 3-sheet-photon idea above, we can calculate the total _opacity_ as one minus the product of the transparencies, or:
 
 $$o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) \\ = 1 - \prod t_i \\ = 1 - \prod (1 - o_i)$$
 
-This gives us the following:
+The implementation would look something like this:
 
 import AlphaDiscs from "./airpods-hearing-test-animation/AlphaDiscs.astro";
 
@@ -212,6 +229,6 @@ Note that this operation is commutative, so it doesn't matter what order we look
 
 Putting everything together we get the following. Since everything is rendered in real time, we can animate it based on time, as we as make it react to user interaction (clicks).
 
-import AirpodsHearingTest from "./airpods-hearing-test-animation/AirpodsHearingTest.astro";
+import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
-<AirpodsHearingTest />
+<BlueSky />
