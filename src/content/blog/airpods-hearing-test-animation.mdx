@@ -1,5 +1,5 @@
 ---
-title: "Recreating an iOS animation with WebGL: interactive tutorial"
+title: "Recreating an iOS Animation with WebGL: an Interactive Tutorial"
 description: "A deep dive into how to recreate a radially symmetric iOS animation using shaders, with performance-friendly WebGL tricks and visual insights."
 og_image: /images/airpods/airpods-hearing-test.png
 pubDate: 2025-04-29
@@ -111,7 +111,7 @@ import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
 
 This idea is central: define shapes at the origin, then transform coordinates. If you ever need to draw shapes more complexe than dots, see Inigo Quilez’s [distance functions](https://iquilezles.org/articles/distfunctions2d/) reference for a deeper dive.
 
-## Repeating dots for free
+## Repeating Patterns for Free with Modulo
 
 Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. In general we want repeating patterns, and in the world of shaders we can actually have any number of repetitions for free.
 
@@ -148,7 +148,7 @@ import RadialSymmetries from "./airpods-hearing-test-animation/RadialSymmetries.
 
 This means that, as long as we can describe a pattern in terms of `theta` and `rho`, we can repeat that pattern radially as many times as we want without any extra resource usage.
 
-## Radially Repeating Dots
+### Radially Repeating Dots
 
 Gradients are pretty, but we're here to draw dots. We use the same trick to make $\theta$ repeat, and we use the checks from earlier to figure out if the pixel lands in a dot.
 
@@ -162,37 +162,41 @@ One added thing here is `slice_ix`, which is the index of the slice the current 
 
 _TODO_
 
-## discs-bad
+## Repeating Dots Horizontally
 
-Now that we have a pattern that we can repeat radially, let's figure out how we might create repeating dots within a slice.
+Next, we need multiple dots per slice. Let's consider the slice with index `0`, extending along the horizontal axis towards (plus) inifinity. We'll have several dots, each at distance `d` from each other, potentially overlapping:
 
 ![image](/images/airpods/discs.png)
 
 _Dots separated by distance `d`_
 
-The `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue. Can you spot it before playing with the animation below?
+We saw earlier that we could leverage the modulo operator to repeat patterns. This `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue.
+
+Can you spot it before playing with the animation below?
 
 import AlphaDiscsBad from "./airpods-hearing-test-animation/AlphaDiscsBad.astro";
 
 <AlphaDiscsBad />
 
-The pattern is repeated exactly and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots are smaller than the slices, this is ok
+The pattern is repeated exactly and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots are smaller than the slices, this is ok.
 
 ![image](/images/airpods/overlap.png)
 
 Let's see how we can resolve this.
 
-## discs
+### Compositing Overlapping Dots
 
-Here unfortunately there is no way to do this in constant time. While there would be workarounds if we had overlapping opaque discs of different colors, there is no workaround when the opacity is changing. For this we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
+Here unfortunately there is no way to do this in constant time, like with the radial repetitions. While there would be workarounds if we had overlapping opaque discs of different colors, there is no workaround when the opacity is changing. For this we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
 
-Simply multiplying the opacity does not work. The reason is that two discs have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
-
-The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. [explain in terms of probability of light going through a material]
+If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
 
 ![image](/images/airpods/photon.png)
 
-Let's say in general transparency is $t = 1 - o$. Let's say all the different layers have transparency $t_0, t_1, ...$. Then $o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) = 1 - \prod_i t_i = 1 - \prod (1 - o_i)$
+The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. [explain in terms of probability of light going through a material]
+
+Let's say in general transparency is $t = 1 - o$. Let's say all the different layers have transparency $t_0, t_1, ...$. Here's how we calculate the total opacity:
+
+$$o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) \\ = 1 - \prod t_i \\ = 1 - \prod (1 - o_i)$$
 
 This gives us the following:
 
@@ -204,7 +208,7 @@ Note that this operation is commutative, so it doesn't matter what order we look
 
 [broader range of alpha blending/compositing: https://en.wikipedia.org/wiki/Alpha_compositing]
 
-## final
+## Final Result & Conclusion
 
 Putting everything together we get the following. Since everything is rendered in real time, we can animate it based on time, as we as make it react to user interaction (clicks).
 
