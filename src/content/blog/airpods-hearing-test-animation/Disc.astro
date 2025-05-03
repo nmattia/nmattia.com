@@ -8,7 +8,6 @@ import QuadShaderMain from "./QuadShaderMain.astro";
     { name: "uShift", min: -1.0, max: 1.0, value: 0 },
   ]}
   main={`
-uv -= vec2(uShift, 0.);
-return 1. - step(uRadius, length(uv));
+return 1. - step(uRadius, length(uv - vec2(uShift, 0.)));
 `}
 />

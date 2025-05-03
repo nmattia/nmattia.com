@@ -10,6 +10,7 @@ float radius = .2;
 float a = TAU/uSymmetries;
 float a2 = a/2.;
 
+/* switch to polar */
 float theta = atan(uv.y, uv.x); // between -TAU/2 and TAU/2
 float rho = length(uv);
 
@@ -23,13 +24,13 @@ float slice_ix = floor(mod(theta + a2 + TAU, TAU) / a);
 // [0, a], [a, 2a], then move back by half alpha
 theta = mod(theta + a2, a)-a2;
 
+/* back to cartesian */
 uv = vec2(rho*cos(theta), rho*sin(theta));
-uv += vec2(-.8, 0.);
 
-float opacity = 0.;
+/* create a dot slightly shifted to the right */
+float opacity = 1. - step(radius, length(uv - vec2(.8, 0.)));
 
-opacity += 1. - step(radius, length(uv));
-
+/* vary opacity depending on the slice the pixel is in */
 opacity *= (1. - .8 * slice_ix / uSymmetries);
 
 return opacity;

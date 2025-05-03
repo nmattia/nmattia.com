@@ -5,25 +5,18 @@ import QuadShaderMain from "./QuadShaderMain.astro";
 <QuadShaderMain
   uniforms={[{ name: "uDist", min: 0.0, max: 1.0, value: 0.66 }]}
   main={`
-// number of symmetries/reps
-const int nSideDots = 1;
 const float radius = .3;
+float uDist2 = uDist/2.;
 
-float period = uDist;
+/* number of dots on the left and right of the center dot */
+const int nSideDots = 1;
 
-uv.x += period/2.;
-float ix = abs(floor(uv.x/period));
-uv.x = mod(uv.x, period);
-uv.x -= period/2.;
+/* get index (use absolute value to mirror around 0) */
+float dot_ix = abs(floor((uv.x + uDist2)/uDist));
+uv.x = mod(uv.x + uDist2, uDist) - uDist2; /* repeat every 'uDist' */
 
-float alpha = .5;
-
-// Multiply by 0 if length < radius
-alpha *= 1. - step(radius, length(uv));
-
-// Multiply by 0 if we're more than nDots
-alpha *= 1. - step(float(nSideDots + 1), ix);
-
-return alpha;
+/* Return 0. (transparent) _if) uv is now _outside_ of the dot at the origin
+    _or_ unless if the index is greater than the number of dots to draw. */
+return (1. - step(radius, length(uv))) * 1. - step(float(nSideDots + 1), dot_ix);
 `}
 />

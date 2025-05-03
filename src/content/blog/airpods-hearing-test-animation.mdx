@@ -38,6 +38,8 @@ Let's start simple: let's draw a disc. If we're inside the disc, the pixel is op
 
 ![image](/images/airpods/disc.png)
 
+_Only pixels within the unit circle will be opaque_
+
 Let's write a function `get_opacity` that takes the the position as `vec2 uv` and returns a `float` between `0.` and `1.`, where `0.` is transparent, and `1.` is opaque. For simplicity, let's assume `uv.x` and `uv.y` range from `-1` to `1`.
 
 We can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
@@ -49,6 +51,11 @@ We will set the opacity depending on this value, so we invert the result with `1
 ```glsl
 float get_opacity(vec2 uv) {
     return 1. - step(1., length(uv));
+}
+
+void main() {
+    vec4 rgb = vec4(...);
+    gl_FragColor = get_opacity(position) * rgb;
 }
 ```
 
@@ -77,21 +84,13 @@ Now let's do something a bit more difficult. Let's change the size of the disc a
 
 ![image](/images/airpods/transform.png)
 
+_Two of the many pixels rendering a disc of radius `r` centered at `c`_
+
 When drawing using an axis plotter, ThreeJS, SVG, etc, our reference is "the canvas" for some definition of "canvas". Here in shader world, we see everything from the pixel's point of view (since the shader program is run once for each pixel, where `uv` contains the position of the pixel).
 
 Let's say we want to draw a scaled down disc (`uScale = .5`). The shader program is evaluated for one particular pixel, and it's not like we can move the pixel. But the pixel can say "if I was a pixel half as close to the origin, would I be within the disc?".
 
 So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first scale ourselves down (or scale the canvas up, depending on how you look at it). Blah blah step(radius, length(uv)).
-
-Same with translation:
-
-```glsl
-float get_opacity(vec2 uv) {
-    uv -= vec2(uShift, 0.); // [sh! highlight]
-    uv /= uScale; // [sh! highlight]
-    return 1. - step(1., length(uv));
-}
-```
 
 Note how we use _subtraction_ for a _positive_ translation, and _division_ for scale. This is all to say "what if I were another pixel". The actual operation is actually done by the positioning of the pixel on the screen. Play with the values in the animation below to get a sense of what's happening.
 
@@ -110,6 +109,8 @@ Now that we can draw one dot and position it wherever we want, let's see how we 
 For our animations, we can take advantage of the fact that it's raidally symmetric. So let's try a radial symmetry. We'll use polar coordinates:
 
 ![image](/images/airpods/slice.png)
+
+_The slice that is described once and repeated N times_
 
 $$\theta = atan(y,x), \rho = \sqrt{x^2 + y^2}$$
 
@@ -161,6 +162,8 @@ import RadialDiscs from "./airpods-hearing-test-animation/RadialDiscs.astro";
 Now that we have a pattern that we can repeat radially, let's figure out how we might create repeating dots within a slice.
 
 ![image](/images/airpods/discs.png)
+
+_Dots described for a single slice and separated by distance `d`_
 
 The `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue:
 
