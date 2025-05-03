@@ -19,7 +19,7 @@ import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
 <BlueSky />
 
-If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). We'll use a simplified version to explain the various things necessary to draw it: first draw a dot, then radial symmetries, and finally overlapping dots with alpha. [clarify simplifications, and introduce slices and dot bars]
+If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). We'll use a simplified version to explain the various things necessary to draw it: first draw a dot, then radial symmetries, and finally overlapping dots with alpha. [clarify simplifications, introduce slices and dot bars, motivate use of shaders for performance]
 
 ![image](/images/airpods/simplified.png)
 
@@ -42,26 +42,44 @@ Let's start simple: let's draw a dot.
 
 _Only pixels within the unit circle will be opaque_
 
-Let's write a function `get_opacity` that takes the the position as `vec2 uv` and returns a `float` between `0.` and `1.`, where `0.` is transparent, and `1.` is opaque. For simplicity, let's assume `uv.x` and `uv.y` range from `-1` to `1`.
+[explain each pixel is like a small computer running the program and setting its color depending on the result, ]
 
-[explain each pixel is like a small computer running the program and setting its color depending on the result]
+[say we will be computing the _opacity_ at every pixel based on the position]
 
+```glsl
+float get_opacity(vec2 uv) {
+    return ... /* opacity definition here */;
+}
+
+void main() {
+    vec4 rgb = vec4(...);
+    vec2 position = ...;
+    gl_FragColor = get_opacity(position) * rgb;
+}
+```
+
+[add note that "position" is input only because quad-shader but inputs could be other things; link to quad-shader for details]
+
+```glsl
+float get_opacity(vec2 uv) {
+    if(sqrt(uv.x * uv.x + uv.y * uv.y) < 1.) {
+        return 1.;
+    } else {
+        return 0.;
+    }
+}
+
+...
+```
+
+[simplify using `step()` and `length()`]
 We can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
 
 With the GLSL built-in `length()` that uses Pythagoras, `step(edge, length(uv))` will be `0.` if `uv` is inside the unit circle, and `1.` otherwise.
 
 We will set the opacity depending on this value, so we invert the result with `1. - result` (where `result = step(...)`), so that if `result` is `1.` we get `0.`, and if `result` is `0.` we get `1.`:
 
-```glsl
-float get_opacity(vec2 uv) {
-    return 1. - step(1., length(uv));
-}
-
-void main() {
-    vec4 rgb = vec4(...);
-    gl_FragColor = get_opacity(position) * rgb;
-}
-```
+[add note that `step(x, y) == 1. - step(y, x)`]
 
 If you struggle to make sense of it, try with calculating the return value for different pixel positions. For instance, to confirm that the pixel at $[0, 0]$ is indeed opaque:
 
@@ -76,8 +94,6 @@ uv := vec2(0., 0.)
 => pixel is opaque
 ```
 
-Positions inside: `uv = vec2(0., 0.)`, `uv = vec2(.9, 0.)`, `uv = vec2(.5, .5)`; positions outside: `uv = vec2(1., 1.)`, `uv = vec2(10., 0.)`, etc.
-
 This gives us the dot shown below.
 
 import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
@@ -90,23 +106,21 @@ Now let's do something a bit more difficult. Let's change the size of the dot.
 
 _Two of the many pixels rendering a dot (disc) of radius `r` centered at `c`_
 
-When drawing using an axis plotter, ThreeJS, SVG, etc, our reference is "the canvas" for some definition of "canvas". Here in shader world, we see everything from the pixel's point of view (since the shader program is run once for each pixel, where `uv` contains the position of the pixel).
-
 So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first move.
 
 import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
 
 <MovingDot />
 
-Mental model: instead of specifying the position of objects of vertices, we instead have to perform "checks" to know if we're within an object or not. It's often easier to define checks around the origin, so we moves the current pixel to the origin, and then the GPU will "move it back" by drawing the result on our original location. See also: https://iquilezles.org/articles/distfunctions2d/
+[name of the game: define shapes around origin and then translate `uv`]
 
-Note this is similar to e.g. Matrix stuff where matrix rot is defined around the origin, and we translate, rotate, and translate back; except here the "translate back" is done by the GPU. asdasd
+https://iquilezles.org/articles/distfunctions2d/
 
 ## Repeating dots for free
 
 Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. In general we want repeating patterns, and in the world of shaders we can actually have any number of repetitions for free.
 
-For our animations, we can take advantage of the fact that it's [radially symmetric](https://en.wikipedia.org/wiki/Rotational_symmetry).
+For our animations, we can take advantage of the fact that it's [radially symmetrical](https://en.wikipedia.org/wiki/Rotational_symmetry).
 
 In order to simplify things we will work with [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system). As a quick refresher, polar coordinates are a way of representing a point as $(\rho, \theta)$ where $\rho$ is the distance to the origin $[0,0]$ and $\theta$ [explain theta].
 
@@ -131,7 +145,7 @@ _The slice that is described once and repeated N times_
 
 If we `mod` the value of theta, pixels with $\theta \in [0, \alpha]$ will get the regular gradient. But then, the gradient will repeat for $\theta \in [\alpha, 2\alpha]$.
 
-Using this we can repeat the pattern any number of times with constant -- $O(1)$ -- complexity w.r.t the number of repetitions.
+Using this we can repeat the pattern any number of times with constant time -- technicall $O(1)$ w.r.t to the number of symmetries or repeated "slices".
 
 import RadialSymmetries from "./airpods-hearing-test-animation/RadialSymmetries.astro";
 
@@ -149,6 +163,10 @@ import RadialDots from "./airpods-hearing-test-animation/RadialDots.astro";
 
 One added thing here is `slice_ix`, which is the index of the slice the current pixel is in. This is useful if you want to vary a parameter based on _which_ slice you're in (if you just used $\theta$ the value would vary within the same slice). This is used in this snippet to give each dot a different opacity.
 
+![image](/images/airpods/slice-indices.png)
+
+_TODO_
+
 ## discs-bad
 
 Now that we have a pattern that we can repeat radially, let's figure out how we might create repeating dots within a slice.
@@ -157,7 +175,7 @@ Now that we have a pattern that we can repeat radially, let's figure out how we 
 
 _Dots separated by distance `d`_
 
-The `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue:
+The `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue. Can you spot it before playing with the animation below?
 
 import AlphaDiscsBad from "./airpods-hearing-test-animation/AlphaDiscsBad.astro";
 
@@ -165,40 +183,31 @@ import AlphaDiscsBad from "./airpods-hearing-test-animation/AlphaDiscsBad.astro"
 
 The pattern is repeated exactly and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots are smaller than the slices, this is ok
 
+![image](/images/airpods/overlap.png)
+
 Let's see how we can resolve this.
 
 ## discs
 
 Here unfortunately there is no way to do this in constant time. While there would be workarounds if we had overlapping opaque discs of different colors, there is no workaround when the opacity is changing. For this we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
 
-Simple multiplying the opacity does not work. The reason is that two discs have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
+Simply multiplying the opacity does not work. The reason is that two discs have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
 
 The "transparency" on the other hand can be multiplied. Is this a truth of nature? Don't know, but works well enough in practice. [explain in terms of probability of light going through a material]
+
+![image](/images/airpods/photon.png)
 
 Let's say in general transparency is $t = 1 - o$. Let's say all the different layers have transparency $t_0, t_1, ...$. Then $o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) = 1 - \prod_i t_i = 1 - \prod (1 - o_i)$
 
 This gives us the following:
 
-```glsl
-float radius = .3;
-int nSideDots = 1;
-
-float alpha_prod = 1.; // current product result
-
-for (int i = -nSideDots; i <= nSideDots; i ++) {
-    vec2 delta = vec2(float(i)*uDist, 0.);
-    float alpha_this = .5 * (1. - step(radius, length(uv + delta)));
-    alpha_prod *= (1. - alpha_this);
-}
-
-return 1. - alpha_prod;
-```
-
-Note that this operation is commutative, so it doesn't matter what order we look at the dots -- though this would be different if we were mixing colors as well.
-
 import AlphaDiscs from "./airpods-hearing-test-animation/AlphaDiscs.astro";
 
 <AlphaDiscs />
+
+Note that this operation is commutative, so it doesn't matter what order we look at the dots -- though this would be different if we were mixing colors as well.
+
+[broader range of alpha blending/compositing: https://en.wikipedia.org/wiki/Alpha_compositing]
 
 ## final
 
