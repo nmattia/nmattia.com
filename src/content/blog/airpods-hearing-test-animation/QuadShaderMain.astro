@@ -1,5 +1,6 @@
 ---
 import Shader from "../../../components/Shader.astro";
+import { Code } from "astro:components";
 
 export type Props = {
   main: string;
@@ -44,8 +45,8 @@ void main() {
 
   .slider-wrapper {
     display: flex;
-    max-width: 80%;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     gap: 1em;
     font-family: monospace;
   }
@@ -67,10 +68,25 @@ void main() {
     min-width: 4em;
     text-align: right;
   }
+
+  div.quad-shader-wrapper {
+    margin-top: 5em;
+    margin-bottom: 5em;
+  }
+
+  div.quad-shader-wrapper > :global(* + *) {
+    margin-top: 2em;
+  }
+
+  div.quad-shader-wrapper > :global(canvas) {
+    height: 50vh;
+    width: 100%;
+    display: block;
+  }
 </style>
 
 <!-- container needed to look up the 'input' elements -->
-<div>
+<div class="quad-shader-wrapper">
   <Shader
     fragShader={fragShader}
     quadShaderSetup={(qs, utils) => {
@@ -130,4 +146,6 @@ void main() {
       </div>
     ))
   }
+  <!-- NOTE: ensure matches the Astro config -->
+  <Code code={main.trim()} lang="glsl" theme="dark-plus" />
 </div>

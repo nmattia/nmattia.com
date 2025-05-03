@@ -5,12 +5,10 @@ import QuadShaderMain from "./QuadShaderMain.astro";
 <QuadShaderMain
   uniforms={[{ name: "uSymmetries", min: 1, max: 8, value: 3 }]}
   main={`
-        float a = TAU/uSymmetries;
+float a = TAU/uSymmetries; // the size (angle) of each slice
 
-        float theta = atan(uv.y, uv.x); // between -TAU/2 and TAU/2
+float theta = atan(uv.y, uv.x); // returns the pixel's angular position within [-TAU, TAU]
 
-        theta = mod(theta, a);
-
-        return theta/a;
+return mod(theta, a) / a; // loop angular position between 0 and 'a' and scale betwee 0 and 1
 `}
 />

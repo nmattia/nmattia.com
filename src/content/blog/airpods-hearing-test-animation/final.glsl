@@ -45,15 +45,15 @@ void main() {
 
         float opacity = 0.;
 
-        const int foo = 7;
+        const int nSideDots = 7;
 
-        for (int i = -foo; i <= foo; i ++) {
+        for (int i = -nSideDots; i <= nSideDots; i ++) {
             vec2 delta = vec2(float(i)*uDist, 0.);
             float v = length(uv + delta);
             float ri = .98 * r;
             float alpha_this = 1.;
             alpha_this *= (1. - smoothstep(ri, r, v));
-            alpha_this *= 1. - smoothstep(.2, 1., abs(float((i)))/float(foo));
+            alpha_this *= 1. - smoothstep(.2, 1., abs(float((i)))/float(nSideDots));
             opacity = 1. - (1. - alpha_this) * (1. - opacity);
         }
 

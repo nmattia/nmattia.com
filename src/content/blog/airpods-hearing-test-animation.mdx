@@ -19,20 +19,30 @@ import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
 <BlueSky />
 
+If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). We'll use a simplified version to explain the various things necessary to draw it: first draw a disc, then radial symmetries, and finally overlapping discs with alpha.
+
 ![image](/images/airpods/simplified.png)
+
+_Simplified representation of the Hearing Test animation dots_
 
 ## Disc
 
 The simplest thing to do is start with a disc. In WebGL, the shader program is run once for
 every pixel. So we have to put ourselves in the Pixel's shoes.
 
-Let's start simple: let's draw a disc. If we're inside the disc, the pixel turns on. Otherwise, it stays off.
+> [!NOTE]
+>
+> Technically we need to talk about "fragments" though for simplicity we'll use "pixels"
+
+Let's start simple: let's draw a disc. If we're inside the disc, the pixel is opaque. Otherwise, it is transparent.
 
 ![image](/images/airpods/disc.png)
 
-Let's write a function `get_opacity` that takes the the position as `vec2 uv`, where `uv.x` and `uv.y` range from `-1` to `1`, and returns a `float` between `0.` and `1.`, where `0.` is transparent, and `1.` is opaque. Then we can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
+Let's write a function `get_opacity` that takes the the position as `vec2 uv` and returns a `float` between `0.` and `1.`, where `0.` is transparent, and `1.` is opaque. For simplicity, let's assume `uv.x` and `uv.y` range from `-1` to `1`.
 
-If we use `length(uv)` as `v`, then `step(edge, length(uv))` will be `0.` if `uv` is inside the unit circle, and `1.` otherwise.
+We can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
+
+With the GLSL built-in `length()` that uses Pythagoras, `step(edge, length(uv))` will be `0.` if `uv` is inside the unit circle, and `1.` otherwise.
 
 We will set the opacity depending on this value, so we invert the result with `1. - result` (where `result = step(...)`), so that if `result` is `1.` we get `0.`, and if `result` is `0.` we get `1.`:
 
@@ -42,7 +52,22 @@ float get_opacity(vec2 uv) {
 }
 ```
 
-This gives us the following beautiful disc of radius `1.`:
+If you struggle to make sense of it, try with calculating the return value for different pixel positions. For instance, to confirm that the pixel at $[0, 0]$ is indeed opaque:
+
+```
+uv := vec2(0., 0.)
+=> length(uv) =
+    sqrt(uv.x*uv.x + uv.y*uv.y) =
+    sqrt(0.*0. + 0.*0.) = 0.
+=> length(uv) = 0. => length(uv) < 1.
+=> step(1., length(uv)) = 0.
+=> get_opacity(uv) = 1. - 0. = 1.
+=> pixel is opaque
+```
+
+Positions inside: `uv = vec2(0., 0.)`, `uv = vec2(.9, 0.)`, `uv = vec2(.5, .5)`; positions outside: `uv = vec2(1., 1.)`, `uv = vec2(10., 0.)`, etc.
+
+This gives us the disc of radius `1.` shown below.
 
 import DiscStatic from "./airpods-hearing-test-animation/DiscStatic.astro";
 
@@ -56,7 +81,7 @@ When drawing using an axis plotter, ThreeJS, SVG, etc, our reference is "the can
 
 Let's say we want to draw a scaled down disc (`uScale = .5`). The shader program is evaluated for one particular pixel, and it's not like we can move the pixel. But the pixel can say "if I was a pixel half as close to the origin, would I be within the disc?".
 
-So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first scale ourselves down (or scale the canvas up, depending on how you look at it). Effectively this adds one step: `uv /= uScale`.
+So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first scale ourselves down (or scale the canvas up, depending on how you look at it). Blah blah step(radius, length(uv)).
 
 Same with translation:
 
@@ -91,16 +116,6 @@ $$\theta = atan(y,x), \rho = \sqrt{x^2 + y^2}$$
 The trick is to define a general pattern (a gradient to start simple) in terms of $\theta$, and then lie about $\theta$ and repeat it.
 
 If we `mod` the value of theta, pixels with $\theta \in [0, \alpha]$ will get the regular gradient. But then, the gradient will repeat for $\theta \in [\alpha, 2\alpha]$.
-
-```glsl
-float a = TAU/uSymmetries;
-
-float theta = atan(uv.y, uv.x);
-theta = mod(theta, a); // make theta repeat between 0 and a
-
-float opacity = theta/a; // create the gradient
-gl_FragColor = opacity * vec4(rgb, 1.);
-```
 
 Using this we can repeat the pattern any number of times with constant complexity ($O(1)$) in the number of repetitions.
 

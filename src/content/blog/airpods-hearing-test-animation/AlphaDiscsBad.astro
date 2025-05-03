@@ -5,26 +5,25 @@ import QuadShaderMain from "./QuadShaderMain.astro";
 <QuadShaderMain
   uniforms={[{ name: "uDist", min: 0.0, max: 1.0, value: 0.66 }]}
   main={`
+// number of symmetries/reps
+const int nSideDots = 1;
+const float radius = .3;
 
-        // number of symmetries/reps
-        const int nSideDots = 1;
-        const float radius = .3;
+float period = uDist;
 
-        float period = uDist;
+uv.x += period/2.;
+float ix = abs(floor(uv.x/period));
+uv.x = mod(uv.x, period);
+uv.x -= period/2.;
 
-        uv.x += period/2.;
-        float ix = abs(floor(uv.x/period));
-        uv.x = mod(uv.x, period);
-        uv.x -= period/2.;
+float alpha = .5;
 
-        float alpha = .5;
+// Multiply by 0 if length < radius
+alpha *= 1. - step(radius, length(uv));
 
-        // Multiply by 0 if length < radius
-        alpha *= 1. - step(radius, length(uv));
+// Multiply by 0 if we're more than nDots
+alpha *= 1. - step(float(nSideDots + 1), ix);
 
-        // Multiply by 0 if we're more than nDots
-        alpha *= 1. - step(float(nSideDots + 1), ix);
-
-        return alpha;
+return alpha;
 `}
 />

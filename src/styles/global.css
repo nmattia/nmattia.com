@@ -387,15 +387,6 @@ img {
   margin-right: auto;
 }
 
-canvas[data-fragment-shader] {
-  width: 100%; /* needed to avoid layout shift */
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5em;
-  margin-bottom: 5em;
-}
-
 /* Hack since we don't have 'figcaption's (yet): if the paragraph after an image contains a single element, and
  * that element is an <em>, then make it look like a caption.
  */
