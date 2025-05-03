@@ -1,6 +1,6 @@
 ---
-title: "Todo"
-description: "Todo"
+title: "Recreating an iOS animation with WebGL: interactive tutorial"
+description: "A deep dive into how to recreate a radially symmetric iOS animation using shaders, with performance-friendly WebGL tricks and visual insights."
 og_image: /images/airpods/airpods-hearing-test.png
 pubDate: 2025-04-29
 tags:
@@ -9,42 +9,32 @@ tags:
   - frontend
 ---
 
-This is an article on how to reproduce an iPhone animation with WebGL. [mention which concepts will be visited]
+
+This article explores how to reproduce an iPhone animation I really liked, using WebGL and GLSL shaders. We'll dive into several foundational concepts in graphics programming: fragment shaders, radial symmetry and compositing with transparency.
+
 
 {/* more */}
 
-[back story]
+You may have seen this animation in iOS (or iPadOS) if you've tried AirPods' hearing test. It’s fluid, elegant, and deceptively simple. On closer inspection, it’s made up of thousands of small fading dots. Recreating this animation isn't just fun—it’s also a great way to learn how GPU-based rendering works at a low level using GLSL.
 
 import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
 <BlueSky />
 
-If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). We'll use a simplified version to explain the various things necessary to draw it: first draw a dot, then radial symmetries, and finally overlapping dots with alpha. [clarify simplifications, introduce slices and dot bars, motivate use of shaders for performance]
+If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact).  To make it manageable, we’ll first work through a simplified version with fewer elements. We’ll explore how to draw a single dot, create repeated radial patterns (like pizza slices), and handle overlapping semi-transparent elements (like a row of dots).
 
 ![image](/images/airpods/simplified.png)
 
 _Simplified representation of the Hearing Test animation dots_
 
-[brief outline: first single dot, then slices & symmetries, then alpha]
+
+In short, we will **start with one dot**, then leverage the animation's **radial symmetry** to render lots of dots for free, and finally learn how to blend overlapping dots with **alpha transparency**.
 
 ## Drawing a single Dot
 
-The simplest thing to do is start with a single dot. In WebGL, the shader program is run once for
-every pixel.
+In WebGL, a fragment shader runs once per pixel. Think of each pixel as a mini processor that decides its own color based on math -- though all pixels share the same program, and the only variation is the pixel's position passed as an input.
 
-> [!NOTE]
->
-> Technically we need to talk about "fragments" though for simplicity we'll use "pixels"
-
-Let's start simple: let's draw a dot.
-
-![image](/images/airpods/single-dot.png)
-
-_Only pixels within the unit circle will be opaque_
-
-[explain each pixel is like a small computer running the program and setting its color depending on the result, ]
-
-[say we will be computing the _opacity_ at every pixel based on the position]
+Here we will simplify and use a single, known color and only vary the _opacity_ of the pixels.
 
 ```glsl
 float get_opacity(vec2 uv) {
@@ -52,13 +42,25 @@ float get_opacity(vec2 uv) {
 }
 
 void main() {
-    vec4 rgb = vec4(...);
-    vec2 position = ...;
+    vec4 rgb = vec4(...) /* known color */;
+    vec2 position = ... /* pixel position magically passed in */;
     gl_FragColor = get_opacity(position) * rgb;
 }
 ```
 
-[add note that "position" is input only because quad-shader but inputs could be other things; link to quad-shader for details]
+> [!NOTE]
+>
+> The shader programs we write here technically run once for every "fragment" though we simplify with pixels. It is every pixel of the canvas bc of quad-shader. Also they take their position as input, also because of quad-shader.
+> [todo: add link to webglfundamentals or something]
+
+So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that all pixels together draw a dot?
+
+![image](/images/airpods/single-dot.png)
+
+_Only pixels within the unit circle will be opaque_
+
+
+We'll define the opacity for each pixel based on how close it is to the origin $(0,0)$. If it’s within a distance (or radius) $1$, it’s opaque. Otherwise, it’s transparent.
 
 ```glsl
 float get_opacity(vec2 uv) {
@@ -72,16 +74,22 @@ float get_opacity(vec2 uv) {
 ...
 ```
 
-[simplify using `step()` and `length()`]
-We can use the handy `step(edge, v)` function where the result is `0` if `v < edge` (`v` a scalar) and `1` if `v > edge`.
+[TODO: add codepen]
 
-With the GLSL built-in `length()` that uses Pythagoras, `step(edge, length(uv))` will be `0.` if `uv` is inside the unit circle, and `1.` otherwise.
+Here we calculate the distance of the pixel to the origin using Pythagoras' formula of $d = \sqrt{x^2 + y^2}$ and, if $d < 1$, set the pixel to fully opaque (`1.`) and otherwise fully transparent (`0.`). This code is very explicit bordering on verbose, though we can leverage two built-in GLSL constructs: [`length()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/length.xhtml) and [`step()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/step.xhtml).
 
-We will set the opacity depending on this value, so we invert the result with `1. - result` (where `result = step(...)`), so that if `result` is `1.` we get `0.`, and if `result` is `0.` we get `1.`:
+> [!NOTE]
+>
+> `step(edge, v)` returns `1.` if `edge < v`, and 0. otherwise. Therefore, `1. - step(1., distance)` gives `1.` when inside the circle and `0.` outside. The value of `1. - step(edge, v)` is the same as `step(v, edge)` (arguments swapped) though I find it easier to remember that `edge` is always the first argument; hence the `1. - ...` part.
 
-[add note that `step(x, y) == 1. - step(y, x)`]
 
-If you struggle to make sense of it, try with calculating the return value for different pixel positions. For instance, to confirm that the pixel at $[0, 0]$ is indeed opaque:
+Using `length()` and `step()` we can simplify the code, and the implementation of `get_opacity` might look like this:
+
+import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
+
+<StaticDot />
+
+Try calculating a few values manually to build intuition:
 
 ```
 uv := vec2(0., 0.)
@@ -94,13 +102,7 @@ uv := vec2(0., 0.)
 => pixel is opaque
 ```
 
-This gives us the dot shown below.
-
-import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
-
-<StaticDot />
-
-Now let's do something a bit more difficult. Let's change the size of the dot.
+Drawing a dot with a given radius was easy enough, let's now move the dot!
 
 ![image](/images/airpods/transform.png)
 
@@ -112,9 +114,7 @@ import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
 
 <MovingDot />
 
-[name of the game: define shapes around origin and then translate `uv`]
-
-https://iquilezles.org/articles/distfunctions2d/
+This idea is central: define shapes at the origin, then transform coordinates. If you ever need to draw shapes more complexe than dots, see Inigo Quilez’s [distance functions](https://iquilezles.org/articles/distfunctions2d/) reference for a deeper dive.
 
 ## Repeating dots for free
 
