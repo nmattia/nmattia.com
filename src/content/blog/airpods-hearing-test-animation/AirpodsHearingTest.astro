@@ -19,8 +19,8 @@ import frag from "./hearing-test.glsl?raw";
     };
 
     qs.uniform1f("uExtra", () => fn(performance.now() / 1000 - t));
-    qs.canvas.onclick = () => {
+    qs.canvas.addEventListener("pointerdown", () => {
       t = performance.now() / 1000;
-    };
+    });
   }}
 />
