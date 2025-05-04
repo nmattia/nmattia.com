@@ -20,7 +20,7 @@ float rho = length(uv);
 /* shift theta to align the center of slice 0 with the X axis */
 theta += a2;
 
-/* atan() returns a value from [-TAU/2, TAU/2] and for simplificy when calculating
+/* atan() returns a value from [-TAU/2, TAU/2] and for simplicity when calculating
  * indices below we move it to [0, TAU] which is equivalent */
 theta = mod(theta + TAU, TAU);
 
@@ -38,13 +38,13 @@ const int nSideDots = 1;
 float product = 1.; /* current product result */
 
 float period = 5.; /* period of 2 seconds */
-    float dist = uDist + uDist/5. * sin(TAU/period * uTime + slice_ix);
+float dist = uDist + uDist/5. * sin(TAU/period * uTime + slice_ix);
 
 for (int i = -nSideDots; i <= nSideDots; i ++) {
     float opacity = .5; /* any dot's opacity */
     vec2 shift = vec2(float(i)*dist, 0.); /* position over dot */
     opacity *= 1. - step(radius, length(uv + shift)); /* only consider current dot */
-    product *= (1. - opacity);
+    product *= 1. - opacity;
 }
 
 return 1. - product;
