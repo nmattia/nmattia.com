@@ -1,6 +1,6 @@
 ---
-title: "Recreating an iOS Animation with WebGL: an Interactive Tutorial"
-description: "A deep dive into how to recreate a radially symmetric iOS animation using shaders, with performance-friendly WebGL tricks and visual insights."
+title: "Interactive WebGL Tutorial: Recreating iOS Radial Animations with GLSL"
+description: "A hands-on guide to rebuilding Apple-style iOS animations in WebGL using shaders, with code samples, performance tips, and compositing techniques."
 og_image: /images/airpods/airpods-hearing-test.png
 pubDate: 2025-04-29
 tags:
@@ -17,27 +17,29 @@ import AirpodsHearingTest from "./airpods-hearing-test-animation/AirpodsHearingT
 
 <AirpodsHearingTest />
 
-You may have seen this animation in iOS (or iPadOS) if you've tried AirPods' hearing test. It’s fluid, elegant, and deceptively simple. On closer inspection, it’s made up of thousands of small fading dots. Recreating this animation isn't just fun—it’s also a great way to learn how GPU-based rendering works at a low level using GLSL.
+You may have seen this animation in iOS (or iPadOS) if you've tried AirPods' hearing test. It’s made up of thousands of small fading dots, that all expand when touched. Recreating this animation isn't just fun—it’s also a great way to learn how GPU-based rendering works at a low level using GLSL.
 
 ## Anatomy of an Animation
 
-If you squint at the animation, you'll see it's actually made up of lots of small dots (3328 of them to be exact). That's a lot of dots. If you were to draw them one-by-one, imperative style (like creating `div`s on a page) it would be terribly inefficient. With WebGL however we can leverage the GPU's many, many cores and by using a couple of tricks, we'll make the animation resource usage be the same whether we're drawing 5 dots or 3'000 dots.
+If you count the individual dots you should land at 3328. That's a lot of dots. It would be terribly inefficient to draw them one by one, imperative style, for instance creating `div`s on a page. With WebGL however we can leverage the GPU's many, many cores and by using a couple of tricks, we'll make the animation resource usage be almost the same whether we're drawing 5 dots or 3'000 dots.
 
-For clarity we'll use a simplified version with fewer elements -- though going to the full animation will just be a matter of changing a few parameters.
+This version of the animation mirrors the visual style and structure of the iOS original. While simplified, it retains the most important visual characteristics -- dot placement, fading, and radial balance.
 
 ![image](/images/airpods/simplified.png)
 
 _Simplified representation of the Hearing Test animation dots_
 
-We’ll first explore how to draw a single dot, then we'll see how we can create repeated radial patterns (like pizza slices) at no extra computing cost by leveraging its radial symmetry, and finally handle overlapping semi-transparent elements (like a row of dots).
+We’ll first explore how to draw a single dot, then we'll see how we can create repeated radial patterns (like pizza slices) at no extra computing cost by leveraging its radial symmetry, and finally handle overlapping semi-transparent elements (like a row of dots). As a final touch we'll make the dots move around.
 
 ## Drawing a single Dot
 
-In WebGL, a fragment shader runs once per pixel. Think of each pixel as a mini processor that decides its own color based on math -- though all pixels share the same program, and the only variation is the pixel's position passed as an input.
+In WebGL, a [fragment shader](https://thebookofshaders.com/01/) runs once per pixel. Think of each pixel as a mini processor that decides its own color based on a program -- though all pixels share the same program, and the only input to the program is the pixel's position.
 
 Here we will keep things simple and use a single, constant color and we'll focus on varying the _opacity_ of the pixels.
 
 ```glsl
+// Example fragment shader
+
 float get_opacity(vec2 uv) {
     return ... /* opacity definition here */;
 }
@@ -53,9 +55,9 @@ void main() {
 >
 > The shader programs technically run once for every "fragment" and not for every "pixel". In this article however I'll use [`quad-shader`](https://github.com/nmattia/quad-shader), an experimental WebGL library I'm developing for this blog, which pretty much maps fragments to pixels. We'll also assume the pixel position is passed in as an argument to the program when it runs for said pixel -- this is also specific to `quad-shader`.
 
-So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that a dot is displayed as a result? As mentioned above, all pixels execute the same program, and only the position (which we'll denote with `uv` here) changes between pixels.
+Since the shader program runs once for every pixel to determine the pixel's output (opacity here), I find it helpful to try and see the canvas (made of all the pixels) from a pixel's perspective (yeah hang with me for a minute). So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that a dot is displayed as a result? As mentioned above, all only the pixel's position (which we'll denote with `uv` here) is input to the program.
 
-Let's assume we draw a dot of radius `1.`. The most straightforward way is to check if we -- the pixel -- are at most at distance `1.` of the origin.
+Let's assume we want to draw a dot of radius `1.`. The most straightforward way is to check if we -- the pixel -- are at most at distance `1.` of the origin.
 
 ![image](/images/airpods/single-dot.png)
 
@@ -75,17 +77,19 @@ float get_opacity(vec2 uv) {
 ...
 ```
 
-Here we calculate the distance of the pixel to the origin using Pythagoras' formula of $d = \sqrt{x^2 + y^2}$ and, if $d < 1$, set the pixel to fully opaque (`1.`) and otherwise fully transparent (`0.`). This code is very explicit bordering on verbose, though we can leverage two built-in GLSL constructs: [`length()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/length.xhtml) and [`step()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/step.xhtml).
+Here we calculate the distance to the pixel from the origin using Pythagoras' formula of $d = \sqrt{x^2 + y^2}$ and, if $d < 1$, set the pixel to fully opaque (`1.`) and otherwise fully transparent (`0.`). This code is very explicit -- bordering on verbose. We'll leverage two built-in GLSL constructs: [`length()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/length.xhtml) and [`step()`](https://registry.khronos.org/OpenGL-Refpages/gl4/html/step.xhtml).
 
-> [!NOTE]
->
-> `step(edge, v)` returns `1.` if `edge < v`, and `0.` otherwise. Therefore, `1. - step(1., distance)` gives `1.` when inside the circle and `0.` outside. The value of `1. - step(edge, v)` is the same as `step(v, edge)` (arguments swapped) though I find it easier to remember that `edge` is always the first argument; hence the `1. - ...` part.
+With `length(uv)` we get the distance of the pixel to the origin and with `1. - step(1., length(uv))` we get a value that is `1.` if inside a circle of radius `1.`, and `0.` otherwise.
 
-Using `length()` and `step()` we can simplify the code, and the implementation of `get_opacity` might look like this:
+If we add in a global input parameter `uRadius` common to all pixels (unlike `uv` which is different for each pixel), we can even vary the size of the dot:
 
 import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
 
 <StaticDot />
+
+> [!NOTE]
+>
+> `step(edge, v)` returns `1.` if `edge < v`, and `0.` otherwise. Therefore, `1. - step(1., distance)` gives `1.` when inside the circle and `0.` outside. The value of `1. - step(edge, v)` is the same as `step(v, edge)` (arguments swapped) though I find it easier to remember that `edge` is always the first argument; hence the `1. - ...` part.
 
 > [!NOTE]
 >
@@ -108,38 +112,36 @@ Drawing a dot with a given radius was easy enough, let's now move the dot!
 
 ### Moving the Dot
 
-[todo: add intro like "we now know how to draw a dot around the origin; how do we draw it elsewhere? First: change the position; then do as before]
+By comparing the length of the position vector (distance from origin to the pixel) to the radius, we were able to draw a dot centered at the origin. What if we wanted to draw a dot _not_ at the origin, but center at some other position $c$? Let's imagine we want to draw a dot to the right of the origin. Instead of directly calculating whether `length(uv)` is smaller than the radius, we shift the pixel's position by subtracting $c$, effectively centering our calculations at c instead of the origin"
 
 ![image](/images/airpods/transform.png)
 
 _Two of the many pixels rendering a dot (disc) of radius `r` centered at `c`_
 
-So effectively we run the same calculation as above to check whether we are inside a unit circle, but we first move.
+So we run the same calculation as above to check whether we are inside a unit circle, but on modified coordinates, and not directly on the pixel's position.
 
 import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
 
 <MovingDot />
 
-This idea is central: define shapes at the origin, then transform coordinates. If you ever need to draw shapes more complexe than dots, see Inigo Quilez’s [distance functions](https://iquilezles.org/articles/distfunctions2d/) reference for a deeper dive.
+This is the name of the game when doing ~~shady~~ _shader_ stuff: find a way to describe a shape mathematically around the origin; to then move it, "shift the canvas" by subtracting the actual center before performing the check. If you ever need to draw shapes more complex than dots (and I hope you do!), see Inigo Quilez’s 2D [distance functions](https://iquilezles.org/articles/distfunctions2d/) which describe many shapes like rounded boxes, triangles, stars, etc.
 
 ## Repeating Patterns for Free with Modulo
 
-Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. In general we want repeating patterns, and in the world of shaders we can actually have any number of repetitions for free.
+Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. For our animations, we can take advantage of the fact that it's [radially symmetrical](https://en.wikipedia.org/wiki/Rotational_symmetry). We'll see that by using the `mod()` (modulo) operator on parameters describing a pattern, we can make the pattern repeat without having to resort to eg loops, and will do so at basically no cost.
 
-For our animations, we can take advantage of the fact that it's [radially symmetrical](https://en.wikipedia.org/wiki/Rotational_symmetry).
-
-In order to simplify things we will work with [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system). As a quick refresher, polar coordinates are a way of representing a point as $(\rho, \theta)$ where $\rho$ is the distance to the origin $[0,0]$ and $\theta$ [explain theta].
+In order to simplify things we will work with [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system). Quick refresher, this coordinate system lets us express the position $(x, y)$ in terms of $rho$ (`rho`) and $theta$ (`theta`), where $rho$ is the distance to the origin and $theta$ the "polar angle".
 
 $$\theta = arctan(y,x), \rho = \sqrt{x^2 + y^2}$$
 
-In GLSL we can use the following primitives:
+In GLSL we can use the following primitives to convert `uv` to polar coordinates:
 
 ```glsl
 float theta = atan(uv.y, uv.x)
 float rho = length(uv)
 ```
 
-The trick is to define a general pattern (a gradient to start simple) in terms of $\theta$, and then lie about $\theta$ and repeat it.
+As mentioned above, the trick is to define a general pattern (a gradient to start simple) in terms of a parameter (we'll use $\theta$), and then by using the modulo operator, we can make the pattern repeat at will.
 
 ![image](/images/airpods/slice.png)
 
@@ -147,11 +149,11 @@ _The slice that is described once and repeated N times_
 
 > [!NOTE]
 >
-> To simplifiy calculations we work with $\tau = 2 \pi$, referred to as `TAU` in the code. See also [The Tau Manifest](https://www.tauday.com/tau-manifesto). Bottom line: one full rotation is one $\tau$.
+> To simplifiy calculations we work with $\tau = 2 \pi$, referred to as `TAU` in the code. There's [lots of good reasons](https://www.tauday.com/tau-manifesto) for using $\tau$ instead of the very famous $\pi$. In particular here having $\tau$ represent a _full rotation_ in radians (around the unit circle) will come in handy.
 
-If we `mod` the value of theta, pixels with $\theta \in [0, \alpha]$ will get the regular gradient. But then, the gradient will repeat for $\theta \in [\alpha, 2\alpha]$.
+Let's say we want to repeat a gradient _radially_ `N` times and have the opacity follow $\theta$. If we `mod` the value of theta, pixels in $0 \leq \theta < \tau$ will get the regular gradient. But as soon as $\theta$ goes beyond $\tau/N$ again, the gradient will repeat, creating $N$ slices with the repeating pattern.
 
-Using this we can repeat the pattern any number of times with constant time -- technicall $O(1)$ w.r.t to the number of symmetries or repeated "slices".
+Using this we can repeat the pattern any number of times with constant time -- technically $O(1)$ w.r.t to the number of symmetries or repeated "slices".
 
 import RadialSymmetries from "./airpods-hearing-test-animation/RadialSymmetries.astro";
 
@@ -161,7 +163,7 @@ This means that, as long as we can describe a pattern in terms of `theta` and `r
 
 ### Radially Repeating Dots
 
-Gradients are pretty, but we're here to draw dots. We use the same trick to make $\theta$ repeat, and we use the checks from earlier to figure out if the pixel lands in a dot.
+Gradients are pretty, but we're here to draw dots. We use the same trick to make $\theta$ repeat, and we can adapt the checks from earlier to figure out if the pixel lands in a dot.
 
 import RadialDots from "./airpods-hearing-test-animation/RadialDots.astro";
 
@@ -171,11 +173,13 @@ One added thing here is `slice_ix`, which is the index of the slice the current 
 
 ![image](/images/airpods/slice-indices.png)
 
-_TODO_
+_Each dot/slice has a different opacity_
+
+Now that we've established how to repeat patterns radially around the center, the next logical step is to build more structure within each slice. After all, the original animation doesn't just have one dot per slice — it has rows of them, extending horizontally. To recreate this, we’ll need to position multiple dots along the direction of each radial slice -- though will only need to describe it once, along the horizontal axis.
 
 ## Repeating Dots Horizontally
 
-Next, we need multiple dots per slice. Let's consider the slice with index `0`, extending along the horizontal axis towards (plus) inifinity. We'll have several dots, each at distance `d` from each other, potentially overlapping:
+Let's consider the slice with index `0`, extending along the horizontal axis towards (plus) infinity. We'll have several dots, each at distance `d` from each other, potentially overlapping:
 
 ![image](/images/airpods/discs.png)
 
@@ -183,23 +187,21 @@ _Dots separated by distance `d`_
 
 We saw earlier that we could leverage the modulo operator to repeat patterns. This `mod` trick can be used for other parameters, for instance `x` if we want linear symmetries instead of radial symmetries. But we run into an issue.
 
-Can you spot it before playing with the animation below?
+Can you spot it?
 
 import OverlappingDots from "./airpods-hearing-test-animation/OverlappingDots.astro";
 
 <OverlappingDots />
 
-The pattern is repeated exactly and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots are smaller than the slices, this is ok.
+You guessed it (or not): the pattern is repeated _exactly_ and the dots do not mix with each other. This also happens with $\theta$ above, but as long as the dots do not cross the boundary between two slices, no one can tell and it'll be our secret.
 
 ![image](/images/airpods/overlap.png)
 
-Let's see how we can resolve this.
+Here unfortunately there is no way to do this in constant time, like with the radial repetitions. While there would be workarounds if we had overlapping opaque discs, there is no workaround for handling transparency. To solve this issue we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
 
 ### Compositing Overlapping Dots
 
-Here unfortunately there is no way to do this in constant time, like with the radial repetitions. While there would be workarounds if we had overlapping opaque discs of different colors, there is no workaround when the opacity is changing. For this we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
-
-If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$.
+If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$. We also run into an issue if we add up the opacities: two dots with an opacity of `.5` each would make for an opacity of `1.` already (fully opaque) and we know that's not how things work "in the real world". Adding a third dot, the opacity would go up to `1.5` or $150%$, whatever that might mean.
 
 To get an idea of how we'll solve this, let's take the real world as an example. Odd, right? Though after all, even though we are modeling a virtual animation, our expectations come from experiences "IRL".
 
@@ -209,9 +211,9 @@ Let's assume we have three sheets of the same material which is slightly opaque,
 
 _Photon going through sheets of material_
 
-Wave-particular duality notwithstanding, what is the probability that the photon will come out the other side? If one sheet of material -- on average -- blocks 80% of the light, let's say that the photon has 20% chance of going through the first sheet; in other words the probability is $0.2$. The probability of the photon going through _both_ the first sheet and the second sheet would then be $0.2 \cdot 0.2 = 0.04$ and finally the probability woould be $0.008$ for going through all three sheets. The probability that the photon will hit any of the three sheets is then $1 - 0.008 = 0.992$, meaning the resulting _opacity_ is 99.2% (for this definition of opacity).
+Wave-particular duality notwithstanding, what is the probability that the photon will manage to go through all three sheets? If one sheet of material -- on average -- blocks 80% of the light, let's say that the photon has 20% chance of going through the first sheet; in other words the probability is $0.2$. The probability of the photon going through _both_ the first sheet and the second sheet would then be $0.2 \cdot 0.2 = 0.04$ and finally the probability would be $0.008$ for going through all three sheets. The probability that the photon will hit any of the three sheets is then $1 - 0.008 = 0.992$, meaning the resulting _opacity_ is 99.2% (for this definition of opacity).
 
-Using the "transparency" (or one minus the opacity) for the sheets allowed us to multiple the individual tranparency values. Let's say in general transparency is $t = 1 - o$ where $o$ is the opacity. Let's say all the different layers have transparency $t_0, t_1, ...$. Following the 3-sheet-photon idea above, we can calculate the total _opacity_ as one minus the product of the transparencies, or:
+Using the "transparency" (or one minus the opacity) for the sheets allowed us to multiply the individual tranparency values. Let's say in general transparency is $t = 1 - o$ where $o$ is the opacity. Let's say all the different layers have transparency $t_0, t_1, ...$. Following the 3-sheet-photon idea above, we can calculate the total _opacity_ as one minus the product of the transparencies, or:
 
 $$o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) \\ = 1 - \prod t_i \\ = 1 - \prod (1 - o_i)$$
 
@@ -221,21 +223,23 @@ import CompositedDots from "./airpods-hearing-test-animation/CompositedDots.astr
 
 <CompositedDots />
 
-Note that this operation is commutative, so it doesn't matter what order we look at the dots -- though this would be different if we were mixing colors as well.
+Note that this operation is [commutative](https://en.wikipedia.org/wiki/Commutative_property), so it doesn't matter what order we look at the dots -- though this would be different if we were mixing colors as well.
 
-[broader range of alpha blending/compositing: https://en.wikipedia.org/wiki/Alpha_compositing]
+> [!NOTE]
+>
+> There’s actually a whole world of alpha blending and compositing techniques out there, and I’m just scratching the surface here. What I’ve described is one way to think about it, but if you want to go deeper (or catch mistakes I'm probably making here), the [Wikipedia article](https://en.wikipedia.org/wiki/Alpha_compositing) on alpha compositing is a great starting point. It covers more formal models and edge cases I'm probably hand-waving past.
+
+One caveat: GLSL in WebGL has limited support for dynamic control flow. For example (very much simplifying here) you can’t loop over an arbitrary number of dots or slices unless the loop bounds are known at compile time -- hence why `nSideDots` is a `const`. This constraint can shape how your compositing logic is structured; here for instance we set the number of dots as a compile-time constant.
 
 ## Final Result & Conclusion
 
-Putting everything together we get the following.
+Alright, so we’ve drawn a dot, made it move, repeated it in slices, stacked those repeated dots with overlapping transparency, and somehow survived all the shader math (I hope? Let me know!). Time to put it all together and see what this looks like -- and let's add a bit of motion.
 
 import SimplifiedHearingTest from "./airpods-hearing-test-animation/SimplifiedHearingTest.astro";
 
 <SimplifiedHearingTest />
 
-[handling clicks (like very first anim) left as exercise to the reader]
-
-[note: glsl has no dynamic control flow -> cannot configure number of dots]
+Handling user interactions like clicks (as in the very first animation) is left as an exercise to the reader (see [here](TODO) for the first animation's source). And while you're at it, why not play with the colors a bit too!?
 
 import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
