@@ -1,0 +1,40 @@
+---
+
+/* Component for embedding bluesky posts. This relies almost
+ * exclusively on reverse engineering... */
+
+export type Props = {
+  uri: string;
+  cid: string;
+};
+const { uri, cid } = Astro.props;
+
+---
+
+<style>
+  :global(div.bluesky-embed) {
+    padding-top: 2em;
+    padding-bottom: 2em;
+  }
+</style>
+
+<blockquote
+  class="bluesky-embed"
+  data-bluesky-uri={uri}
+  data-bluesky-cid={cid}
+  data-bluesky-embed-color-mode="system"
+>
+  <slot />
+</blockquote>
+<script
+  is:inline
+  async
+  src="https://embed.bsky.app/static/embed.js"
+  charset="utf-8"></script>
+<script is:inline>
+  document.addEventListener("astro:page-load", () => {
+    if (window.bluesky && window.bluesky.scan) {
+      window.bluesky.scan();
+    }
+  });
+</script>
