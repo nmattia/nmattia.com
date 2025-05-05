@@ -59,7 +59,7 @@ void main() {
 >
 > The shader programs technically run once for every "fragment" and not for every "pixel". In this article however I'll use [`quad-shader`](https://github.com/nmattia/quad-shader), an experimental WebGL library I'm developing for this blog, which pretty much maps fragments to pixels. We'll also assume the pixel position is passed in as an argument to the program when it runs for said pixel -- this is also specific to `quad-shader`.
 
-Since the shader program runs once for every pixel to determine the pixel's output (opacity here), I find it helpful to try and see the canvas (made of all the pixels) from a pixel's perspective (yeah hang with me for a minute). So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that a dot is displayed as a result? As mentioned above, all only the pixel's position (which we'll denote with `uv` here) is input to the program.
+Since the shader program runs once for every pixel to determine the pixel's output (opacity here), I find it helpful to try and see the canvas (made of all the pixels) from a pixel's perspective (yeah hang with me for a minute). So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that a dot is displayed as a result? As mentioned above, only the pixel's position (which we'll denote with `uv` here) is input to the program.
 
 Let's assume we want to draw a dot of radius `1.`. The most straightforward way is to check if we -- the pixel -- are at most at distance `1.` of the origin.
 
@@ -134,9 +134,9 @@ This is the name of the game when doing ~~shady~~ _shader_ stuff: find a way to 
 
 Now that we can draw one dot and position it wherever we want, let's see how we can draw _multiple_ dots. For our animations, we can take advantage of the fact that it's [radially symmetrical](https://en.wikipedia.org/wiki/Rotational_symmetry). We'll see that by using the `mod()` (modulo) operator on parameters describing a pattern, we can make the pattern repeat without having to resort to eg loops, and will do so at basically no cost.
 
-In order to simplify things we will work with [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system). Quick refresher, this coordinate system lets us express the position $(x, y)$ in terms of $rho$ (`rho`) and $theta$ (`theta`), where $rho$ is the distance to the origin and $theta$ the "polar angle".
+In order to simplify things we will work with [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system). Quick refresher, this coordinate system lets us express the position $(x, y)$ in terms of $\rho$ (`rho`) and $\theta$ (`theta`), where $\rho$ is the distance to the origin and $\theta$ the so-called "polar angle".
 
-$$\theta = arctan(y,x), \rho = \sqrt{x^2 + y^2}$$
+$$\rho = \sqrt{x^2 + y^2}, \theta = arctan(y,x)$$
 
 In GLSL we can use the following primitives to convert `uv` to polar coordinates:
 
@@ -205,7 +205,7 @@ Here unfortunately there is no way to do this in constant time, like with the ra
 
 ### Compositing Overlapping Dots
 
-If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$. We also run into an issue if we add up the opacities: two dots with an opacity of `.5` each would make for an opacity of `1.` already (fully opaque) and we know that's not how things work "in the real world". Adding a third dot, the opacity would go up to `1.5` or $150%$, whatever that might mean.
+If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$. We also run into an issue if we add up the opacities: two dots with an opacity of `.5` each would make for an opacity of `1.` already (fully opaque) and we know that's not how things work "in the real world". Adding a third dot, the opacity would go up to `1.5` or $150\%$, whatever that might mean.
 
 To get an idea of how we'll solve this, let's take the real world as an example. Odd, right? Though after all, even though we are modeling a virtual animation, our expectations come from experiences "IRL".
 
@@ -243,7 +243,7 @@ import SimplifiedHearingTest from "./airpods-hearing-test-animation/SimplifiedHe
 
 <SimplifiedHearingTest />
 
-Handling user interactions like clicks (as in the very first animation) is left as an exercise to the reader (see [here](TODO) for the first animation's source). And while you're at it, why not play with the colors a bit too!?
+Handling user interactions like clicks (as in the very first animation) is left as an exercise to the reader (see [here](https://github.com/nmattia/quad-shader/blob/7d7f05eff631232bee1c9f763db76b4237e82ffb/frag-dots.glsl) for the first animation's source). And while you're at it, why not play with the colors a bit too!?
 
 import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
 
