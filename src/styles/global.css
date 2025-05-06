@@ -244,7 +244,7 @@ img {
 
 :root {
   /* Max width for things like header, actual content, etc */
-  --max-content-width: min(1012px, calc(100% - 2 * var(--max-content-gutter)));
+  --max-content-width: min(60em, calc(100% - 2 * var(--max-content-gutter)));
   /* the spacing on each side when max width is reached (in rem to ensure it is consistent across the page.) */
   --max-content-gutter: 1rem;
 }
@@ -259,9 +259,6 @@ img {
   max-width: var(--max-content-width);
   margin-left: auto;
   margin-right: auto;
-  /* Size the header as 1.8 rem by default, though scale down to ~5% of width
-   * if the width is too small. But never below 1rem. */
-  font-size: max(min(1.8rem, 5vw), 1rem);
 }
 
 .header-divider {
@@ -297,6 +294,10 @@ img {
   margin: auto;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
+
+  /* Size the header as 1.8 rem by default, though scale down to ~5% of width
+   * if the width is too small. But never below 1rem. */
+  font-size: max(min(1.8rem, 5vw), 1rem);
 }
 
 .header .nav .nav-icon {
