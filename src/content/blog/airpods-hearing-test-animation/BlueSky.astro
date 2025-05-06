@@ -1,12 +1,10 @@
 ---
-
+import BlueSkyEmbed from "../../../components/BlueSkyEmbed.astro";
 ---
 
-<blockquote
-  class="bluesky-embed"
-  data-bluesky-uri="at://did:plc:fll26nbvvyfm6ion7tj2sbjc/app.bsky.feed.post/3lmnfavghks2p"
-  data-bluesky-cid="bafyreiarx4shqp7zp4w3rrl4vmrkywagigvhinaw26phx73fkghuyxl6n4"
-  data-bluesky-embed-color-mode="system"
+<BlueSkyEmbed
+  uri="at://did:plc:fll26nbvvyfm6ion7tj2sbjc/app.bsky.feed.post/3lmnfavghks2p"
+  cid="bafyreiarx4shqp7zp4w3rrl4vmrkywagigvhinaw26phx73fkghuyxl6n4"
 >
   <p lang="en">
     Fell in love with iPhone&#x27;s &quot;Hearing Test&quot; animation, just had
@@ -21,8 +19,4 @@
     href="https://bsky.app/profile/did:plc:fll26nbvvyfm6ion7tj2sbjc/post/3lmnfavghks2p?ref_src=embed"
     >12 April 2025 at 22:38</a
   >
-</blockquote><script
-  is:inline
-  async
-  src="https://embed.bsky.app/static/embed.js"
-  charset="utf-8"></script>
+</BlueSkyEmbed>
