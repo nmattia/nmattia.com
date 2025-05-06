@@ -13,7 +13,7 @@ discussion: "https://lobste.rs/s/srwduz/notes_on_building_app_looks_like_ikea"
 
 This is a mini-release for [Skapa](https://skapa.build), an app I made for generating 3D-printable models for IKEA Skadis pegboards. This post goes through some of the UI & UX decisions and gives an overview of the tech used for model generation and rendering (with Three.js).
 
-<!--more-->
+{/* more */}
 
 ![My Skadis board at home](/images/skapa-intro/skapa-wall.jpeg)
 
@@ -114,7 +114,9 @@ Three.js does have pretty nice support for post-processing through its `EffectCo
 My implementation uses two different passes, each implemented as a WebGL shader.
 
 > WebGL shaders are programs that the browser runs on the GPU. They are generally used for graphics [...]. For more information I recommend [https://webglfundamentals.org/](https://webglfundamentals.org/) and the [MDN WebGL tutorial](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial).
-> <br/><br/>
+>
+> <br />
+> <br />
 >
 > _From [How to Set WebGL Shader Colors with CSS and JavaScript](https://nmattia.com/posts/2025-01-29-shader-css-properties/)_.
 
@@ -126,14 +128,9 @@ The second pass goes through every pixel on screen again and checks if said pixe
 
 Here's an animation of the depth & normals (I seem to have misplaced the original video):
 
-<!-- prettier-ignore -->
-<blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:fll26nbvvyfm6ion7tj2sbjc/app.bsky.feed.post/3ljsyvltpvk2e" data-bluesky-cid="bafyreiaegqomzt4uqr7uqkwcu3lnrfhjckgg6bj2eq2d4ojmrya2q6mwly" data-bluesky-embed-color-mode="system"><p lang="en">what goes into edge detection:
-1. depth
-2. normals
-3. depth edges &amp; normal edges
-4. thickening
+import BlueSky from "./skapa-intro/BlueSky.astro";
 
-#3D #3dgraphics #ThreeJS #webgl<br><br><a href="https://bsky.app/profile/did:plc:fll26nbvvyfm6ion7tj2sbjc/post/3ljsyvltpvk2e?ref_src=embed">[image or embed]</a></p>&mdash; Nicolas Mattia (<a href="https://bsky.app/profile/did:plc:fll26nbvvyfm6ion7tj2sbjc?ref_src=embed">@nmattia.bsky.social</a>) <a href="https://bsky.app/profile/did:plc:fll26nbvvyfm6ion7tj2sbjc/post/3ljsyvltpvk2e?ref_src=embed">7 March 2025 at 22:57</a></blockquote><script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
+<BlueSky />
 
 That's it for the tech used; bit of [manifold-3d](https://github.com/elalish/manifold), a dab of [Three.js](https://threejs.org/) and some [shading goodness](https://roystan.net/articles/outline-shader/)!
 
