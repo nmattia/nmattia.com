@@ -1,0 +1,26 @@
+---
+import Shader from "../../../components/Shader.astro";
+import frag from "./hearing-test.glsl?raw";
+---
+
+<Shader
+  fragShader={frag}
+  quadShaderSetup={(qs, utils) => {
+    let t = -1000 * 1000;
+
+    qs.uniform4f("uColor", () =>
+      utils.getComputedStylePropRGBA(qs.canvas, "accent-color"),
+    );
+
+    const fn = (x: number) => {
+      const M = 1;
+      const b = 0.1;
+      return M * (x / b) * Math.exp(1 - x / b);
+    };
+
+    qs.uniform1f("uExtra", () => fn(performance.now() / 1000 - t));
+    qs.canvas.addEventListener("pointerdown", () => {
+      t = performance.now() / 1000;
+    });
+  }}
+/>

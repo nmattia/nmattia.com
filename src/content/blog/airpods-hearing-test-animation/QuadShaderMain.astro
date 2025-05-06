@@ -1,0 +1,151 @@
+---
+import Shader from "../../../components/Shader.astro";
+import { Code } from "astro:components";
+
+export type Props = {
+  main: string;
+  uniforms?: {
+    name: string;
+    min: number;
+    max: number;
+    value?: number;
+    step?: number;
+  }[];
+};
+const { main, uniforms = [] } = Astro.props;
+
+const fragShader = `
+#define TAU 6.28318530718
+
+precision mediump float;
+
+varying vec2 vPosition;
+uniform float uTime;
+uniform float uAspectRatio; // TODO: used?
+uniform vec4 uColor;
+${uniforms.map((uniform) => `uniform float ${uniform.name};`).join("\n")}
+
+float get_opacity(in vec2 uv) {
+        ${main}
+}
+
+void main() {
+        vec3 rgb = uColor.rgb;
+        vec2 uv = vPosition.xy;
+        gl_FragColor = get_opacity(uv) * vec4(rgb, 1.);
+}`;
+---
+
+<style>
+  input {
+    outline-width: 1px;
+    outline-style: solid;
+    border-radius: 0.5em;
+  }
+
+  .slider-wrapper {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 1em;
+    font-family: monospace;
+  }
+
+  .slider-wrapper + .slider-wrapper {
+    padding-top: 2em;
+  }
+
+  .slider-wrapper > label {
+    width: 100%;
+    display: flex;
+    gap: 1em;
+  }
+  .slider-wrapper > label > input {
+    flex-grow: 1;
+  }
+
+  .slider-wrapper > output {
+    min-width: 4em;
+    text-align: right;
+  }
+
+  div.quad-shader-wrapper {
+    margin-top: 5em;
+    margin-bottom: 5em;
+  }
+
+  div.quad-shader-wrapper > :global(* + *) {
+    margin-top: 2em;
+  }
+
+  div.quad-shader-wrapper > :global(canvas) {
+    height: 50vh;
+    width: 100%;
+    display: block;
+  }
+</style>
+
+<!-- container needed to look up the 'input' elements -->
+<div class="quad-shader-wrapper">
+  <Shader
+    fragShader={fragShader}
+    quadShaderSetup={(qs, utils) => {
+      const container = qs.canvas.parentElement as HTMLElement;
+
+      const inputs = container.querySelectorAll("input");
+
+      for (const slider of inputs) {
+        const uniform = slider.dataset.quadShaderUniform;
+        if (!uniform) {
+          throw Error("nope");
+        }
+
+        // one up for label, and one up for div wrapper
+        const output =
+          slider.parentElement?.parentElement?.querySelector("output");
+        if (!output) {
+          throw Error("nope");
+        }
+
+        const setVal = () => {
+          qs.uniform1f(uniform, Number(slider.value));
+          output.innerText = Number(slider.value).toFixed(2);
+        };
+
+        setVal();
+
+        slider.oninput = () => {
+          setVal();
+        };
+      }
+
+      qs.uniform4f("uColor", () =>
+        utils.getComputedStylePropRGBA(qs.canvas, "accent-color"),
+      );
+    }}
+  />
+
+  {
+    uniforms.map((uniform) => (
+      <div class="slider-wrapper">
+        <>
+          <label>
+            {uniform.name}
+            <input
+              data-quad-shader-uniform={uniform.name}
+              type="range"
+              min={uniform.min}
+              max={uniform.max}
+              value={uniform.value ?? (uniform.max - uniform.min) / 2}
+              step={uniform.step ?? 0.01}
+              value="0.5"
+            />
+          </label>
+          <output />
+        </>
+      </div>
+    ))
+  }
+  <!-- NOTE: ensure matches the Astro config -->
+  <Code code={main.trim()} lang="glsl" theme="dark-plus" />
+</div>

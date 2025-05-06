@@ -1,0 +1,24 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  uniforms={[{ name: "uDist", min: 0.0, max: 1.0, value: 0.66 }]}
+  main={`
+float radius = .3;
+
+/* how many dots to the side (right, left) of central dot */
+const int nSideDots = 1;
+
+float product = 1.; /* current product result */
+
+for (int i = -nSideDots; i <= nSideDots; i ++) {
+    float opacity = .5; /* any dot's opacity */
+    vec2 shift = vec2(float(i)*uDist, 0.); /* position over dot */
+    opacity *= 1. - step(radius, length(uv + shift)); /* only consider current dot */
+    product *= (1. - opacity);
+}
+
+return 1. - product;
+`}
+/>

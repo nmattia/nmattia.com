@@ -1,0 +1,36 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  uniforms={[{ name: "uSymmetries", min: 1, max: 8, value: 3, step: 1 }]}
+  main={`
+float radius = .2;
+
+float a = TAU/uSymmetries;
+float a2 = a/2.;
+
+/* switch to polar */
+float theta = atan(uv.y, uv.x); // between -TAU/2 and TAU/2
+float rho = length(uv);
+
+/* shift theta to align the center of slice 0 with the X axis */
+theta += a2;
+
+/* atan() returns a value from [-TAU/2, TAU/2] and for simplificy when calculating
+ * indices below we move it to [0, TAU] which is equivalent */
+theta = mod(theta + TAU, TAU);
+
+/* index the slices with slice 0 around theta == 0*a, slice 1 around theta == 1*a, etc */
+float slice_ix = floor(theta / a);
+theta = mod(theta, a); /* make everything repeat between [0, a] */
+
+theta -= a2; /* compensate for shift above */
+uv = vec2(rho*cos(theta), rho*sin(theta)); /* back to cartesian */
+
+float opacity = 1. - step(radius, length(uv - vec2(.8, 0.))); /* dot shifted to the right */
+opacity *= (1. - .8 * slice_ix / uSymmetries); /* vary opacity depending on the slice */
+
+return opacity;
+`}
+/>

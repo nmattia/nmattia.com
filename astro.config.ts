@@ -17,7 +17,8 @@ export default defineConfig({
   integrations: [sitemap(), mdx()],
   markdown: {
     shikiConfig: {
-      theme: "dark-plus",
+      theme:
+        "dark-plus" /* NOTE: ensure this matches values used in <Code/> components */,
     },
     remarkPlugins: [remarkMath, remarkGfmAdmonitions],
     rehypePlugins: [

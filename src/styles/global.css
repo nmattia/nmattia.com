@@ -387,15 +387,6 @@ img {
   margin-right: auto;
 }
 
-.blog-article > canvas {
-  max-height: 40em;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5em;
-  margin-bottom: 5em;
-}
-
 /* Hack since we don't have 'figcaption's (yet): if the paragraph after an image contains a single element, and
  * that element is an <em>, then make it look like a caption.
  */
@@ -453,6 +444,10 @@ footer a:hover {
 
   .card:hover {
     background-color: var(--col-card-hover);
+  }
+
+  canvas {
+    aspect-ratio: 1; /* looks better on small screens */
   }
 }
 

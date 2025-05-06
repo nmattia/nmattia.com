@@ -1,0 +1,52 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  uniforms={[
+    { name: "uSymmetries", min: 1, max: 8, value: 8, step: 1 },
+    { name: "uDist", min: 0.0, max: 0.2, value: 0.1 },
+  ]}
+  main={`
+float radius = .1;
+
+float a = TAU/uSymmetries;
+float a2 = a/2.;
+
+/* switch to polar */
+float theta = atan(uv.y, uv.x); // between -TAU/2 and TAU/2
+float rho = length(uv);
+
+/* shift theta to align the center of slice 0 with the X axis */
+theta += a2;
+
+/* atan() returns a value from [-TAU/2, TAU/2] and for simplicity when calculating
+ * indices below we move it to [0, TAU] which is equivalent */
+theta = mod(theta + TAU, TAU);
+
+/* index the slices with slice 0 around theta == 0*a, slice 1 around theta == 1*a, etc */
+float slice_ix = floor(theta / a);
+theta = mod(theta, a); /* make everything repeat between [0, a] */
+
+theta -= a2; /* compensate for shift above */
+uv = vec2(rho*cos(theta), rho*sin(theta)); /* back to cartesian */
+uv.x -= .5;
+
+/* how many dots to the side (right, left) of central dot */
+const int nSideDots = 1;
+
+float product = 1.; /* current product result */
+
+float period = 5.; /* period of 2 seconds */
+float dist = uDist + uDist/5. * sin(TAU/period * uTime + slice_ix);
+
+for (int i = -nSideDots; i <= nSideDots; i ++) {
+    float opacity = .5; /* any dot's opacity */
+    vec2 shift = vec2(float(i)*dist, 0.); /* position over dot */
+    opacity *= 1. - step(radius, length(uv + shift)); /* only consider current dot */
+    product *= 1. - opacity;
+}
+
+return 1. - product;
+`}
+/>

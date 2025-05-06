@@ -1,0 +1,13 @@
+---
+import QuadShaderMain from "./QuadShaderMain.astro";
+---
+
+<QuadShaderMain
+  uniforms={[
+    { name: "uRadius", min: 0.1, max: 1.0, value: 0.3 },
+    { name: "uShift", min: -1.0, max: 1.0, value: 0 },
+  ]}
+  main={`
+return 1. - step(uRadius, length(uv - vec2(uShift, 0.)));
+`}
+/>
