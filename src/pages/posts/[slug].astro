@@ -94,15 +94,9 @@ const suggestedEntries = similarEntries.slice(0, 2);
           </>
         ) : undefined
       }
-      if you enjoyed this article and
-      <em>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/nmattia/nmattia.com/issues/new"
-          >report an issue</a
-        >
-      </em>if something doesn't look right!
+      if you enjoyed this article! You can also <a
+        href="https://buttondown.com/nmattia">subscribe</a
+      > to receive updates.
     </p>
 
     <hr />
@@ -110,7 +104,7 @@ const suggestedEntries = similarEntries.slice(0, 2);
     {
       suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
         <>
-          <p>Like {suggestedTopics}? Here's more on the topic:</p>
+          <p>Here's more on the topic of {suggestedTopics}:</p>
           <ul>
             {suggestedEntries.map((e) => (
               <li>
