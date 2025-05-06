@@ -63,11 +63,11 @@ void main() {
 >
 > The shader programs technically run once for every "fragment" and not for every "pixel". In this article however I'll use [`quad-shader`](https://github.com/nmattia/quad-shader) -- a WebGL helper library I'm writing for this blog -- which pretty much maps fragments to pixels. We'll also assume the pixel position is passed in as an argument to the program when it runs for said pixel -- this is also specific to `quad-shader`.
 
-Since the shader program runs once for every pixel to determine the pixel's output (opacity here), I find it helpful to imagine the canvas from the perspective of a single pixel -- hang with me for a second. So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that a dot is displayed as a result? As mentioned above, only the pixel's position (which we'll denote with `uv` here) is input to the program.
+Since the shader program runs once for every pixel to determine the pixel's output (opacity here), I find it helpful to imagine the canvas from the perspective of a single pixel -- hang with me for a second. So if we are a pixel, and we know our position, how do we go about figuring out our opacity so that -- over the whole canvas -- a dot is displayed as a result? As mentioned above, only the pixel's position (which we'll denote with `uv` here) is input to the program.
 
 > [!NOTE]
 >
-> My friend Bas read a preview of this article and pointed me to Conal Elliot's [Functional Images](http://conal.net/papers/functional-images/). In a sense, fragment shaders are a way of describing images functionally, where you give a mathematical expression for what each pixel should be, and let the GPU do the rest!
+> My friend Bas read a preview of this article and pointed me to Conal Elliot's [Functional Images](http://conal.net/papers/functional-images/). In a sense, fragment shaders are a way of describing images functionally, where you give a mathematical expression for the image at any position, and the GPU will evaluate it at every pixel!
 
 Let's assume we want to draw a dot of radius `1.`. The most straightforward way is to check if we -- the pixel -- are at most at distance `1.` of the origin.
 
@@ -136,7 +136,7 @@ import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
 
 <MovingDot />
 
-This is the name of the game when doing ~~shady~~ _shader_ stuff: find a way to describe a shape mathematically around the origin; to then move it, "shift the canvas" by subtracting the actual center before performing the check. If you ever need to draw shapes more complex than dots (and I hope you do!), see Inigo Quilez’s 2D [distance functions](https://iquilezles.org/articles/distfunctions2d/) which describe many more shapes like rounded boxes, triangles, stars, etc.
+This is the name of the game when doing ~~shady~~ _shader_ stuff: find a way to describe a shape mathematically around the origin; then in order to move it we "shift the canvas" by subtracting the actual center before performing the check. If you ever need to draw shapes more complex than dots (and I hope you do!), see Inigo Quilez’s 2D [distance functions](https://iquilezles.org/articles/distfunctions2d/) which describe many more shapes like rounded boxes, triangles, stars, etc.
 
 ## Repeating Patterns for Free with Modulo
 
@@ -187,11 +187,11 @@ One added thing here is `slice_ix`, which is the index of the slice the current 
 
 _Each dot/slice has a different opacity_
 
-Now that we've established how to repeat patterns radially around the center, the next logical step is to build more structure within each slice. After all, the original animation doesn't just have one dot per slice — it has rows of them, extending out. To recreate this, we’ll need to position multiple dots along the direction of each radial slice -- though will only need to describe it once, along the horizontal axis.
+Now that we've established how to repeat patterns radially around the center, the next logical step is to build more structure within each slice. After all, the original animation doesn't just have one dot per slice — it has rows of them, extending out. To recreate this, we’ll need to position multiple dots along the direction of each radial slice -- though we'll only need to describe it once, along the horizontal axis.
 
 ## Repeating Dots Horizontally
 
-Let's consider the slice with index `0`, extending along the horizontal axis towards (plus) infinity. We'll have several dots, each at distance `d` from each other, potentially overlapping:
+Let's consider the slice with index `0`, extending along the horizontal axis towards (plus) infinity. We'll have several dots, each at distance $d$ (`uDist` in the code) from each other, potentially overlapping:
 
 ![image](/images/airpods/discs.png)
 
@@ -209,15 +209,17 @@ You guessed it (or not): the pattern repeats exactly -- and the dots don't blend
 
 ![image](/images/airpods/overflow.png)
 
-Here unfortunately there is no way to do this in constant time, like with the radial repetitions. While there would be workarounds if we had overlapping opaque discs, there is no workaround for handling transparency. To solve this issue we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
+Here unfortunately there is no way to do this in constant time, like with the radial repetitions. While there would be workarounds if we had overlapping opaque discs, there is no workaround for handling transparency -- which is used in the original iOS animation. To solve this issue we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
 
 ### Compositing Overlapping Dots
 
-If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should be _greater_ than the individual opacities, though $0.5 \cdot 0.5 = 0.25 < 0.5$. We also run into an issue if we add up the opacities: two dots with an opacity of `.5` each would make for an opacity of `1.` already (fully opaque) and we know that's not how things work "in the real world". Adding a third dot, the opacity would go up to `1.5` or $150\%$, whatever that might mean.
+If two overlapping dots have opacity `.5` we may be tempted to multiply the individual opacities to get the overlap's opacity, though a quick example shows that this won't work: if the dots have opacity `.5`, the resulting opacity should come out _greater_ than the individual opacities, though if we do the math with the naive technique we get the following: $0.5 \cdot 0.5 = 0.25 < 0.5$.
 
-To get an idea of how we'll solve this, let's take the real world as an example. Odd, right? Though after all, even though we are modeling a virtual animation, our expectations come from experiences "IRL".
+We also run into an issue if we add up the opacities: two dots with an opacity of `.5` each would make for an opacity of `1.` already (fully opaque) and we know that's not how things work "in the real world". Adding a third dot, the opacity would go up to `1.5` or $150\%$ (whatever that might mean) so clearly this technique doesn't work either.
 
-Let's assume we have three sheets of the same material which is slightly opaque, and let's say each sheet lets 20% of the light through. We'll say each sheet is 80% opaque -- this might not be scientifically precise, but it serves as a helpful mental model. Now let's picture a photon (light particle) that has to go through all three sheets of the material.
+To get an idea of how we'll solve this, let's look at the real world -- though we are modeling a virtual animation, our visual expectations do come from experiences "IRL".
+
+Let's assume we have three sheets of the same material which is slightly opaque, and let's say each sheet lets 20% of the light through and blocks the remaining 80% of the light. We'll say each sheet is 80% opaque -- this might not be scientifically precise, but it serves as a helpful mental model. Now let's picture a photon (light particle) that has to go through all three sheets of the material.
 
 ![image](/images/airpods/photon.png)
 
