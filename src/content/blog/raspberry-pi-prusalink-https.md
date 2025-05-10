@@ -299,6 +299,32 @@ sudo ufw allow 443/tcp
 
 And now it should work! Try pointing your browser at `https://mk3s.homelette.xyz` (replace with your domain, and note the `s` in `https`).
 
+### Reloading the nginx configuration
+
+While `certbot` will renew your certificate automatically, `nginx` may continue serving a cached version long past the expiration date. Fortunately for us, `certbot` has a concept of hooks that are run upon renewals.
+
+Create a new hook that will be run _after_ the certificate has been renewed:
+
+```bash
+sudo nano /etc/letsencrypt/renewal-hooks/post/reload-nginx
+```
+
+This is a script that will be executed by `certbot`. We only need a single command to have `nginx` reload the certificate:
+
+```bash
+#!/usr/bin/env bash
+
+systemctl reload nginx
+```
+
+After this, make the script executable:
+
+```bash
+sudo chmod +x /etc/letsencrypt/renewal-hooks/post/reload-nginx
+```
+
+From now on, `nginx` will reload its configuration -- including the certificate -- whenever `certbot` renews the certificate.
+
 ## Redirecting HTTP to HTTPS
 
 When you use a client (like `curl` or your browser) to get a page via `https://`, the client will under the hood try to reach the server on port `443`. When using `http://` (no `s`) the client will try to reach the server on port `80`. At this point your Raspberry Pi _might_ be serving PrusaLink on port `80` as well as on port `443`. Ideally we don't want to allow traffic to PrusaLink through port `80`, so we'll instruct `nginx` to redirect any `http://` traffic (on port `80`) to use `https://` instead.
