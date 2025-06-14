@@ -76,11 +76,12 @@ production-ready products. Consulting and development of Nix, Go, Haskell & C pr
 
 ## Open Source & Side Projects
 
+- [SKAPA](https://skapa.build) -- In-browser generation of 3D printable models for IKEA pegboards
 - [niv](https://github.com/nmattia/niv/) -- Easy dependency management for Nix projects
 - [naersk](https://github.com/nix-community/naersk/) -- Just-add-water Nix packaging for Rust projects
 - [nmattia.com](https://nmattia.com) -- Irregular blogging
 - [onyx](https://github.com/nmattia/onyx/) (work in progress) -- Bi-directional type-checker for the Nix programming language
-- [twrl](https://twrl.dev) (work in progress) -- TypeScript framework for reactive webapps
+- [twrl](https://twrljs.dev) (work in progress) -- TypeScript framework for reactive webapps
 - [DeckDeckGo](https://deckdeckgo.com/) (deprecated) -- Open Source presentation platform
 
 ## Academic & Speaking
