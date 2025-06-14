@@ -18,23 +18,21 @@ layout: ../ResumeLayout.astro
 
 ## Employment
 
-2019 -- present **Senior Software Engineer, DFINITY**
+2019 -- present **DFINITY**
 
-**Full-stack engineering**:
+**Full-stack & Infrastructure Engineering**:
 
-- **Engineering lead** for DFINITY's authentication system, [Internet Identity](https://github.com/dfinity/internet-identity)
-- Coordinated between engineering, product & design for timely feature releases
-- Set up and maintained **CI & release process** for Internet Identity and defined **CI & reproducibility best practices** in the scope of DFINITY's (WebAssembly-based) canister smart contract development
-- Actively contributed to Internet Identity (**Rust & TypeScript**)
+- Contributed to DFINITY's authentication system (**Rust**, **TypeScript**)
+- Coordinated between engineering, product, and design for timely feature delivery
+- Improved developer workflows and tooling as part of the **Internal Developer Experience** team
+- Built a system to catch and debug non-deterministic builds early in CI
+- Optimized caching and workflows to reduce CI time and flakiness
+- Collaborated across teams and with external partners to scale and secure CI infrastructure
+- Built secure, cross-platform build and release pipelines with automated artifact publishing
+- Ported the company's main **Bazel**-driven Rust project to produce release artifacts for **arm64 Linux** and **Apple Silicon**
+- Developed a **Nix-based build tool for Rust** ([naersk](https://github.com/nix-community/naersk))
 
-**Infrastructure/Ops engineering**:
-
-- Developed a new **Nix-based build tool for Rust** ([naersk](https://github.com/nix-community/naersk))
-- Streamlined in-house **developer experience** and maintained **developer environment** and tooling: **Rust builds, static dependency packaging, GitHub Actions setup**, DFINITY SDK packaging
-- Deployment & management of in-house services (logs, code search, RBAC & more) with **Terraform, Docker & NixOS**
-- Set up **Docker-based remote environments** for in-house development
-
-2016 -- 2019 **Software Engineer, Tweag I/O**
+2016 -- 2019 **Tweag I/O**
 
 Led and contributed to projects from when they were moonshots to
 production-ready products. Consulting and development of Nix, Go, Haskell & C projects.
