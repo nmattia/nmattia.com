@@ -13,3 +13,4 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build`   | Build production site to `./dist/`         |
 | `npm run preview` | Preview the build locally                  |
 | `npm run format`  | Run formatter                              |
+| `npm run upgrade` | Upgrade astro                              |
