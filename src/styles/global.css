@@ -90,18 +90,18 @@ strong {
 /* Shadows */
 
 :root {
-  --shadow-elevation-low: 0.6px 0.4px 0.5px
-      hsl(from var(--col-shadow) h s l / 0.86),
+  --shadow-elevation-low:
+    0.6px 0.4px 0.5px hsl(from var(--col-shadow) h s l / 0.86),
     0.8px 0.6px 0.8px -2.5px hsl(from var(--col-shadow) h s l / 0.58),
     2.5px 1.9px 2.4px -5px hsl(from var(--col-shadow) h s l / 0.29);
-  --shadow-elevation-medium: 0.6px 0.4px 0.5px
-      hsl(from var(--col-shadow) h s l / 0.73),
+  --shadow-elevation-medium:
+    0.6px 0.4px 0.5px hsl(from var(--col-shadow) h s l / 0.73),
     0.7px 0.6px 0.7px -1.2px hsl(from var(--col-shadow) h s l / 0.58),
     2px 1.5px 1.9px -2.5px hsl(from var(--col-shadow) h s l / 0.44),
     5.6px 4.2px 5.3px -3.7px hsl(from var(--col-shadow) h s l / 0.29),
     12.4px 9.4px 11.7px -5px hsl(from var(--col-shadow) h s l / 0.15);
-  --shadow-elevation-high: 0.6px 0.4px 0.5px
-      hsl(from var(--col-shadow) h s l / 0.67),
+  --shadow-elevation-high:
+    0.6px 0.4px 0.5px hsl(from var(--col-shadow) h s l / 0.67),
     0.6px 0.5px 0.6px -0.6px hsl(from var(--col-shadow) h s l / 0.61),
     1.3px 1px 1.2px -1.1px hsl(from var(--col-shadow) h s l / 0.54),
     3.1px 2.3px 2.9px -1.7px hsl(from var(--col-shadow) h s l / 0.47),
