@@ -23,7 +23,7 @@ export const sphereShader = await fetch(
   "https://raw.githubusercontent.com/nmattia/webgl-shader-template/081f36822f54632eb939ebac41c10f54df06a600/frag.glsl",
 ).then((resp) => resp.text());
 
-import Sphere from "./shader-css-properties/Sphere.astro";
+import Sphere from "./Sphere.astro";
 
 <Sphere />
 
@@ -37,7 +37,7 @@ Let's go!
 
 To understand the problem, look at the following image:
 
-import Example from "./shader-css-properties/Example.astro";
+import Example from "./Example.astro";
 
 <Example color="static" />
 
