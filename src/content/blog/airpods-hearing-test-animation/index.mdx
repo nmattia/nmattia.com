@@ -13,7 +13,7 @@ This article explores how to reproduce an iPhone animation I really liked, using
 
 {/* more */}
 
-import AirpodsHearingTest from "./airpods-hearing-test-animation/AirpodsHearingTest.astro";
+import AirpodsHearingTest from "./AirpodsHearingTest.astro";
 
 <AirpodsHearingTest />
 
@@ -95,7 +95,7 @@ With `length(uv)` we get the distance of the pixel to the origin and with `1. - 
 
 If we add in a global input parameter `uRadius` _common_ to all pixels (unlike `uv` which is _different_ for each pixel), we can even vary the size of the dot:
 
-import StaticDot from "./airpods-hearing-test-animation/StaticDot.astro";
+import StaticDot from "./StaticDot.astro";
 
 <StaticDot />
 
@@ -132,7 +132,7 @@ _Two of the many pixels rendering a dot (disc) of radius `r` centered at `c`_
 
 So we run the same calculation as above to check whether we are inside a unit circle, but on modified coordinates, and not directly on the pixel's position.
 
-import MovingDot from "./airpods-hearing-test-animation/MovingDot.astro";
+import MovingDot from "./MovingDot.astro";
 
 <MovingDot />
 
@@ -167,7 +167,7 @@ Let's start simple and say we want to repeat a gradient (we'll get to the dots i
 
 Using this we can repeat the pattern any number of times with constant time -- technically $O(1)$ w.r.t to the number of symmetries or repeated "slices".
 
-import RadialSymmetries from "./airpods-hearing-test-animation/RadialSymmetries.astro";
+import RadialSymmetries from "./RadialSymmetries.astro";
 
 <RadialSymmetries />
 
@@ -177,7 +177,7 @@ This means that, as long as we can describe a pattern in terms of `theta` and `r
 
 Gradients are pretty, but we're here to draw dots. We can use the same trick to make $\theta$ repeat, and we can adapt the checks from the first section to figure out if the pixel lands in a dot.
 
-import RadialDots from "./airpods-hearing-test-animation/RadialDots.astro";
+import RadialDots from "./RadialDots.astro";
 
 <RadialDots />
 
@@ -201,7 +201,7 @@ We saw earlier that we could leverage the modulo operator to repeat patterns. Th
 
 Can you spot it?
 
-import OverlappingDots from "./airpods-hearing-test-animation/OverlappingDots.astro";
+import OverlappingDots from "./OverlappingDots.astro";
 
 <OverlappingDots />
 
@@ -233,7 +233,7 @@ $$o = 1 - t = 1 - (t_0 \cdot t_1 \cdot ...) \\ = 1 - \prod t_i \\ = 1 - \prod (1
 
 The implementation would look something like this:
 
-import CompositedDots from "./airpods-hearing-test-animation/CompositedDots.astro";
+import CompositedDots from "./CompositedDots.astro";
 
 <CompositedDots />
 
@@ -249,12 +249,12 @@ One caveat: GLSL in WebGL has limited support for dynamic control flow. For exam
 
 Alright, so we’ve drawn a dot, made it move, repeated it in slices, stacked those repeated dots with overlapping transparency, and somehow survived all the shader math (I hope? Let me know!). Time to put it all together and see what this looks like -- and let's add a bit of motion.
 
-import SimplifiedHearingTest from "./airpods-hearing-test-animation/SimplifiedHearingTest.astro";
+import SimplifiedHearingTest from "./SimplifiedHearingTest.astro";
 
 <SimplifiedHearingTest />
 
 Handling user interactions like clicks (as in the very first animation) is left as an exercise to the reader (see [here](https://github.com/nmattia/quad-shader/blob/7d7f05eff631232bee1c9f763db76b4237e82ffb/frag-dots.glsl) for the first animation's source). And while you're at it, why not play with the colors a bit too!?
 
-import BlueSky from "./airpods-hearing-test-animation/BlueSky.astro";
+import BlueSky from "./BlueSky.astro";
 
 <BlueSky />
