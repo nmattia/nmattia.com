@@ -9,6 +9,7 @@ export async function GET() {
     title: "nmattia's blog",
     site: "https://nmattia.com",
     description: "Infrequent articles about software and more.",
+    stylesheet: "/rss/styles.xsl",
     items: blog.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,

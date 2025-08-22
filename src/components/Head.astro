@@ -62,7 +62,7 @@ if (title !== undefined) {
     rel="alternate"
     type="application/rss+xml"
     title="nmattia RSS feed"
-    href="/rss.xml?type=blog"
+    href={new URL("rss.xml", Astro.site)}
   />
 
   <!-- OG, favicons, etc -->
