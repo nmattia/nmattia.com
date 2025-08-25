@@ -179,14 +179,14 @@ rows, wors, cols, locs :: Traversal' (M44 (Maybe  a)) [a]
 
 The various directions are represented here:
 
-![image](/images/rows-wors-cols-locs.jpg)
+![image](./images/rows-wors-cols-locs.jpg)
 
 ### Setting up our lenses
 
 Let's start with `rows`. Once again, the type `M44` is nothing but a vector of
 vectors, or a `V4` of `V4`s.
 
-![image](/images/v4-v4-m44.jpg)
+![image](./images/v4-v4-m44.jpg)
 
 The vector type `V4` is an instance of
 [Traversable](https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Traversable.html)

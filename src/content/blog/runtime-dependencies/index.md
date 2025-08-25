@@ -90,7 +90,7 @@ of runtime store paths. If it's a match, we keep it. Otherwise, we discard it.
 Let's look at some code. We'll go top-down, starting with the function creating
 the final string.
 
-![image](/images/runtime-deps.png)
+![image](./images/runtime-deps.png)
 
 _The "Function Tree". Today we'll follow the red arrow._
 
@@ -180,7 +180,7 @@ As we walk down the tree of functions, we get to the other big piece of the
 puzzle: laying our hands on the original derivations of all the buildtime
 dependencies.
 
-![image](/images/warning-hack-ahead.png)
+![image](./images/warning-hack-ahead.png)
 
 _My cat is responsible for this drawing as well._
 

@@ -17,7 +17,7 @@ If someone is reading a particular article you wrote, chances are they'll be int
 
 If you've read an article on [nmattia.com](https://nmattia.com), you might have noticed this when you reached the end:
 
-![image](/images/astro-suggestions.png)
+![image](./images/astro-suggestions.png)
 
 _Article suggestions based on the topics "Nix" and "build systems"_
 

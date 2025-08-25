@@ -23,7 +23,7 @@ The goal is to have a `gcc` executable built from source, and we'll take a few d
 
 [GCC](https://gcc.gnu.org) is not just a single compiler, but (similar to [clang](https://clang.llvm.org)) it's a compiler collection -- the _GNU_ Compiler Collection. It consists of e.g. `gcc` the C compiler, but also `g++` for C++ and many more.
 
-![image](/images/gcc_dep_graph.png)
+![image](./images/gcc_dep_graph.png)
 
 _GCC dependencies_
 
@@ -70,7 +70,7 @@ In order to run those two commands successfully (`configure` and `make`), you'll
 
 If you're building on macOS, then run `xcode-select --install`, which will install the "Command-Line Tools" (CLT) from Xcode (but more lightweight). Then you'll have `/usr/bin/cc` and `/usr/bin/make`.
 
-![image](/images/xcode-select-install.jpg)
+![image](./images/xcode-select-install.jpg)
 
 _Install some build tools provided by Apple._
 
@@ -100,7 +100,7 @@ And that's "all" you need to build GCC!
 
 ## The platforms: build, host & target
 
-![image](/images/gnu-platform.png)
+![image](./images/gnu-platform.png)
 
 _The GNU platform_
 
@@ -146,7 +146,7 @@ my-machine$ ./dist/avr-gcc ~/sample-arduino/main.c -o arduino.hex
 
 Finally you can imagine a situation where the build, host and target platforms are all different. You could for instance have a web platform that allows users to compile firmware for keyboards with `avr` chips. In this case you'd first build GCC on e.g. your Linux laptop (so the `build` platform would be Linux), with the intent of running GCC in the browser (the `host` platform would be [WebAssembly](https://webassembly.org)) and the programs produced by that GCC would be running on your keyboard (the `target` would be the AVR platform).
 
-![image](/images/build-host-target.gif)
+![image](./images/build-host-target.gif)
 
 _A compiler built by a computer wizard, used by an app developper, producing an iOS app used by a mere mortal._
 
@@ -262,7 +262,7 @@ We built `gmp`, `mpfr` and `libmpc`, which GCC needs. Let's now build GCC itself
 
 ## Building GCC
 
-![image](/images/gnu-coding.png)
+![image](./images/gnu-coding.png)
 
 Here's one way to build GCC, though there are others:
 
@@ -295,7 +295,7 @@ This is not a short build, so go grab a coffee or a book!
 
 ## Go and build more
 
-![foo](/images/gnu-sunset.png)
+![image](./images/gnu-sunset.png)
 
 This is where our journey ends, for now at least! You should now have a working `gcc` executable in `$gcc/bin/gcc`.
 

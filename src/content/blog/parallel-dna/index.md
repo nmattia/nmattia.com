@@ -39,7 +39,7 @@ call it _The Roadtrip Problem_), and it goes something like this:
 - Cut out a part of the map, and you'll be left with a few cities, linked by roads
 - Grab a pen. Can you trace a **path** that goes through **every city exactly once**, following the roads?
 
-![image](/images/hamilton.jpg)
+![image](./images/hamilton.jpg)
 
 Roadtrip problem. Alright. The idea is this: **the more cities** you have,
 **the longer** it will take you to find out. And unfortunately, if you double
@@ -51,7 +51,7 @@ once**?
 
 This is basically the reason why computers nowadays have more that one core working at a time. It usually goes from two to eight, the latter more often than the former. Still, if a problem takes one year to be solved on a single core, using 8-cores instead would still take a month and a half. Not that cool if you need the results to do something else, huh? Well, that's why super computers exist, hosting 250k+ cores. Your one-year-problem now takes about two minutes.
 
-![image](/images/cities-comarison.jpg)
+![image](./images/cities-comarison.jpg)
 
 Sometimes even that is not sufficient (which is kind of a good thing in regards
 to [cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), for
@@ -105,7 +105,7 @@ tiny). Those strands we call **_d_**. Now we'll go to the kitchen, grab a
 bucket, fill it up with water, and throw our twelve thousand DNA strands in it.
 **Congratulations**, you just built and programmed **your first DNA computer**!
 
-![image](/images/nine-minus-three.jpg)
+![image](./images/nine-minus-three.jpg)
 
 Let's get that straight, right now: **you won't be running Minecraft on it
 anytime soon**. But what exactly happens in the bucket? First of all, both
