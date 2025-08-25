@@ -388,6 +388,21 @@ figcaption {
   margin-right: auto;
 }
 
+/* Same for og_image */
+.blog-article > img {
+  max-height: 60vh; /* don't let images grow too much */
+  max-width: 100%; /* ensure images don't go wider than container */
+
+  /* ensures aspect ratio is respected (should be default) */
+  height: auto;
+  width: auto;
+
+  /* center */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Hack since we don't have 'figcaption's (yet): if the paragraph after an image contains a single element, and
  * that element is an <em>, then make it look like a caption.
  */
