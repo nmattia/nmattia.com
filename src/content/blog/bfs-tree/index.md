@@ -57,7 +57,7 @@ we know that we can safely stop whenever we hit a node with depth:
 
 $d \gt 4 \cdot x$.
 
-![image](/images/topcoder-tree.jpg)
+![image](./images/topcoder-tree.jpg)
 
 Clearly the number of nodes traversed (assuming a BFS) is proportional
 to the exponential of the depth (it is actually $2^d$). But we also know
@@ -117,7 +117,7 @@ completeBinaryTree = go 0 1
 
 This second tree would look like this:
 
-![image](/images/complete-binary-tree.jpg)
+![image](./images/complete-binary-tree.jpg)
 
 Now comes the fun part, the breadth-first search (note that you
 typically don't want to do a depth-first on an infinite tree). A typical
@@ -187,7 +187,7 @@ time. Looks like we have a breadth-first search using a list instead of
 a queue! And added bonus, we got rid of `Queue`'s `O(n)` worst case,
 since we never even `tail`!
 
-![image](/images/queue-moving-window.jpg)
+![image](./images/queue-moving-window.jpg)
 
 In this case, a queue is nothing more than a window, or slice, of a
 list. Every time we enqueue, we expand the window to the right. Every

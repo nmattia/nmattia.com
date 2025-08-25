@@ -65,7 +65,7 @@ GET /users/<user>/notes?query=<prefix>
 
 ### Problem 1: It gets in the way
 
-![image](/images/peanut_butter_cookies_nola.jpg)
+![image](./images/peanut_butter_cookies_nola.jpg)
 
 _And #2 in America._
 
@@ -131,7 +131,7 @@ codebase.
 
 ### Problem 3: The Hunt
 
-![image](/images/mads_the_hunt.jpg)
+![image](./images/mads_the_hunt.jpg)
 
 _Mads "The Hunter" Mikkelsen_
 
@@ -202,7 +202,7 @@ mol> @you sure np
 mkt> @channel coffee break?
 ```
 
-![image](/images/where_does_it_end.jpg)
+![image](./images/where_does_it_end.jpg)
 
 _Time is a flat circle. Where does it end?_
 
@@ -332,7 +332,7 @@ want to merge? Add it to the right of the list. The left-most PR has either
 been merged or failed CI? Remove it from the list, and rebase the new left-most
 PR.
 
-![image](/images/slack-topic-merge-queue.png)
+![image](./images/slack-topic-merge-queue.png)
 
 _Slack Screenshot_
 

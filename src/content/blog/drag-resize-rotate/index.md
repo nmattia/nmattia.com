@@ -39,7 +39,7 @@ on one case: the user drags the bottom-right corner, $p'$. That is, the
 bottom-right of the _rotated_ rectangle. We can easily recover its position:
 that's where the user's cursor is when they start dragging!
 
-![image](/images/drag-resize-rotate-schema.png)
+![image](./images/drag-resize-rotate-schema.png)
 
 Here's the million dollar question: when the user moves $q'$ around, how do we
 make sure that $p'$ (the top-left, rotated corner) stays in place?
@@ -53,7 +53,7 @@ move as well...
 
 ## Enter: The Matrix
 
-![image](/images/janos-pach.jpg)
+![image](./images/janos-pach.jpg)
 
 _János Pach Warned You_
 
@@ -87,7 +87,7 @@ rotate around a point that is not the origin, we just have to pretend that
 point is actually the origin for the duration of the rotation. Basically, move
 that point (and everything else) to the origin, rotate, and then move back.
 
-![image](/images/drag-resize-rotate-schema-2.png)
+![image](./images/drag-resize-rotate-schema-2.png)
 
 That means a rotation around a point $c$ is something like this:
 
@@ -105,7 +105,7 @@ calculate $p$ (which means `top` and `left`) we can simply rotate $p'$ back,
 but this time around the new center of rotation. New? Yes! Because when $q'$
 was dragged, the center of the rectangle moved!
 
-![image](/images/drag-resize-rotate-schema-3.png)
+![image](./images/drag-resize-rotate-schema-3.png)
 
 This new center is simply the point halfway between the new, dragged $q'$ and
 the original, never-to-be-moved top-left corner $p'$. Now the new top-left corner that we should give the browser is:

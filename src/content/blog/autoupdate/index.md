@@ -12,7 +12,7 @@ scheduled builds, [Nix](https://nixos.org/nix) and [niv](https://github.com/nmat
 
 <!--more-->
 
-![image](/images/autoupdate-notifications.jpg)
+![image](./images/autoupdate-notifications.jpg)
 
 _Notifications for automated PRs_
 
@@ -41,7 +41,7 @@ other repository `$repo_name`:
 - ... fork `nmattia/$repo_name`, and create a PR, with GitHub's [hub] tool. All
   checks _after the update_ are handled by `$repo_name`'s CI.
 
-![image](/images/autoupdate-schema.png)
+![image](./images/autoupdate-schema.png)
 
 Here's the plan for the rest of the article.
 
