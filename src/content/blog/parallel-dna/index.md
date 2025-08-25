@@ -1,6 +1,6 @@
 ---
 title: "Parallel Computing with DNA"
-og_image: /images/blueprint.png
+og_image: ./images/blueprint.png
 description: "An introduction to using DNA to compute"
 pubDate: 2015-04-20
 ---

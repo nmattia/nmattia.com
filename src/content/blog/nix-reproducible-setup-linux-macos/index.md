@@ -1,6 +1,6 @@
 ---
 title: "Nix: A Reproducible Setup for Linux and macOS"
-og_image: /images/assembly_robots_laptop.jpg
+og_image: ./images/assembly_robots_laptop.jpg
 pubDate: 2018-03-21
 description: "Introduction to homies, a reproducible development environment"
 tags:

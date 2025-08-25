@@ -1,7 +1,7 @@
 ---
 title: A Fully Functional, Fully Functional Webapp
 description: "This is a link to a talk I gave at WebZurich on how to build a webapp using functional programming"
-og_image: "/images/lambda.jpg"
+og_image: ./images/lambda.jpg
 pubDate: 2017-09-07
 tags:
   - "haskell"

@@ -1,6 +1,6 @@
 ---
 title: Recovering Nix derivation attributes of runtime dependencies
-og_image: /images/schematics_dependencies.jpg
+og_image: ./images/schematics_dependencies.jpg
 description: "This describes how to get a list of runtime dependencies of a Nix package, from within Nix"
 pubDate: 2019-10-08
 tags:

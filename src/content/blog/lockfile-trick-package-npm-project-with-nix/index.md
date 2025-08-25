@@ -1,6 +1,6 @@
 ---
 title: "Lockfile trick: Package an npm project with Nix in 20 lines"
-og_image: /images/package_delivery.jpg
+og_image: ./images/package_delivery.jpg
 description: "This article explains how to package an npm project with Nix by using information from the lockfile directly to download the dependencies."
 pubDate: 2022-12-18
 tags:

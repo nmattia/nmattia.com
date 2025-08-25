@@ -468,6 +468,21 @@ footer a:hover {
   padding: 1em;
 }
 
+/* similar to article images, we fit the dimensions to match the aspect ratio */
+.card-container > img {
+  max-height: 60vh; /* don't let images grow too much */
+  max-width: 100%; /* ensure images don't go wider than container */
+
+  /* ensures aspect ratio is respected (should be default) */
+  height: auto;
+  width: auto;
+
+  /* center */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .card-container .teaser {
   padding: 0 2em;
   margin-top: 2em;

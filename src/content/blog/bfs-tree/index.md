@@ -1,6 +1,6 @@
 ---
 title: Puzzle solving in Haskell
-og_image: /images/bfs_tree_og.jpg
+og_image: ./images/bfs_tree_og.png
 description: "An article that explains how I used Haskell to solve a particular puzzle"
 pubDate: 2016-07-31
 tags:

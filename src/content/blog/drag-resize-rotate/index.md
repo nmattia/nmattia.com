@@ -1,6 +1,6 @@
 ---
 title: "Dragging, Resizing and Rotating HTML elements: Fun with Web Components and Math"
-og_image: /images/drag-resize-controller.png
+og_image: ./images/drag-resize-controller.png
 description: "This explains how to build user-friendly drag/resize/rotate operations in JavaScript and goes through a bit of the math behind it"
 pubDate: 2020-03-03
 tags:

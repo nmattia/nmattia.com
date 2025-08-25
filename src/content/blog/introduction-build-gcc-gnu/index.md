@@ -1,6 +1,6 @@
 ---
 title: "Intro to building GCC and some other GNU projects (focus on macOS & Apple Silicon)"
-og_image: /images/gnu_chip.jpg
+og_image: ./images/gnu_chip.jpg
 description: "An introduction to the GNU build system (./configure & make), pkg-config, the concepts of build, host and target platforms, and building gcc, including on Apple Silicon"
 pubDate: 2023-01-09
 tags:

@@ -2,6 +2,7 @@
 // The articles (from the "blog" collection) rendered
 
 import Default from "../../components/Default.astro";
+import { Image } from "astro:assets";
 
 import type { Tag } from "../../content/config";
 import {
@@ -67,9 +68,10 @@ const suggestedEntries = similarEntries.slice(0, 2);
 
     {
       entry.data.og_image ? (
-        <img
+        <Image
           style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
           src={entry.data.og_image}
+          alt="Blog post social card"
           style="margin: auto; display: block; max-height: 630px;"
         />
       ) : undefined

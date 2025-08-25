@@ -5,12 +5,13 @@ import "the-new-css-reset/css/reset.css";
 import "../styles/global.css";
 
 import { ClientRouter } from "astro:transitions";
+import type { ImageMetadata } from "astro";
 
 export type Props = {
   title?: string;
   ogType: "website" | "article";
   description: string;
-  og_image?: string;
+  og_image?: ImageMetadata;
   path?: string;
 };
 
