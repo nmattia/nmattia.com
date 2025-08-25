@@ -15,7 +15,7 @@ This is a mini-release for [Skapa](https://skapa.build), an app I made for gener
 
 {/* more */}
 
-![My Skadis board at home](/images/skapa-intro/skapa-wall.jpeg)
+![My Skadis board at home](./images/skapa-wall.jpeg)
 
 _My Skadis board at home_
 
@@ -25,7 +25,7 @@ With Skapa you can generate custom boxes for IKEA Skadis. The boxes can be downl
 
 To use it, head over to [skapa.build](https://skapa.build), specify the dimensions (width, height & depth) and click the download button. Open the downloaded file in your slicer of choice (PrusaSlicer team here) and print. Voila!
 
-![User interface of skapa.build](/images/skapa-intro/skapa-ui.jpeg)
+![User interface of skapa.build](./images/skapa-ui.jpeg)
 
 _The user interface of [https://skapa.build](https://skapa.build)_
 
@@ -43,7 +43,7 @@ _Nu kör vi!_ (let's go!)
 
 The base idea (and hopefully most obvious design choice) was to make the app look like an IKEA manual. This was done by sticking to black and white, using big blocky letters with an **Å**, and showing strong, black outlines (more on how this is achieved later).
 
-![IKEA billy manual](/images/skapa-intro/billy.png)
+![IKEA billy manual](./images/billy.png)
 
 _The first page of an IKEA Billy shelf manual_
 
@@ -51,7 +51,7 @@ There are a couple of notable differences between Skapa and an actual IKEA manua
 
 Another goal was to have an interface as minimal as possible, so I just spent a lot of time removing buttons and features from the original implementation.
 
-![Evolution of the UI over time](/images/skapa-intro/skapa-evolution.gif)
+![Evolution of the UI over time](./images/skapa-evolution.gif)
 
 _The evolution of the UI over time_
 
@@ -65,7 +65,7 @@ This surfaced some issues on mobile, where the part can take up most of the real
 
 The workaround here was to only capture events if they landed _on the part itself_, but not if the event was inside the `canvas` but _not_ on the part. So satisfying.
 
-![Skapa touch controls](/images/skapa-intro/skapa-touch.gif)
+![Skapa touch controls](./images/skapa-touch.gif)
 
 _Satisfying camera controls_
 
@@ -105,7 +105,7 @@ The part (with clips) can be exported as a list of vertices, but they still need
 
 Unfortunately Three.js' "outline" material didn't allow me to render the part exactly as I wanted; in particular it gave me no control over the thickness of the outline and did not actually add outlines everywhere.
 
-![Three.js' native outline rendering](/images/skapa-intro/skapa-3js-outline-mat.png)
+![Three.js' native outline rendering](./images/skapa-3js-outline-mat.png)
 
 _The model rendered with Three.js' "outline material", the `EdgesGeometry` with a `LineMaterial`._
 
@@ -122,7 +122,7 @@ My implementation uses two different passes, each implemented as a WebGL shader.
 
 The first pass implements the edge detection algorithm explained in the article linked above. The edge detection is done by casting a ray for every pixel and figuring out where it lands on the model. It then calculates the _depth_ of that point on the model (i.e. the distance between the camera & the point on the model) and the _normal_ of the model at that point (i.e. the face's orientation). The resulting depth and normal are then compared to the depth and normal of other pixels close by. If they differ too much from one pixel to the next, then an outline should be shown there and the pixel is given the color "black". This would create a ~1 pixel outline.
 
-![Edge detection illustrated](/images/skapa-intro/skapa-passes.png)
+![Edge detection illustrated](./images/skapa-passes.png)
 
 The second pass goes through every pixel on screen again and checks if said pixel is within some distance (say, 5 pixels) of a black (outline) pixel from the first pass. If so, this new pixel is also marked as "outline" and rendered black. This effectively thickens the outline, and is implemented as a second pass for performance reasons.
 
@@ -142,7 +142,7 @@ The Skapa project is not complete however and I'll probably keep working on it e
 
 For instance, I'd love to have more models, either for other IKEA products or potentially beyond IKEA. I have a couple of parts in mind but I need to figure out what the app will then look like: Will it be a single page still, with a dropdown to select the part? Or multi page app where each part gets its own page? Should it still be IKEA-themed if it's not just for IKEA?
 
-![My Skadis collection on Printables](/images/skapa-intro/skadis-collection.png)
+![My Skadis collection on Printables](./images/skadis-collection.png)
 
 _Some [models on Printables](https://www.printables.com/@nmattia/collections/2221121) I'd like to port to Skapa_
 
