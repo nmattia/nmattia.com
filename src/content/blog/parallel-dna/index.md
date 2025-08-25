@@ -51,7 +51,7 @@ once**?
 
 This is basically the reason why computers nowadays have more that one core working at a time. It usually goes from two to eight, the latter more often than the former. Still, if a problem takes one year to be solved on a single core, using 8-cores instead would still take a month and a half. Not that cool if you need the results to do something else, huh? Well, that's why super computers exist, hosting 250k+ cores. Your one-year-problem now takes about two minutes.
 
-![image](./images/cities-comarison.jpg)
+![image](./images/cities-comparison.jpg)
 
 Sometimes even that is not sufficient (which is kind of a good thing in regards
 to [cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), for
