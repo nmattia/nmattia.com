@@ -1,6 +1,6 @@
 ---
 title: "NixCon Talk: An Overview of Language Support in Nix"
-image: /images/nixcon2019.png
+image: ./images/nixcon2019.png
 pubDate: 2019-11-12
 tags:
   - "nix"

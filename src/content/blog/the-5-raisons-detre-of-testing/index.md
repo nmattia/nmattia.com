@@ -1,7 +1,7 @@
 ---
 title: The 5 Raisons d'Être of Testing
 description: "A personal take on why testing is necessary"
-og_image: /images/five-reasons-testing.jpg
+og_image: ./images/five-reasons-testing.jpg
 pubDate: 2019-01-22
 ---
 

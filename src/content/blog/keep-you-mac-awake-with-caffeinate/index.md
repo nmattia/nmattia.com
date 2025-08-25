@@ -1,7 +1,7 @@
 ---
 title: "Keep your Mac awake with caffeinate"
 description: "This explains how to keep a Mac from going to sleep using a simple command"
-og_image: /images/coffee-cup-iso.jpg
+og_image: ./images/coffee-cup-iso.jpg
 pubDate: 2022-07-12
 tags:
   - macos

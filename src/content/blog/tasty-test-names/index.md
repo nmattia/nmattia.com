@@ -1,7 +1,7 @@
 ---
 title: Automatically generated directories for individual tasty tests
 description: "This describes a trick for creating directories based on test names when using the Tasty Haskell testing library"
-og_image: "/images/cube-directory.jpg"
+og_image: ./images/cube-directory.jpg
 pubDate: 2018-04-30
 tags:
   - "haskell"

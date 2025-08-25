@@ -1,6 +1,6 @@
 ---
 title: WebGL Shader Template
-image: "/images/webgl-shader-template.png"
+image: ./images/webgl-shader-template.png
 pubDate: 2024-12-07
 tags:
   - "js"

@@ -1,7 +1,7 @@
 ---
 title: Easy Peasy Nix Versions
 description: "Describes a simple way to update Nix dependencies and shows a simple Bash script implementing it"
-og_image: "/images/nix-versions.jpg"
+og_image: ./images/nix-versions.jpg
 pubDate: 2019-01-15
 tags:
   - "nix"
