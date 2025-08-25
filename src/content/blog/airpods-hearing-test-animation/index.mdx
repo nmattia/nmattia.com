@@ -31,7 +31,7 @@ If you count the individual dots you should land at 3328. That's a lot of dots. 
 
 We'll start with fewer dots to see what's happening.
 
-![image](/images/airpods/simplified.png)
+![image](./images/simplified.png)
 
 _Simplified representation of the Hearing Test animation dots_
 
@@ -71,7 +71,7 @@ Since the shader program runs once for every pixel to determine the pixel's outp
 
 Let's assume we want to draw a dot of radius `1.`. The most straightforward way is to check if we -- the pixel -- are at most at distance `1.` of the origin.
 
-![image](/images/airpods/single-dot.png)
+![image](./images/single-dot.png)
 
 _Only pixels within the unit circle will be opaque_
 
@@ -126,7 +126,7 @@ Drawing a dot with a given radius was easy enough, let's now move the dot!
 
 By comparing the length of the position vector (distance from origin to the pixel) to the radius, we were able to draw a dot centered at the origin. What if we wanted to draw a dot _not_ at the origin, but centered at some other position $c$? Let's imagine we want to draw a dot to the right of the origin. Instead of directly calculating whether `length(uv)` is smaller than the radius, we shift the pixel's position by subtracting $c$, effectively centering our calculations at c instead of the origin:
 
-![image](/images/airpods/transform.png)
+![image](./images/transform.png)
 
 _Two of the many pixels rendering a dot (disc) of radius `r` centered at `c`_
 
@@ -155,7 +155,7 @@ float rho = length(uv)
 
 As mentioned above, the trick is to define a general pattern in terms of a parameter (we'll use $\theta$), and then by using the modulo operator, we can make the pattern repeat at will.
 
-![image](/images/airpods/slice.png)
+![image](./images/slice.png)
 
 _The slice that is described once and repeated N times_
 
@@ -183,7 +183,7 @@ import RadialDots from "./RadialDots.astro";
 
 One added thing here is `slice_ix`, which is the index of the slice the current pixel is in. This is useful if you want to vary a parameter based on _which_ slice you're in (if you just used `theta` instead of `slice_ix` the value would vary within the same slice, try it out in the [CodePen](https://codepen.io/nmattia/pen/GggxdBM)). This is used in this snippet to give each dot a different opacity.
 
-![image](/images/airpods/slice-indices.png)
+![image](./images/slice-indices.png)
 
 _Each dot/slice has a different opacity_
 
@@ -193,7 +193,7 @@ Now that we've established how to repeat patterns radially around the center, th
 
 Let's consider the slice with index `0`, extending along the horizontal axis towards (plus) infinity. We'll have several dots, each at distance $d$ (`uDist` in the code) from each other, potentially overlapping:
 
-![image](/images/airpods/discs.png)
+![image](./images/discs.png)
 
 _Dots separated by distance `d`_
 
@@ -207,7 +207,7 @@ import OverlappingDots from "./OverlappingDots.astro";
 
 You guessed it (or not): the pattern repeats exactly -- and the dots don't blend together; moreover the overflows are hidden. The same limitation applies to $\theta$, but as long as dots don't cross slice boundaries, it's imperceptible -- our little secret.
 
-![image](/images/airpods/overflow.png)
+![image](./images/overflow.png)
 
 Here unfortunately there is no way to do this in constant time, like with the radial repetitions. While there would be workarounds if we had overlapping opaque discs, there is no workaround for handling transparency -- which is used in the original iOS animation. To solve this issue we need to calculate the opacity at every point, taking all other (potentially overlapping) discs into account.
 
@@ -221,7 +221,7 @@ To get an idea of how we'll solve this, let's look at the real world -- though w
 
 Let's assume we have three sheets of the same material which is slightly opaque, and let's say each sheet lets 20% of the light through and blocks the remaining 80% of the light. We'll say each sheet is 80% opaque -- this might not be scientifically precise, but it serves as a helpful mental model. Now let's picture a photon (light particle) that has to go through all three sheets of the material.
 
-![image](/images/airpods/photon.png)
+![image](./images/photon.png)
 
 _Photon going through sheets of material_
 
