@@ -1,0 +1,109 @@
+---
+title: "build.log#1 - Printing labels via SSH with Raspberry Pi Zero and Nix"
+description: "Sending jobs to a label printer via SSH with Raspberry Pi Zero & Nix"
+og_image: ./images/rpi-brother.png
+pubDate: 2025-08-27
+tags:
+  - ops
+---
+
+
+I acquired a second hand label printer. I did not want to install driver. So I set up a Raspberry Pi Zero and used brother-ql.
+
+<!--more-->
+
+![image](./images/overview.jpg)
+
+First I checked if my label printer — QL-700 — natively supports wireless connectivity. No luck.
+
+So I then tried sending a job with the printer wired to my laptop. I used a USB-A (normal, "old" USB) to USB-B (printer USB thingy) cable (technically I also used a USB-A to USB-C adapter). I'm bringing this up because this will be relevant for the Raspberry Pi Zero setup.
+
+![image](./images/usb-a-b-brother.png)
+
+
+I do not like vendors that force you to install closed-source drivers in order to use your appliances. In general, if I can avoid installing anything, it's even better. As this particular label printer does not speak "standard" printer protocol, I first looked for a WebUSB tool — i.e. a website that uses e.g. Chrome's USB support to talk to USB devices directly. I found [brotherql-webusb](https://github.com/tylercrumpton/brotherql-webusb), which looked promising at first, but after several tries I only managed to print half a picture.
+
+Having spent a good half hour on this already, and having never hacked on WebUSB (or Brother's [raster binary protocol](https://download.brother.com/welcome/docp100278/cv_ql800_eng_raster_101.pdf)) it seemed wise to look for another ready made solution instead of trying to fix `brotherql-webusb`).
+
+I then came across [brother_ql](https://github.com/pklaus/brother_ql), a Python project that's both a library and a CLI tool for working with brother QL machines (mine being `QL-700`). Assuming things work, we should be able to print an image (by path) using the following command:
+
+```bash
+$ brother_ql -m QL-700 -p usb://0x04f9:0x2042 print ./out.jpg --label 62
+```
+
+Here `-m` specifies the model (`QL-700` in my case), the USB device as `usb://<vendor ID>:<product ID>` (look at the output of `lsusb` on Linux and `system_profiler SPUSBDataType` on macOS). Then we issue the command (`print`), specify the path to an image (`./out.jpg`) and specify the label type loaded in the machine (`--label 62` for 62mm wide paper rolls).
+
+Of course things don't usually work out of the box. I tried `pip install`ing the library but the `brother_ql` command kept throwing exceptions. The brother-ql project looks abandoned and the code is not compatible with newer versions of its dependencies.
+
+Finding the right set of versions that will work together can take a long, long time, so I used Nix to go back in time. Nix is a great time machine. I picked a nixpkgs commit from around the time of the last commit to brother-ql and was able to print an image:
+
+```bash
+nix run nixpkgs/97eb7ee0da337d385ab015a23e15022c865be75c#python311Packages.brother-ql -- -m QL-700 -p usb://0x04f9:0x2042 print ./out.jpg --label 62
+```
+
+The next step was to set up the RPi Zero. I flashed the default Raspberry Pi OS (selecting RPi Zero 2W in the device list in Raspberry Pi Installer). I also specified the hostname to be `brother` and added my SSH pubkey & my WiFi credentials
+
+Once the card was flashed, I could boot the RPi Zero. I wasn't sure if Nix was supported and if nixpkgs had good support for arm64-linux. I tried:
+
+```bash
+ssh pi@<device>.local
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+```
+
+After a bit, things seemed to work. So I `scp`ed an image to the pi and ran the command again:
+
+```bash
+nix run nixpkgs/97eb7ee0da337d385ab015a23e15022c865be75c#python311Packages.brother-ql -- -m QL-700 -p usb://0x04f9:0x2042 print ./out.jpg --label 62
+```
+
+This took eons and eventually I was greeted with the following error:
+
+```
+ValueError: Device not found
+```
+
+This was a very good sign. This is the same error I would get on my laptop if I forgot to plug in the device. At this point this means that Nix works, and I'm able to use the same nixpkgs commit that has a working `brother-ql`.
+
+The next step was to find the right cable.
+
+The Raspberry Pi Zero has no USB-A ports but has 2 microUSB ports. On of them is for power. The second port can be used as "host" USB port. This is unconventional because microUSB was mostly made to be put on _devices_ (AFAIU), i.e. not as the host devices.
+
+You'd see microUSB on a phone meant to be connected as a "device" (or _slave_ but that's a bit outdated) to a "host" device like a computer. If you've ever heard of "OTG" or "On-The-Go cables", that's what this refers to: a way for microUSB devices to work as USB hosts.
+
+![image](./images/usb-a-b-micro.png)
+
+So a microUSB connector has an extra pin, and depending on what it's wired to, the connector (well, the device it's soldered to) can advertise itself either as USB "host" or "device". In our case, we don't have to worry about this. The Raspberry Pi Zero is already (hard?) wired as microUSB "host" (for the curious: by shorting this extra pin called ID to ground).
+
+On the other hand, USB-B is just a regular USB-A but with a different shape. I ended up cutting one microUSB-to-something cable, one USB-A-to-USB-B cable and spliced the microUSB and USB-B sides together: Red to Red, Black to Black, Green to Green and White to White. With this Franken-cable you can connect Raspberry Pi Zero to any printer.
+
+![image](./images/frankenstein-cable.jpg)
+
+With this new cable I re-ran the test `brother_ql` command and... it worked! To clean up a bit, I installed brother-ql globally and used image magick to generate labels dynamically:
+
+
+```bash
+# install both imagemagick and brother-ql
+$ nix profile add nixpkgs/97eb7ee0da337d385ab015a23e15022c865be75c#{imagemagick,python311Packages.brother-ql}
+$ brother_ql --help
+
+Usage: brother_ql [OPTIONS] COMMAND [ARGS]...
+
+  Command line interface for the brother_ql Python package.
+  ...
+$ magick \
+        -background none -fill black -pointsize 300 \
+        label:"hello world" \
+        -rotate 90 -resize "306x991>" -gravity center -background white \
+        -extent 306x991 -units PixelsPerInch -density 300 png:- \
+        | brother_ql -m QL-700 -p usb://0x04f9:0x2042 print - --label 29x90
+< Job is sent to printer >
+```
+
+The last command above creates an image from text using `magick` from ImageMagick and pipes the resulting image (as a png) to stdout. This is fed fed into `brother_ql`.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/42Vdf88h7vc?si=v2Qr1PqVM-84AZKc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+At this point I thought it would be nice to serve a little page with [Excalidraw](https://excalidraw.com/) and hook into it so that images can be saved (uploaded to `/api`) and sent to the printer. It would also be nice to have a 3D printed enclosure for the Raspberry Pi and to have a single cable powering both the printer and the Pi. There might be a 5V source inside the printer already.
+
+But at this point I had already sunk a couple hours into this and still didn't have a use-case for a label printer so I stopped there.
+
