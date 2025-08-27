@@ -388,6 +388,14 @@ figcaption {
   margin-right: auto;
 }
 
+/* Somewhat sensible iframe placement (for YouTube embeds) */
+.blog-article iframe {
+  max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Same for og_image */
 .blog-article > img {
   max-height: 60vh; /* don't let images grow too much */
