@@ -6,6 +6,7 @@ pubDate: 2025-02-17
 tags:
   - "3dp"
   - "ops"
+  - "rpi"
 discussion: "https://www.reddit.com/r/prusa3d/comments/1irfyi7/notes_on_how_to_secure_prusalink_with_https/"
 ---
 
