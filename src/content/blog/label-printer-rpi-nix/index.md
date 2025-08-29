@@ -7,6 +7,7 @@ tags:
   - ops
   - nix
   - rpi
+discussion: https://lobste.rs/s/vb9bex/printing_labels_via_ssh_with_raspberry_pi
 ---
 
 I acquired a second-hand label printer. I did not want to install any proprietary drivers. So I set up a Raspberry Pi Zero with WiFi and installed ImageMagick and Python with Nix to print labels remotely.
