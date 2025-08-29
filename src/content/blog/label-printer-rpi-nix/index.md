@@ -43,6 +43,10 @@ nix run nixpkgs/97eb7ee0da337d385ab015a23e15022c865be75c#python311Packages.broth
 
 Lo and behold, it worked! The printer spit out a label.
 
+> [!NOTE]
+>
+> BlueSky user Peter Rice [pointed out](https://bsky.app/profile/pvsr.dev/post/3lxjawqge3c2p) that the `brother_ql` package in nixpkgs is [actually a fork](https://github.com/NixOS/nixpkgs/blob/97eb7ee0da337d385ab015a23e15022c865be75c/pkgs/development/python-modules/brother-ql/default.nix#L21) of `brother_ql` — which includes some fixes!
+
 The next step was to set up the RPi Zero. I flashed the default Raspberry Pi OS (selecting RPi Zero 2W in the device list in Raspberry Pi Installer). I also specified the hostname to be `brother` and added my SSH pubkey & my WiFi credentials
 
 Once the card was flashed, I could boot the RPi Zero. I wasn't sure if Nix was supported and if nixpkgs had good support for arm64-linux. I tried:
