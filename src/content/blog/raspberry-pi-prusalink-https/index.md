@@ -50,6 +50,7 @@ This is not particularly safe because any device on the network can reply and pr
 If you want to log in via SSH, the easiest way is to include your **public** (`.pub`) SSH key when flashing the Raspberry Pi (your **private** SSH key, the one without a `.pub` extension, should never leave your computer). The public key can be added to the Raspberry Pi from the OS configurator. If you use GitHub, you may already have an SSH key. Check at: `https://github.com/<username>.keys`.
 
 ![image](./images/os-customisation-ssh.png)
+
 Note that anyone with the associated **private** key will have full access to your Raspberry Pi. Keep it private on your (non-Raspberry Pi) computer.
 
 ## Logging into the Raspberry Pi
