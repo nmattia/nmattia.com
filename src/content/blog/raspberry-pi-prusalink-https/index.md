@@ -201,7 +201,8 @@ Once Let's Encrypt has verified that you own the domain via the challenge, `cert
 Here we'll simply follow the (very nice) [docs](https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal&tab=wildcard) for `certbot`. First, let's install the `certbot` executable:
 
 ```bash
-sudo snap install certbot
+sudo apt install snapd # if not installed already
+sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 ```
 
@@ -254,7 +255,7 @@ You should see something like this:
 You only need to run the `certbot` command once; from now on `certbot` will take care of generating and renewing certificates. Your certificates will be ready in a minute or so, and in the next section we'll figure out how to use them:
 
 ```bash
-ls /etc/letsencrypt/live/mk3s.homelette.xyz/*
+sudo ls /etc/letsencrypt/live/mk3s.homelette.xyz/*
 ... certificate stuff
 ```
 
@@ -289,6 +290,7 @@ server {
 Now we can tell `nginx` to use that config:
 
 ```bash
+sudo rm /etc/nginx/sites-enabled/default # remove existing symlink if present
 sudo ln -s /etc/nginx/sites-available/mk3s.homelette.xyz /etc/nginx/sites-enabled/default
 sudo systemctl reload nginx # notify nginx of the config change
 ```
@@ -331,9 +333,10 @@ From now on, `nginx` will reload its configuration -- including the certificate 
 
 When you use a client (like `curl` or your browser) to get a page via `https://`, the client will under the hood try to reach the server on port `443`. When using `http://` (no `s`) the client will try to reach the server on port `80`. At this point your Raspberry Pi _might_ be serving PrusaLink on port `80` as well as on port `443`. Ideally we don't want to allow traffic to PrusaLink through port `80`, so we'll instruct `nginx` to redirect any `http://` traffic (on port `80`) to use `https://` instead.
 
-Luckily it doesn't take much to do so. Add a new `server` block in the `nginx` config (in my case it's `/etc/nginx/sites-available/mk3s.homelette.xyz`):
+Luckily it doesn't take much to do so. Add a new `server` block in the `nginx` config (add this above the `server { }` block we wrote earlier):
 
 ```nginx
+# /etc/nginx/sites-available/mk3s.homelette.xyz, replace with your own domain name
 server {
   listen 80;
   server_name mk3s.homelette.xyz;
@@ -342,6 +345,7 @@ server {
   return 301 https://$host$request_uri; # [sh! highlight]
 }
 
+# server definition from earlier
 server { ... }
 ```
 
