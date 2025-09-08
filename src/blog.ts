@@ -69,7 +69,7 @@ export const blogEntryName = (blogPostEntry: CollectionEntry<"blog">) => {
 
 // The URL/path for an entry, i.e. basically /posts/<name>
 export const blogEntryPath = (blogPostEntry: CollectionEntry<"blog">) => {
-  return `/posts/${blogEntryName(blogPostEntry)}`;
+  return `/posts/${blogEntryName(blogPostEntry)}/`;
 };
 
 // A (unique) transition name to be used for the post's image
