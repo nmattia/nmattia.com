@@ -397,10 +397,8 @@ figcaption {
 }
 
 /* Same for og_image */
-.blog-article > img {
-  max-height: 60vh; /* don't let images grow too much */
-  max-width: 100%; /* ensure images don't go wider than container */
-
+/* this is a div wrapping an Astro image */
+.blog-article-header-image > img {
   /* ensures aspect ratio is respected (should be default) */
   height: auto;
   width: auto;
@@ -492,10 +490,8 @@ footer a:hover {
 }
 
 /* similar to article images, we fit the dimensions to match the aspect ratio */
-.card-container > img {
-  max-height: 60vh; /* don't let images grow too much */
-  max-width: 100%; /* ensure images don't go wider than container */
-
+/* this is a div wrapping an Astro image */
+.card-container-article-image > img {
   /* ensures aspect ratio is respected (should be default) */
   height: auto;
   width: auto;
