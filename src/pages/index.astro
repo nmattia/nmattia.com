@@ -78,16 +78,16 @@ const description =
           >
             <div class="card">
               <div class="card-container">
-                <Image
+                <div
+                  class="card-container-article-image"
                   style={
                     entry.transitionName
                       ? `view-transition-name: ${entry.transitionName};`
                       : undefined
                   }
-                  alt="Blog post social card"
-                  src={entry.image}
-                  style="margin: auto; display: block; max-height: 630px;"
-                />
+                >
+                  <Image alt="Blog post social card" src={entry.image} />
+                </div>
                 <h3 class="card-title">{entry.title}</h3>
                 <div class="teaser">
                   <p set:html={entry.teaser} />

@@ -68,12 +68,12 @@ const suggestedEntries = similarEntries.slice(0, 2);
 
     {
       entry.data.og_image ? (
-        <Image
+        <div
+          class="blog-article-header-image"
           style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
-          src={entry.data.og_image}
-          alt="Blog post social card"
-          style="margin: auto; display: block; max-height: 630px;"
-        />
+        >
+          <Image src={entry.data.og_image} alt="Blog post social card" />
+        </div>
       ) : undefined
     }
     <Content />
