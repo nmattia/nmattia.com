@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
-    "astro": "^5.14.4",
+    "astro": "^5.15.6",
     "quad-shader": "^0.0.6",
     "the-new-css-reset": "1.11.3"
   },
