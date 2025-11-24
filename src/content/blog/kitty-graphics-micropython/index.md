@@ -1,16 +1,19 @@
 ---
-title: "Terminal Graphics Protocol for fast iterations in embedded code"
+title: "Terminal Graphics Protocol for fast embedded development"
 description: "Todo, todo!"
 og_image: ./images/termbuf-oled-fade.png
 pubDate: 2025-12-12
+tags:
+  - micropython
+  - embedded
 # TODO: tags: micropython, embedded, more?
 ---
 
-From a software mindset, embedded graphics are slow going: hunt down a microcontroller and display, wire them up, and for every small change flash the board and wait for it to reboot. But modern terminals can render images, so we can now skip the hardware shuffle and iterate right in the terminal!
+From a software perspective, embedded graphics are slow going: hunt down a microcontroller and display, wire them up, and for every small change flash the board and wait for it to reboot. But modern terminals can render images, so we can now skip the hardware shuffle and iterate right in the terminal!
 
 <!--more-->
 
-The Terminal Graphics Protocol works as follows: a program that needs to display an image in the terminal writes the image data to stdout, surrounded by escape codes used as delimiters. Here's an example program written in Bash that displays a 32x16 rectangle:
+Modern terminals support the "Terminal Graphics Protocol", which works as follows: a program that needs to display an image writes the image data to stdout, surrounded by escape codes used as delimiters. Here's an example program written in Bash that displays a 32x16 rectangle:
 
 ```bash
 #!/usr/bin/env bash
@@ -44,9 +47,9 @@ def draw_saturn(fbuf, width, height):
     fbuf.ellipse(width//2, height//2, r, r, 1)
 ```
 
-This code assumes `fbuf` is a `FrameBuffer` from MicroPython’s `framebuf` module which presents an abstraction that many display drivers build on: a memory buffer for storing pixel data, plus a few drawing primitives like `line`, `rect`, and `ellipse`. Your code draws into this buffer, and the driver reads the data and decides how to render it — in general to I2C hardware.
+This code assumes `fbuf` is a `FrameBuffer` from MicroPython’s [`framebuf`](https://docs.micropython.org/en/latest/library/framebuf.html) module which presents an abstraction that many display drivers build on: a memory buffer for storing pixel data, plus a few drawing primitives like `line`, `rect`, and `ellipse`. Your code draws into this buffer, and the driver reads the data and decides how to render it — like I2C or SPI hardware.
 
-But why leave the terminal! We can use the [termbuf](https://github.com/nmattia/termbuf) driver that reads the buffer and prints it out to stdout following the Terminal Graphics Protocol:
+But why leave the terminal! We can use the [`termbuf`](https://github.com/nmattia/termbuf) driver that reads the buffer and prints it out to stdout following the Terminal Graphics Protocol:
 
 ```python
 from my_drawings import draw_saturn
@@ -64,6 +67,6 @@ By defining the drawing code like this we can use the same function for both tes
 
 _Flat representation of Saturn_
 
-In my experience, this leads to huge speed improvements. First, you completely avoid the need to go fish out for a microcontroller and display, wiring, etc. And when you start coding, there is no flashing required, meaning you can stay in the flow and see your changes appear in real time!
+In my experience, this leads to huge speed improvements. First, you completely avoid the need to go fish out for a microcontroller and display, wiring, etc. And when you start coding, there is no flashing required, meaning you can stay in the flow and see your changes appear in real time.
 
-This is not limited to MicroPython but to any programming language that also compiles for your host platform, or any interpreted scripting language that also has an interpreter for your host (like MicroPython's Unix port).
+This is not limited to MicroPython, so if your development framework compiles or runs on your host platform, give the Terminal Graphics Protocol a try!

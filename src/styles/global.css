@@ -77,6 +77,7 @@ html {
   .header,
   .header-divider,
   .bottom-divider,
+  .blog-publish-date,
   footer,
   .nudge-feedback {
     display: none !important;

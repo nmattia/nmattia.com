@@ -19,6 +19,8 @@ export const topics = {
   rpi: "Raspberry Pi",
   luks: "LUKS",
   linux: "Linux",
+  micropython: "MicroPython",
+  embedded: "embedded",
 } as const;
 
 // Zod schema/inference machinery
