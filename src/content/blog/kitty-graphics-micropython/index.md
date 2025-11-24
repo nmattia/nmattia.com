@@ -3,11 +3,10 @@ title: "Terminal Graphics Protocol for fast iterations in embedded code"
 description: "Todo, todo!"
 og_image: ./images/termbuf-oled-fade.png
 pubDate: 2025-12-12
-draft: true
 # TODO: tags: micropython, embedded, more?
 ---
 
-Modern terminal emulators support displaying images directly in the terminal. Here we'll see how it can help iterate on embedded graphics code quickly from the terminal without the need for flashing hardware, leading to super fast feedback loops.
+From a software mindset, embedded graphics are slow going: hunt down a microcontroller and display, wire them up, and for every small change flash the board and wait for it to reboot. But modern terminals can render images, so we can now skip the hardware shuffle and iterate right in the terminal!
 
 <!--more-->
 
