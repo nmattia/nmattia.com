@@ -23,15 +23,15 @@ w=32; h=16 # image dimensions
 printf "\e_G" # start delimiter
 
 # metadata:
-#   [a]ction = [T]ransmit and display
-#   [f]ormat = 24-bit RGB bitmap for simplicity
+#   [a]ction: [T]ransmit and display
+#   [f]ormat: 24-bit RGB bitmap
 printf "a=T,f=24,s=$w,v=$h;"
 
 # bitmap data:
 for pixel in $(seq 1 $((w * h))); do
     printf "\x00\xff\xff" # R=0, G=255, B=255
 done | base64 -w0
-#      ^ the protocol requires base64 encoded data
+#      ^ base64 required by protocol
 
 printf "\e\\" # end delimiter
 ```
