@@ -12,6 +12,11 @@
   --col-7: hsl(60deg, 60%, 85%);
   --col-8: hsl(227, 28.2%, 25.7%);
   --col-9: f9f9f9;
+
+  /* Max width for things like header, actual content, etc */
+  --max-content-width: min(60em, calc(100% - 2 * var(--max-content-gutter)));
+  /* the spacing on each side when max width is reached (in rem to ensure it is consistent across the page.) */
+  --max-content-gutter: 1rem;
 }
 
 html {
@@ -41,7 +46,6 @@ html {
    * with good contrast */
   img {
     background-color: var(--col-fg);
-    border-radius: 5px;
   }
 }
 
@@ -51,7 +55,6 @@ body {
   background-color: var(--col-bg);
   color: var(--col-fg);
   counter-reset: sidenote-counter;
-  line-height: 1;
 
   /* used as an accent color in quad shaders */
   accent-color: var(--col-5);
@@ -126,20 +129,20 @@ h1 {
   font-weight: 600;
   font-size: 2.2rem;
   line-height: 1.4;
-  margin-bottom: 1.5rem;
-  margin-top: 4rem;
 }
 
 h2 {
   font-size: 1.8rem;
-  margin-bottom: 1.4rem;
-  margin-top: 2.1rem;
   line-height: 1.4;
 }
 
 h3 {
   font-size: 1.7rem;
   line-height: 1.4;
+}
+
+.blog-article {
+  padding-top: 1.6em;
 }
 
 .blog-article > hr {
@@ -162,7 +165,6 @@ p,
 ol,
 ul {
   font-size: 1.2rem;
-  line-height: 1.8rem;
 }
 
 blockquote {
@@ -195,6 +197,7 @@ blockquote footer {
 /* Special blockquotes marked as admonitions */
 .admonition {
   border-color: var(--col-note);
+  break-inside: avoid;
 }
 
 .admonition-header {
@@ -235,13 +238,6 @@ figcaption {
   vertical-align: baseline;
   position: relative;
   max-width: 40%;
-}
-
-:root {
-  /* Max width for things like header, actual content, etc */
-  --max-content-width: min(60em, calc(100% - 2 * var(--max-content-gutter)));
-  /* the spacing on each side when max width is reached (in rem to ensure it is consistent across the page.) */
-  --max-content-gutter: 1rem;
 }
 
 .content {
@@ -363,7 +359,8 @@ figcaption {
 }
 
 /* Space out all top-level elements */
-.blog-article > * {
+/* (except for the first one, which is handled by the parent) */
+.blog-article > *:not(:first-child) {
   margin-top: 1.6rem; /* rem to avoid element's line-height impacting the spacing */
 }
 
@@ -529,7 +526,7 @@ pre {
 
 pre code {
   font-size: 1em;
-  line-height: 1.5em;
+  line-height: 1.3em;
 
   /* let the code breath a bit */
   /* padding left & right is handled on the line level becau
@@ -603,4 +600,51 @@ e we need
 .bluesky-embed {
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Print overrides */
+@media print {
+  :root {
+    font-size: 10px;
+    /* limit the width with margin */
+    --max-content-width: auto;
+  }
+
+  html {
+    --col-fg: var(--col-1);
+    --col-bg: transparent;
+    --col-shadow: var(--col-3);
+    --col-quote: var(--col-4);
+    --col-card: var(--col-6);
+    --col-card-shadow: var(--col-7);
+    --col-card-hover: var(--col-9);
+
+    --col-note: var(--col-5);
+  }
+
+  body {
+    /* Paged Out inspired borders */
+    margin: 22mm 14mm;
+  }
+
+  h1 {
+    font-size: 1.7em;
+  }
+
+  .blog-article {
+    column-count: 2;
+    column-gap: 3rem;
+    line-height: 1.5em;
+  }
+
+  /* remove unnecessary elements */
+  .header,
+  .header-divider,
+  .title-divider,
+  .bottom-divider,
+  .blog-publish-date,
+  footer,
+  .nudge-feedback {
+    display: none !important;
+  }
 }
