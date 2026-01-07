@@ -17,13 +17,23 @@ I format (most of) my external drives with `LUKS` on top of `ext4`. While my dai
 
 I'll first give a brief overview of how I mount, decrypt and access the `LUKS`-encrypted partitions from `macOS`. Then, I'll show the actual commands I use.
 
+## No off-the-shelf solution
+
+I could not find a lightweight, ready-made solution that I trusted with long-term storage data. macOS does not ship with support for LUKS or ext4; Apple focuses on its own file systems and strongly promotes APFS, which makes cross-platform storage somewhat awkward.
+
+Using a Linux VM seemed to be the most direct and least surprising approach. You get first-class LUKS and ext4 tooling from a stock distribution like Ubuntu, while still running everything locally on the same machine. With QEMU passing the disk through directly — and using macOS’ Hypervisor Framework for CPU virtualization — the performance overhead is minimal.
+
+Finally, the setup is fully reproducible. The VM is effectively stateless and can be spun up on demand from a small set of commands, which is exactly what I want when dealing with backup and archival data.
+
 ## Overview
 
-This works by spinning up an Ubuntu VM using `QEMU`, using the [Hypervisor Framework](https://developer.apple.com/documentation/hypervisor) (`hvf`) for CPU. The raw disk is passed to the VM, where I decrypt & mount the partition. The VM's single user is set up using `cloud-init` so that I can spin everything up with a quick script and have SSH access. I can then use `ssh` to browse the files and `scp` or `rsync` to move files between macOS and the decrypted partition. In the future I might set up Samba drive sharing or create a small Tauri app to automate all of this with a nice UI interface. Do reach out if you're interested. If you use Docker or podman on `macOS` you're already using `QEMU`.
+This works by spinning up an Ubuntu VM (using `QEMU`, the lightweight CLI tool powering Docker & podman), using the [Hypervisor Framework](https://developer.apple.com/documentation/hypervisor) (`hvf`) for CPU. The raw disk is passed to the VM, where I decrypt & mount the partition. The VM's single user is set up using `cloud-init` so that I can spin everything up with a quick script and have SSH access. I can then use `ssh` to browse the files and `scp` or `rsync` to move files between macOS and the decrypted partition.
+
+![image](./images/overview.png)
+
+We'll first download an Ubuntu image (actual Ubuntu, not the installer) and we'll create the cloud-init data disk (alongside with two other necessary evil disks). Then we'll spin up the VM with the physical disk passed through. Finally we'll decrypt and mount the partition from within Ubuntu — at this point the partition can be accessed via SSH from macOS. Except for QEMU which we have to install, this uses native tools exclusively.
 
 ## Workflow
-
-We'll first download an Ubuntu image and create two files which qemu will use as disks: one for cloud-init and one for ????. Then, we'll install qemu and spin up the VM with the raw disk attached. Finally, we'll decrypt and mount the partition from within Ubuntu. At this point the partition can be accessed via SSH.
 
 It's a good idea to run all these commands in an empty directory:
 
@@ -68,6 +78,11 @@ nix build nixpkgs#qemu
 PATH="$PWD/result/bin:$PATH"
 QEMU="$PWD/result/share/qemu"
 qemu-system-aarch64 --version
+```
+
+The firmware and varstore disks are required for Ubuntu to boot under UEFI on Apple Silicon, but they are incidental to the setup and can be treated as opaque.
+
+```
 ls "$QEMU/edk2-aarch64-code.fd"
 ```
 
@@ -77,7 +92,15 @@ Create an empty varstore (empty 64M but compressed image)
 qemu-img create -f qcow2 varstore.img 64M
 ```
 
+At this point we have the OS image ready, as well as two images that we won't get into. All these will be connected to the VM; we do miss the final and very import drive: the physical, external drive.
+
+Connect it:
+
 ![image](./images/drive-ignore.png)
+
+> [!WARNING]
+>
+> From here on, do not **plug** or **unplug** _any_ disks. Whenever a new disk is plugged, macOS rescans all the disks and might attempt to mount `/dev/disk4` again which will wreak havoc.
 
 Use `diskutil list` and look for something labeled as `external, physical`, which has a partition of type `Linux` and a `SIZE` that matches your drive's.
 
@@ -108,10 +131,6 @@ Here we use `/dev/disk4`:
 ```shell
 diskutil unmountDisk /dev/disk4
 ```
-
-> [!WARNING]
->
-> From here on, do not **plug** or **unplug** _any_ disks. Whenever a new disk is plugged, macOS rescans all the disks and might attempt to mount `/dev/disk4` again which will wreak havoc.
 
 Start the Ubuntu VM with the external drive passed through (with `/dev/rdisk4` replaced with disk above; note that `r` is important so that the raw disk is passed through):
 
@@ -189,3 +208,7 @@ Turn off the drive:
 # from macOS
 diskutil eject /dev/disk4
 ```
+
+## Limitations and future work
+
+This works though is limited to SSH. That being said you could use sshfs on top of it; I find it a bit invasive though would rather invest time in setting up a Samba drive though I've never done it before. The whole setting up the drives is a bit brittle and would like to turn it into a more robust script or, ideally, Tauri app. Alternatively: use kernel-as-a-process?
