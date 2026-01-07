@@ -47,7 +47,7 @@ def draw_saturn(fbuf, width, height):
     fbuf.ellipse(width//2, height//2, r, r, 1)
 ```
 
-This code assumes `fbuf` is a `FrameBuffer` from MicroPython’s [`framebuf`](https://docs.micropython.org/en/latest/library/framebuf.html) module which presents an abstraction that many display drivers build on: a memory buffer for storing pixel data, plus a few drawing primitives like `line`, `rect`, and `ellipse`. Your code draws into this buffer, and the driver reads the data and decides how to render it — like I2C or SPI hardware.
+This code assumes `fbuf` is a `FrameBuffer` from MicroPython’s [`framebuf`](https://docs.micropython.org/en/latest/library/framebuf.html) module which presents an abstraction that many display drivers build on: a memory buffer for storing pixel data, plus a few drawing primitives like `line`, `rect`, and `ellipse`. Your code draws into this buffer; the driver then reads it and turns the pixel data into display-specific commands over I2C, SPI, and so on.
 
 But why leave the terminal! We can use the [`termbuf`](https://github.com/nmattia/termbuf) driver that reads the buffer and prints it out to stdout following the Terminal Graphics Protocol:
 
