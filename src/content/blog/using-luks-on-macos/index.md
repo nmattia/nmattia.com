@@ -1,6 +1,6 @@
 ---
 title: Accessing LUKS-encrypted drives from macOS
-description: "hello"
+description: "Playbook for accessing LUKS-encrypted, ext4 formatted drives from macOS"
 og_image: ./images/ssd-macbook.png
 pubDate: 2026-01-22
 tags:
@@ -9,17 +9,17 @@ tags:
   - macos
 ---
 
-This is a collection of commands I use to spin up a lightweight Linux VM in Qemu to access LUKS-encrypted partitions from my MacBook.
+This is a collection of commands I use to spin up a lightweight Linux VM in `QEMU` to access `LUKS`-encrypted partitions from my MacBook.
 
 <!--more-->
 
-I format (most of) my external drives with LUKS on top of ext4. While my daily driver is a MacBook Air, I avoid APFS and other Apple schemes for longterm storage to avoid getting locked in. There's existing software that does this but whenever I can — and especially when connecting my backups — like to understand everything that's happening and keep full control.
+I format (most of) my external drives with `LUKS` on top of `ext4`. While my daily driver is a MacBook Air, I avoid Apple's [`APFS`](https://en.wikipedia.org/wiki/Apple_File_System) and other proprietary schemes for long term storage to avoid getting locked in. There's existing software that does this but whenever I can — and especially when connecting my backups — like to understand everything that's happening and keep full control.
 
-I'll first give a brief overview of how I mount, decrypt and access the LUKS-encrypted partitions from macOS. Then, I'll show the actual commands I use.
+I'll first give a brief overview of how I mount, decrypt and access the `LUKS`-encrypted partitions from `macOS`. Then, I'll show the actual commands I use.
 
 ## Overview
 
-This works by spinning up an Ubuntu VM using Qemu, using hvf for CPU. The raw disk is passed to the VM, where I decrypt & mount the partition. The VM's single user is set up using cloud-init so that I can spin everything up with a quick script and have SSH access. I can then use `ssh` to browse the files and `scp` or `rsync` to move files between macOS and the decrypted partition. In the future I might set up Samba drive sharing or create a small Tauri app to automate all of this with a nice UI interface. Do reach out if you're interested.
+This works by spinning up an Ubuntu VM using `QEMU`, using the [Hypervisor Framework](https://developer.apple.com/documentation/hypervisor) (`hvf`) for CPU. The raw disk is passed to the VM, where I decrypt & mount the partition. The VM's single user is set up using `cloud-init` so that I can spin everything up with a quick script and have SSH access. I can then use `ssh` to browse the files and `scp` or `rsync` to move files between macOS and the decrypted partition. In the future I might set up Samba drive sharing or create a small Tauri app to automate all of this with a nice UI interface. Do reach out if you're interested. If you use Docker or podman on `macOS` you're already using `QEMU`.
 
 ## Workflow
 
@@ -47,7 +47,7 @@ chpasswd:
   expire: False
 ssh_pwauth: False
 ssh_authorized_keys:
-    - $(cat ~/.ssh/id_ed25519.pub)
+$(cat ~/.ssh/*.pub | sed 's/^/  - /')
 EOF
 
 cat << EOF > ./cloud-init/meta-data
@@ -118,15 +118,19 @@ Start the Ubuntu VM with the external drive passed through (with `/dev/rdisk4` r
 ```shell
 sudo qemu-system-aarch64 \
   -cpu host -M virt,accel=hvf -m 2G \
-  -drive if=pflash,format=raw,readonly=on,file="$QEMU/edk2-aarch64-code.fd" \
-  -drive if=pflash,file=varstore.img \
+  -drive file="$QEMU/edk2-aarch64-code.fd",if=pflash,format=raw,readonly=on \
+  -drive file=varstore.img,if=pflash \
   -drive file=./noble-server-cloudimg-arm64.img,format=qcow2,if=virtio \
   -drive file=seed.iso,index=1,media=cdrom \
   -drive file=/dev/rdisk4,if=virtio,format=raw,cache=none \
   -nographic -nic user,hostfwd=tcp:127.0.0.1:2222-:22
 ```
 
-We give the machine 2 Gigs of RAM (`-m 2G`) and specify the CPU as `host` using Apple's Hypervisor Framework (`hvf`) to avoid emulating the CPU; instead thereal CPU will be used by the VM. We do also map the VM's SSH port (`22`) to a free port on the macOS host (here `2222`) so that we can connect to the VM via SSH. The `-drive` options ...
+We give the machine 2 Gigs of RAM (`-m 2G`) and specify the CPU as `host` using Apple's Hypervisor Framework (`hvf`) to avoid emulating the CPU; instead thereal CPU will be used by the VM.
+
+The `-drive` options ... `-if` is in interface, `.fd` is the firmware, `varstore` is NVRAM variables; necessary for Ubuntu to boot but don't care here. ubuntu image: this will be connected as a virtual disk (`virtio`) and will be the main system partition (the system will write to it). Then we have `seed.iso` which contains our cloud-init data, attached as a cd-rom per the cloudinit spec. Finally, the external drive is passed as raw as possible to avoid any issues. Block device options [link](https://www.qemu.org/docs/master/system/qemu-manpage.html#hxtool-1)
+
+We do also map the VM's SSH port (`22`) to a free port on the macOS host (here `2222`) so that we can connect to the VM via SSH.
 
 SSH into the VM:
 
@@ -135,6 +139,8 @@ SSH into the VM:
 SSH_CMD='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222'
 eval "$SSH_CMD ubuntu@localhost"
 ```
+
+(it's handy to keep the SSH command in a variable so it can be reused with other commands like `rsync`)
 
 Note the relevant partition:
 
@@ -163,18 +169,12 @@ Then copy from/to or archive:
 
 ```shell
 # from macOS
-rsync -avz -h --progress -e "$SSH_CMD" ubuntu@localhost:/mnt/ext-drive/foo/ ./bar
+rsync --archive --verbose --human-readable --progress -rsh "$SSH_CMD" ./my-new-backup/ ubuntu@localhost:/mnt/ext-drive/my-backup-v42
 ```
 
-- `-a` archive mode (recursive, etc)
-- `-v` verbose
-- `-z` ?
-- `-h` humand-friendly output
-- `--progress` show progress during (long) file upload
-- `-e` the SSH command to use, _without_ the `user@host` but _with_ the port
-- `rsync src/ dest` will copy every file from `src/` into `dest`, such that `src/foo` becomes `dest/foo`
+The first argument turns on archive mode so that files are copied recursively. We also enable verbose, human readable output, as well as progress reporting. The `-rsh` argument specifies a custom SSH command to use; if you followed along `$SSH_CMD` should contain the ssh command with port. The last two arguments specify what to copy where; in general `rsync src/ dest` will copy every file from `src/` into `dest`, such that `src/foo` becomes `dest/foo` (same as `cp`)
 
-Shut down:
+Once we're done copying or playing with the files, we can `umount` the drive, close it from a `LUKS` point of view, and shut down the VM:
 
 ```shell
 # from Linux VM via SSH
