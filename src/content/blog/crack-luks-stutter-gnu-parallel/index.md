@@ -3,6 +3,9 @@ title: Recovering forgotten passwords with stutter and GNU parallel
 og_image: ./images/locked_drive.png
 description: "I explain how I managed to crack my LUKS-encrypted hard drive by generating many, many passwords."
 pubDate: 2017-03-05
+tags:
+  - luks
+  - linux
 ---
 
 A few days ago I found myself with two terabytes' worth of my personal data
