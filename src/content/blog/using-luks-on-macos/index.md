@@ -27,27 +27,23 @@ I'll first give a brief overview of how I mount, decrypt and access the `LUKS`-e
 
 ## Architecture
 
-1. Ubuntu VM
-2. QEMU + hvf
-3. Disk passthrough
-4. cloud-init as a configuration mechanism
-5. SSH as interface
-6. Data flow (mac user — ubuntu — disk)
+This works by spinning up a virtual machine (VM) running an official Canonical minimal Ubuntu image. The VM is created using `QEMU`, the lightweight CLI tool that also powers Docker Desktop and Podman Desktop on macOS. The external drive (with backups) is passed raw to the VM and QEMU supports Apple's Hypervisor Framework for so-called "hardware-facilitated" CPU emulation; both these features make the performance more than acceptable.
+
+The Ubuntu system is set up using `cloud-init`, which is a collection of tools and interfaces more often used by cloud services like AWS to set up new machines and instances automatically, which makes this setup — and in particular the SSH config — automated and reproducible. SSH is core to this solution, as it's used for both accessing the Ubuntu system (to eg decrypt the LUKS partition) and then transfer the files (from the external drive to macOS and vice-versa).
 
 ![image](./images/overview.png)
 
-Leftover:
-The solution (details [below](workflow)) works by spinning up an Ubuntu VM (using [`QEMU`](https://www.qemu.org/), the lightweight CLI tool powering Docker & podman), using the [Hypervisor Framework](https://developer.apple.com/documentation/hypervisor) (`hvf`) to get decent CPU performance in the VM. The external drive is passed through to the VM, where the partition can be decrypted & mounted. The VM's single user is set up using [`cloud-init`](https://cloud-init.io/) so that everything (VM, OS, user) can be set up with a short script. I can then use `ssh` to browse the files and `scp` or `rsync` to move files between macOS and the decrypted partition.
-
-We'll download an official Ubuntu image, then create the `cloud-init` user metadata (mostly for the SSH pubkey). Then we'll create the QEMU VM booting from the Ubuntu image with the `cloud-init` metadata mounted as a CD ROM, which Ubuntu knows to use to set up its user. The external drive (as in, backup, physical thingy) will be passed through to QEMU, which will give us full access to the drive from Ubuntu via SSH. Except for `QEMU` itself we'll only use macOS-native tools.
+So to recap, the external drive is connected to the MacBook but ignored by macOS; instead it is passed through to an Ubuntu VM created with QEMU. The Ubuntu system is configured with `cloud-init` to allow SSH access from the macOS host, which allows interactive access with the disk for mounting and transfering files. The only non-native tool necessary is QEMU. Note that macOS never mounts or interprets the encrypted filesystem; all LUKS and ext4 handling happens inside the VM.
 
 ## Playbook
 
-It's a good idea to run all these commands in an empty directory:
+Move to an empty directory:
 
 ```shell
 cd $(mktemp -d)
 ```
+
+### Prepare the images and the drive
 
 Download the official Ubuntu image:
 
@@ -79,13 +75,15 @@ EOF
 
 Cloud init is yaml based. This sets up a single user and disables password authentication, only allowing SSH access. Why chpasswd? The pubkeys are read from the host (i.e. macbook air), YMMV. The `meta-data` is necessary for Ubuntu to run cloud-init successfully though the actual content doesn't matter much. Full cloud-init description: here.
 
-Cloud init expects a CD ROM with volume name `cidata`. We can create the exact disk necessary, from the YAML content we create above in `./cloud-init/`, directly from macOS using built-in tools:
+Cloud init expects a CD ROM with volume name `cidata`. Create an ISO image with volume name `cidata` with content from `./cloud-init`, using the macOS tool `hdiutil`:
 
 ```shell
 hdiutil makehybrid -iso -joliet -default-volume-name cidata -o ./seed.iso ./cloud-init
 ```
 
-Now we'll need QEMU. I use Nix to install QEMU from nixpkgs, as it allows ephemeral install & no headache:
+Now we need QEMU. I use Nix to install QEMU from nixpkgs, as it allows ephemeral install & no headache.
+
+Install `QEMU` from `nixpkgs`:
 
 ```shell
 nix build nixpkgs#qemu
@@ -94,15 +92,21 @@ QEMU="$PWD/result/share/qemu"
 qemu-system-aarch64 --version
 ```
 
-QEMU can also be installed with `brew` and others, see https://www.qemu.org/download/#macos.
+> [!NOTE]
+>
+> QEMU can also be installed with `brew` and others, see https://www.qemu.org/download/#macos.
 
-Whichever way you install `QEMU`, make sure it ships with aarch64 firmware, which will need for Ubuntu to boot under UEFI on Apple Silicon and which we will attach as flash when creating the VM:
+Ubuntu needs some firmware to boot under UEFI on Apple Silicon. Said firmware should be shipped as part of the QEMU install.
+
+Locate the aarch64 firmware in the QEMU install:
 
 ```shell
 ls "$QEMU/edk2-aarch64-code.fd"
 ```
 
-To please UEFI we need another (blank) drive used to store NVRAM variables and more; the details are not important, I don't understand how this works but it's necessary. This needs to be 64MB big. Instead of creating a blank 64MB file, we can use QEMU to create a sparse (compressed) image:
+To please UEFI we need another (blank) drive used to store NVRAM variables and more; the details are not important, I don't understand how this works but it's necessary. This needs to be 64MB big.
+
+Use the `qemu-img` tool from QEMU to create a sparse empty image:
 
 ```shell
 qemu-img create -f qcow2 varstore.img 64M
@@ -110,7 +114,7 @@ qemu-img create -f qcow2 varstore.img 64M
 
 At this point we have the OS image ready, as well as two images that we won't get into. All these will be connected to the VM; we do miss the final and very import drive: the physical, external drive.
 
-Connect it:
+Connect the external drive to the MacBook and when prompted tell macOS to ignore it:
 
 ![image](./images/drive-ignore.png)
 
@@ -118,7 +122,9 @@ Connect it:
 >
 > From here on, do not **plug** or **unplug** _any_ disks. Whenever a new disk is plugged, macOS rescans all the disks and might attempt to mount `/dev/disk4` again which will wreak havoc.
 
-Use `diskutil list` and look for something labeled as `external, physical`, which has a partition of type `Linux` and a `SIZE` that matches your drive's.
+We need to find the number `macOS` assigned to the external drive.
+
+Use `diskutil list` and look for a drive labeled as `external, physical`, which has a partition of type `Linux` and a `SIZE` that matches the drive's:
 
 ```shell
 $ diskutil list
@@ -142,13 +148,25 @@ $ diskutil list
 ...
 ```
 
-Here we use `/dev/disk4`:
+TODO: why "ignore" but then still listed by macOS; and then why unmount?
+
+> [!WARNING]
+>
+> In the next **2** commands replace `disk4` with the disk your disk.
+
+Unmount the drive:
 
 ```shell
 diskutil unmountDisk /dev/disk4
 ```
 
-Start the Ubuntu VM with the external drive passed through (with `/dev/rdisk4` replaced with disk above; note that `r` is important so that the raw disk is passed through):
+### Boot the VM
+
+Start the Ubuntu VM with the external drive:
+
+> [!NOTE]
+>
+> Use `/dev/rdisk4` instead of eg `/dev/disk4` so that the disk is passed through "raw". This gives Ubuntu direct control over the disk without QEMU or macOS interfering.
 
 ```shell
 sudo qemu-system-aarch64 \
@@ -161,11 +179,13 @@ sudo qemu-system-aarch64 \
   -nographic -nic user,hostfwd=tcp:127.0.0.1:2222-:22
 ```
 
-We give the machine 2 Gigs of RAM (`-m 2G`) and specify the CPU as `host` using Apple's Hypervisor Framework (`hvf`) to avoid emulating the CPU; instead the real CPU will be used by the VM.
+This creates a VM with 2GBs of RAM (`-m 2G`) and specifies the CPU as `host` using Apple's Hypervisor Framework (`hvf`) to avoid software CPU emulation.
 
 The `-drive` options ... `-if` is in interface, `.fd` is the firmware, `varstore` is NVRAM variables; necessary for Ubuntu to boot but don't care here. ubuntu image: this will be connected as a virtual disk (`virtio`) and will be the main system partition (the system will write to it). Then we have `seed.iso` which contains our cloud-init data, attached as a cd-rom per the cloudinit spec. Finally, the external drive is passed as raw as possible to avoid any issues. Block device options [link](https://www.qemu.org/docs/master/system/qemu-manpage.html#hxtool-1)
 
 We do also map the VM's SSH port (`22`) to a free port on the macOS host (here `2222`) so that we can connect to the VM via SSH.
+
+### Decrypt and access the drive
 
 SSH into the VM:
 
