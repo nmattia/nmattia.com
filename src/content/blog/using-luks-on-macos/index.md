@@ -9,31 +9,31 @@ tags:
   - macos
 ---
 
-I store my backups on LUKS-encrypted ext4 drives, even on macOS. This article documents the minimal, VM-based workflow I use to access them without relying on proprietary filesystems.
+I store my backups on LUKS-encrypted `ext4` drives, even on macOS. This is the `QEMU`-based workflow I use to access them from macOS.
 
 <!--more-->
 
 ## Overview
 
-I want to securely back up my data long term.
+I have some data that I want to securely back up, and I want to that data to be accessible in the future. Who doesn't? If you don't, lucky you! If you do, keep reading.
 
-While my daily driver is a MacBook Air, I format my external drives with LUKS on top of ext4. I avoid Apple's [APFS](https://en.wikipedia.org/wiki/Apple_File_System) and other proprietary schemes for long term storage to avoid getting locked in. What happens if my MacBook dies and I want a Linux machine next? Unfortunately ext4 and LUKS are not supported natively by macOS.
+My daily driver is a MacBook Air. Still, I format my external drives as `ext4` and encrypt them with `LUKS` (instead of Apple's [APFS](https://en.wikipedia.org/wiki/Apple_File_System) and other proprietary schemes) to avoid getting too locked in. (What happens if my MacBook dies and I want a Linux machine next? What if Tim Apple gets bored of thinking rocks and starts selling fruit instead?)
 
-The aim here is to be minimal, stateless, minimal trust surface, reproducible; which in turns makes it ergonomic and reliable. I want as few dependencies as possible that can break — this so that I can always access my backups. I like to understand everything that's happening and keep full control. You get first-class LUKS and ext4 tooling from a stock distribution like Ubuntu, while still running everything locally on the same machine.
+Unfortunately `ext4` and `LUKS` are not supported natively by macOS so accessing the data from a Mac requires extra tooling. I've aimed for a lightweight and minimal, mostly stateless solution; this in turns should make it reliable and future proof (I'll report back in ten years from now). I want as few dependencies as possible that can break (this so that I can always access my backups), and whenever possible I like to understand everything that's happening and keep full control.
 
-I achieve this by running a small Linux VM locally on my MacBook and access it over SSH. The VM is set up using QEMU, which is the only external dep. The VM is configured using cloud-init, which lets me define the user and SSH access at boot time without ever logging into the VM console. QEMU is setup to use HVF to hardware-facilitation of the CPU. SSH is used to run the LUKS related commands to mount the disk and also used by rsync to transfer files.
+I achieve this by running a small Linux VM locally on my MacBook and access it over SSH; SSH is both used to run the `LUKS` related commands to mount the disk and to transfer files (via `rsync`). This gives first-class `LUKS` and `ext4` tooling from Linux, while still running everything locally on the same machine! No need for NAS rabbit holes. Only virtualization rabbit holes.
 
-I'll first give a brief overview of how I mount, decrypt and access the `LUKS`-encrypted partitions from `macOS`. Then, I'll show the actual commands I use.
+The [next section](#architecture) gives an overview of architecture, and the [section after that](#playbook) is the playbook I actually use when accessing my backup data from a Mac. In the [final section](#wrapping-up) we'll wrap up by looking at some issues with the playbook and possible improvements. Let's go!
 
 ## Architecture
 
-This works by spinning up a virtual machine (VM) running an official Canonical minimal Ubuntu image. The VM is created using `QEMU`, the lightweight CLI tool that also powers Docker Desktop and Podman Desktop on macOS. The external drive (with backups) is passed raw to the VM and QEMU supports Apple's Hypervisor Framework for so-called "hardware-facilitated" CPU emulation; both these features make the performance more than acceptable.
+The solution works by spinning up a virtual machine (VM) running an official Canonical minimal Ubuntu image. The VM is created using [`QEMU`](https://www.qemu.org/), the lightweight CLI tool that also powers Docker Desktop and Podman Desktop on macOS. The external drive (with backups) is passed raw to the VM and `QEMU` supports Apple's Hypervisor Framework for hardware acceleration (i.e. to avoid software CPU emulation); both these features make the performance inside the VM more than acceptable.
 
-The Ubuntu system is set up using `cloud-init`, which is a collection of tools and interfaces more often used by cloud services like AWS to set up new machines and instances automatically, which makes this setup — and in particular the SSH config — automated and reproducible. SSH is core to this solution, as it's used for both accessing the Ubuntu system (to eg decrypt the LUKS partition) and then transfer the files (from the external drive to macOS and vice-versa).
+The Ubuntu system is set up using `cloud-init`, which is a collection of tools and interfaces more often used by cloud services like AWS to set up new machines and instances automatically, which makes this setup — and in particular the SSH config — automated and reproducible. SSH is used for both accessing the Ubuntu system (to eg decrypt the `LUKS` partition) and then also to transfer the files (from the external drive to macOS and vice-versa).
 
 ![image](./images/overview.png)
 
-So to recap, the external drive is connected to the MacBook but ignored by macOS; instead it is passed through to an Ubuntu VM created with QEMU. The Ubuntu system is configured with `cloud-init` to allow SSH access from the macOS host, which allows interactive access with the disk for mounting and transfering files. The only non-native tool necessary is QEMU. Note that macOS never mounts or interprets the encrypted filesystem; all LUKS and ext4 handling happens inside the VM.
+To recap, the external drive is connected to the MacBook but never read by macOS; instead it is passed through to an Ubuntu VM created with `QEMU.` The Ubuntu system is configured with `cloud-init` to allow SSH access from the macOS host, which allows interactive access with the disk for mounting and transfering files. The only non-native tool necessary is `QEMU.` Note that macOS never mounts or interprets the encrypted filesystem; all `LUKS` and `ext4` handling happens inside the VM.
 
 ## Playbook
 
@@ -43,7 +43,7 @@ Move to an empty directory:
 cd $(mktemp -d)
 ```
 
-### Prepare the images and the drive
+### Preparing the VM drives
 
 Download the official Ubuntu image:
 
@@ -55,7 +55,7 @@ curl -LO https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-arm
 >
 > You can also add a date to the URL to use a specific image. In my experience using the `current` is the most reliable bc the tools we use from Ubuntu (SSH, luks) don't change interface, but old Ubuntu images are not store forever by Canonical.
 
-Create the cloud-init data:
+Create the `cloud-init` data:
 
 ```shell
 mkdir -p ./cloud-init
@@ -73,15 +73,17 @@ instance-id: my-network/my-vm
 EOF
 ```
 
-Cloud init is yaml based. This sets up a single user and disables password authentication, only allowing SSH access. Why chpasswd? The pubkeys are read from the host (i.e. macbook air), YMMV. The `meta-data` is necessary for Ubuntu to run cloud-init successfully though the actual content doesn't matter much. Full cloud-init description: here.
+All `cloud-init` configuration is done with `YAML`. The first file — `./cloud-init/user-data` — sets up a single user and disables password authentication, only allowing SSH access. The public key(s) are read from the host (i.e. macbook air). The value in `./cloud-init/meta-data` is necessary for Ubuntu to run cloud-init successfully though the actual content doesn't matter much (see the [`cloudinit` reference](https://cloudinit.readthedocs.io/en/latest/reference/examples.html) for more information).
 
-Cloud init expects a CD ROM with volume name `cidata`. Create an ISO image with volume name `cidata` with content from `./cloud-init`, using the macOS tool `hdiutil`:
+For Ubuntu to correctly recognize the `cloud-init` data, it needs to be mounted as a CD ROM with volume name `cidata`.
+
+Create an ISO image with volume name `cidata` with content from `./cloud-init`, using the macOS tool `hdiutil`:
 
 ```shell
 hdiutil makehybrid -iso -joliet -default-volume-name cidata -o ./seed.iso ./cloud-init
 ```
 
-Now we need QEMU. I use Nix to install QEMU from nixpkgs, as it allows ephemeral install & no headache.
+Now we need `QEMU`. I use Nix to install `QEMU` from nixpkgs, as it allows ephemeral install & no headache.
 
 Install `QEMU` from `nixpkgs`:
 
@@ -94,25 +96,23 @@ qemu-system-aarch64 --version
 
 > [!NOTE]
 >
-> QEMU can also be installed with `brew` and others, see https://www.qemu.org/download/#macos.
+> `QEMU` can also be installed with `brew` and others, see https://www.qemu.org/download/#macos.
 
-Ubuntu needs some firmware to boot under UEFI on Apple Silicon. Said firmware should be shipped as part of the QEMU install.
+Ubuntu needs some firmware to boot under UEFI on Apple Silicon. Said firmware should be shipped as part of the `QEMU` install.
 
-Locate the aarch64 firmware in the QEMU install:
+Locate the aarch64 firmware in the `QEMU` install:
 
 ```shell
 ls "$QEMU/edk2-aarch64-code.fd"
 ```
 
-To please UEFI we need another (blank) drive used to store NVRAM variables and more; the details are not important, I don't understand how this works but it's necessary. This needs to be 64MB big.
-
-Use the `qemu-img` tool from QEMU to create a sparse empty image:
+The boot process also requires an additional, blank 64MB drive. Use the `qemu-img` tool from `QEMU` to create a sparse empty image:
 
 ```shell
 qemu-img create -f qcow2 varstore.img 64M
 ```
 
-At this point we have the OS image ready, as well as two images that we won't get into. All these will be connected to the VM; we do miss the final and very import drive: the physical, external drive.
+At this point we have the OS image ready, the `cloud-init` "CD-ROM" image, as well as two boot-related images. All these will be connected to the VM; now let's actually set up the physical (external drive).
 
 Connect the external drive to the MacBook and when prompted tell macOS to ignore it:
 
@@ -120,7 +120,7 @@ Connect the external drive to the MacBook and when prompted tell macOS to ignore
 
 > [!WARNING]
 >
-> From here on, do not **plug** or **unplug** _any_ disks. Whenever a new disk is plugged, macOS rescans all the disks and might attempt to mount `/dev/disk4` again which will wreak havoc.
+> From here on, do not _plug_ or _unplug_ **any** disks. Whenever a new disk is plugged in, macOS rescans all the disks and might attempt to mount `/dev/disk4` again which will wreak havoc in the VM.
 
 We need to find the number `macOS` assigned to the external drive.
 
@@ -148,11 +148,9 @@ $ diskutil list
 ...
 ```
 
-TODO: why "ignore" but then still listed by macOS; and then why unmount?
-
 > [!WARNING]
 >
-> In the next **2** commands replace `disk4` with the disk your disk.
+> In the next two commands replace `disk4` with your disk. Passing in the wrong disk might incur unexpected data loss, I'm not responsible for you erasing your data in any way, etc, etc. Enjoy responsibly.
 
 Unmount the drive:
 
@@ -160,13 +158,13 @@ Unmount the drive:
 diskutil unmountDisk /dev/disk4
 ```
 
-### Boot the VM
+### Starting the VM
 
 Start the Ubuntu VM with the external drive:
 
 > [!NOTE]
 >
-> Use `/dev/rdisk4` instead of eg `/dev/disk4` so that the disk is passed through "raw". This gives Ubuntu direct control over the disk without QEMU or macOS interfering.
+> Note the use of `/dev/rdisk4` (instead of `/dev/disk4`) so that the disk is passed through "raw". This gives Ubuntu direct control over the disk, without `QEMU` or macOS interfering.
 
 ```shell
 sudo qemu-system-aarch64 \
@@ -181,11 +179,18 @@ sudo qemu-system-aarch64 \
 
 This creates a VM with 2GBs of RAM (`-m 2G`) and specifies the CPU as `host` using Apple's Hypervisor Framework (`hvf`) to avoid software CPU emulation.
 
-The `-drive` options ... `-if` is in interface, `.fd` is the firmware, `varstore` is NVRAM variables; necessary for Ubuntu to boot but don't care here. ubuntu image: this will be connected as a virtual disk (`virtio`) and will be the main system partition (the system will write to it). Then we have `seed.iso` which contains our cloud-init data, attached as a cd-rom per the cloudinit spec. Finally, the external drive is passed as raw as possible to avoid any issues. Block device options [link](https://www.qemu.org/docs/master/system/qemu-manpage.html#hxtool-1)
+Five `-drive`s are attached to the machine:
+
+- The first two are necessary for Ubuntu to boot correctly. Those are attached as flash (`if=pflash`) and use the `aarch64` firmware from the `QEMU` install as well as the `varstore` image we created earlier.
+- The third drive is the Ubuntu image. This is effectively the (writeable) OS filesystem that will be booted from. Once booted, Ubuntu will see this drive much like it would an internal SSD.
+- The fourth drive is the image we baked from `./cloud-init` and its yaml. Ubuntu will see it as a CD-ROM and recognize it as cloud-init data and use it to set up the default user `ubuntu`.
+- The fifth and final drive is the external, `LUKS`-encrypted drive, passed through. Ubuntu will see this as an external drive.
 
 We do also map the VM's SSH port (`22`) to a free port on the macOS host (here `2222`) so that we can connect to the VM via SSH.
 
-### Decrypt and access the drive
+For more information on `QEMU`'s CLI options refer to [the official documentation](https://www.qemu.org/docs/master/system/qemu-manpage.html#hxtool-1).
+
+### Decrypting and accessing the drive
 
 SSH into the VM:
 
@@ -195,9 +200,9 @@ SSH_CMD='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222
 eval "$SSH_CMD ubuntu@localhost"
 ```
 
-(it's handy to keep the SSH command in a variable so it can be reused with other commands like `rsync`)
+It's handy to keep the SSH command in a variable so it can be reused with other commands like `rsync`. Host key checking is disabled because I spin up a new VM every time.
 
-Note the relevant partition:
+Now note the relevant partition:
 
 ```shell
 ubuntu@ubuntu:~$ sudo lsblk
@@ -220,7 +225,9 @@ sudo mkdir -p /mnt/ext-drive
 sudo mount /dev/mapper/ext-drive /mnt/ext-drive
 ```
 
-Then copy from/to or archive:
+At this point, the drive decrypted drive content is accessible from Ubuntu.
+
+Finally, copy from the VM to macOS, or from macOS to the VM using `rsync`:
 
 ```shell
 # from macOS
@@ -229,7 +236,7 @@ rsync --archive --verbose --human-readable --progress -rsh "$SSH_CMD" ./my-new-b
 
 The first argument turns on archive mode so that files are copied recursively. We also enable verbose, human readable output, as well as progress reporting. The `-rsh` argument specifies a custom SSH command to use; if you followed along `$SSH_CMD` should contain the ssh command with port. The last two arguments specify what to copy where; in general `rsync src/ dest` will copy every file from `src/` into `dest`, such that `src/foo` becomes `dest/foo` (same as `cp`)
 
-Once we're done copying or playing with the files, we can `umount` the drive, close it from a `LUKS` point of view, and shut down the VM:
+Once we're done copying or playing with the files, we can `umount` the drive, close it from a `LUKS` point of view, and power off the VM:
 
 ```shell
 # from Linux VM via SSH
@@ -238,13 +245,19 @@ sudo cryptsetup close ext-drive
 sudo poweroff
 ```
 
-Turn off the drive:
+Finally, we can turn off the drive from `macOS`:
 
 ```shell
 # from macOS
 diskutil eject /dev/disk4
 ```
 
-## Limitations and future work
+## Wrapping up
 
-This works though is limited to SSH. That being said you could use sshfs on top of it; I find it a bit invasive though would rather invest time in setting up a Samba drive though I've never done it before. The whole setting up the drives is a bit brittle and would like to turn it into a more robust script or, ideally, Tauri app. Alternatively: use kernel-as-a-process?
+That's it for the playbook!
+
+While this works pretty well in practice, there are a few things that could be improved. For instance, it would be nice to have a somehwat native integration with `Finder` — this could be done with `sshfs` (somewhat deprecated as I understand) or by setting up Samba from within Ubuntu and connecting to it from `Finder`.
+
+There's also the issue that, as it is now, it's a bunch of commands you have to get right; get one wrong and you might wipe your system or backups. I like running them manually so that I can double check everything before hitting enter, but over time I might start porting them to a small script, or even better a full-blown app (I've been looking for an excuse to try [Tauri](https://tauri.app/) for a while).
+
+For now, I'll stick to the playbook. Feel free to use it and tweak it — at your own risk of course!
