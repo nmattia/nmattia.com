@@ -17,6 +17,8 @@ export const topics = {
   ["3dp"]: "3D printing",
   ops: "Ops",
   rpi: "Raspberry Pi",
+  luks: "LUKS",
+  linux: "Linux",
 } as const;
 
 // Zod schema/inference machinery
