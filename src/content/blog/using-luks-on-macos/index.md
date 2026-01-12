@@ -1,5 +1,5 @@
 ---
-title: Accessing LUKS-encrypted drives from macOS
+title: Accessing LUKS and ext4 drives from macOS
 description: "A playbook for accessing LUKS-encrypted ext4 drives from macOS"
 og_image: ./images/ssd-macbook.png
 pubDate: 2026-01-13
