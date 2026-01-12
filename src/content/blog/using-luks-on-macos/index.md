@@ -15,13 +15,13 @@ Recently I needed to access my `LUKS`-encrypted, `ext4` drives from a MacBook. T
 
 ## Overview
 
-Unfortunately `ext4` and `LUKS` are not supported natively by macOS so accessing the data from a Mac requires extra tooling. I've aimed for a lightweight and minimal, mostly stateless solution; this in turn should make it reliable and future-proof (I'll report back in ten years from now). To minimize the risk of bit-rot, the only dependency beyond stock macOS is (the amazing) QEMU.
+Unfortunately `ext4` and `LUKS` are not supported natively by macOS so accessing the data from a Mac requires extra tooling. I've aimed for a lightweight and minimal, mostly stateless solution; this in turn should make it reliable and future-proof (I'll report back in ten years from now). To minimize the risk of bit-rot, the only dependency beyond stock macOS is (the amazing) `QEMU`.
 
 In the [next section](#architecture) I'll outline the solution, then walk through the actual [playbook](#playbook) I use when accessing those pesky Linux drives from a Mac. In the [final section](#wrapping-up) we'll wrap up by looking at some issues with the playbook and possible improvements. Let's go!
 
 ## Architecture
 
-The solution works by spinning up a virtual machine (VM) running an official Canonical minimal Ubuntu image. The VM is created using [`QEMU`](https://www.qemu.org/), the lightweight CLI tool that also powers Docker Desktop and Podman Desktop on macOS. The external drive (with backups) is passed raw to the VM and `QEMU` supports Apple's Hypervisor Framework for hardware acceleration (i.e. to avoid software CPU emulation); both these features make the performance inside the VM more than acceptable.
+The solution works by spinning up a virtual machine (VM) running a minimal Ubuntu image. The VM is created using [`QEMU`](https://www.qemu.org/), the lightweight CLI tool that also powers Docker Desktop and Podman Desktop on macOS. Because the external drive is passed raw to the VM and because `QEMU` supports Apple's Hypervisor Framework for hardware acceleration, the VM runs smoothly and the drive's data can be accessed efficiently.
 
 The Ubuntu system is set up using `cloud-init`, which is a collection of tools and interfaces more often used by cloud services like AWS to set up new machines and instances automatically, which makes this setup — and in particular the SSH config — automated and reproducible. SSH is used both for accessing the Ubuntu system (to e.g. decrypt the `LUKS` partition) and to transfer the files between the VM and macOS.
 
@@ -29,15 +29,15 @@ The Ubuntu system is set up using `cloud-init`, which is a collection of tools a
 
 To recap, the external drive is connected to the MacBook but the content is not directly accessed from macOS; instead the drive is passed through to an Ubuntu VM created with `QEMU`. The Ubuntu system is configured with `cloud-init` to allow SSH access from the macOS host, for terminal access (for `LUKS` and mount operations) and then also for transferring files. Note that macOS never mounts or interprets the encrypted filesystem; all `LUKS` and `ext4` handling happens inside the VM.
 
+Let's now see how the VM is set up and how the files can be transferred!
+
 ## Playbook
 
-Move to an empty directory:
+We need to prepare a few images required by the VM to boot. We'll be downloading and creating a few files, so it's best to move to an empty directory:
 
 ```shell
 cd $(mktemp -d)
 ```
-
-### Preparing the VM drives
 
 Download the official Ubuntu image:
 
@@ -47,7 +47,7 @@ curl -LO https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-arm
 
 > [!NOTE]
 >
-> You can also reference old (specific) images by date. In my experience however using the latest (`current`) image is the most reliable: the tools we use from Ubuntu (SSH, `LUKS`) don't (or very rarely) change interface, but old Ubuntu images are not stored indefinitely by Canonical.
+> You can also pin an old (specific) image by date. In my experience however using the latest (`current`) image is the most reliable: the tools we use from Ubuntu (SSH, `LUKS`) don't (or very rarely) change interface, but old Ubuntu images are not stored indefinitely by Canonical.
 
 Create the `cloud-init` data:
 
@@ -67,7 +67,7 @@ instance-id: my-network/my-vm
 EOF
 ```
 
-All `cloud-init` configuration is done with `YAML`. The first file (`./cloud-init/user-data`) sets up a single user and disables password authentication, only allowing SSH access. The public key(s) are read from the host (i.e. Macbook Air). The value in `./cloud-init/meta-data` is required for `cloud-init` to run successfully though the specific content does not matter much (see the [`cloudinit` reference](https://cloudinit.readthedocs.io/en/latest/reference/examples.html) for more information).
+All `cloud-init` configuration is done with `YAML`. The first file, `./cloud-init/user-data`, sets up a single user and disables password authentication, only allowing SSH access. The public key(s) are read from the host (i.e. Macbook Air). The value in `./cloud-init/meta-data` is required for `cloud-init` to run successfully though the specific content does not matter much (see the [`cloudinit` reference](https://cloudinit.readthedocs.io/en/latest/reference/examples.html) for more information).
 
 For Ubuntu to correctly recognize the `cloud-init` data, it needs to be mounted as a CD-ROM with volume name `cidata`.
 
@@ -90,7 +90,7 @@ qemu-system-aarch64 --version
 
 > [!NOTE]
 >
-> `QEMU` can also be installed with `brew` and others, see https://www.qemu.org/download/#macos.
+> `QEMU` can also be installed with `brew`, see https://www.qemu.org/download/#macos.
 
 Ubuntu needs some firmware to boot under UEFI on Apple Silicon. Said firmware should be shipped as part of the `QEMU` install.
 
@@ -182,7 +182,7 @@ Five `-drive`s are attached to the machine:
 
 We do also map the VM's SSH port (`22`) to a free port on the macOS host (here `2222`) so that we can connect to the VM via SSH.
 
-For more information on `QEMU`'s CLI options refer to [the official documentation](https://www.qemu.org/docs/master/system/qemu-manpage.html#hxtool-1).
+After a few seconds the VM is up and running and accessible via SSH. For more information on `QEMU`'s CLI options refer to [the official documentation](https://www.qemu.org/docs/master/system/qemu-manpage.html#hxtool-1).
 
 ### Decrypting and accessing the drive
 
@@ -219,7 +219,7 @@ sudo mkdir -p /mnt/ext-drive
 sudo mount /dev/mapper/ext-drive /mnt/ext-drive
 ```
 
-From here on, the decrypted drive content is accessible from Ubuntu!
+The decrypted drive content is accessible!
 
 Transfer content between the VM and macOS using `rsync`:
 
