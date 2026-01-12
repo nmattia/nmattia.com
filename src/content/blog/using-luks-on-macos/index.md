@@ -225,7 +225,9 @@ Transfer content between the VM and macOS using `rsync`:
 
 ```shell
 # from macOS
-rsync --archive --verbose --human-readable --progress --rsh "$SSH_CMD" ./my-new-backup/ ubuntu@localhost:/mnt/ext-drive/my-backup-v42
+rsync --archive --verbose --human-readable --progress \
+    --rsh "$SSH_CMD" \
+    ./my-new-backup/ ubuntu@localhost:/mnt/ext-drive/my-backup-v42
 ```
 
 The first argument turns on archive mode so that files are copied recursively. We also enable verbose, human readable output, as well as progress reporting. The `--rsh` argument specifies a custom SSH command to use; if you followed along then `$SSH_CMD` should contain the ssh command with port. The last two arguments specify what to copy where; in general `rsync src/ dest` will copy every file from `src/` into `dest`, such that `src/foo` becomes `dest/foo` (same as `cp`)
