@@ -262,8 +262,6 @@ We built `gmp`, `mpfr` and `libmpc`, which GCC needs. Let's now build GCC itself
 
 ## Building GCC
 
-![image](./images/gnu-coding.png)
-
 Here's one way to build GCC, though there are others:
 
 ```bash
