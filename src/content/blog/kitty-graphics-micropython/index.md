@@ -1,6 +1,6 @@
 ---
 title: "Terminal Graphics Protocol for fast embedded development"
-description: "Todo, todo!"
+description: "This article explains how the Terminal Graphics Protocol can be used to render embedded-style frame buffer graphics directly in a terminal for development and testing."
 og_image: ./images/termbuf-oled-fade.png
 pubDate: 2026-03-10
 tags:
