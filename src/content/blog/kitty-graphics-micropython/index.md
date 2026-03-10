@@ -2,16 +2,19 @@
 title: "Terminal Graphics Protocol for fast embedded development"
 description: "Todo, todo!"
 og_image: ./images/termbuf-oled-fade.png
-pubDate: 2025-12-12
+pubDate: 2026-03-10
 tags:
   - micropython
   - embedded
-# TODO: tags: micropython, embedded, more?
 ---
 
 From a software perspective, embedded graphics are slow going: hunt down a microcontroller and display, wire them up, and for every small change flash the board and wait for it to reboot. But modern terminals can render images, so we can now skip the hardware shuffle and iterate right in the terminal!
 
 <!--more-->
+
+> [!NOTE]
+>
+> This article was written for [Paged Out! Issue #8](https://pagedout.institute/webview.php?issue=8&page=58&article=Terminal+Graphics+Protocol+for+fast+embedded+development) published in February 2026.
 
 Modern terminals support the "Terminal Graphics Protocol", which works as follows: a program that needs to display an image writes the image data to stdout, surrounded by escape codes used as delimiters. Here's an example program written in Bash that displays a 32x16 rectangle:
 
