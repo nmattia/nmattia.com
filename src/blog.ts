@@ -43,6 +43,11 @@ export const blogPostTeaser = async (
     teaserMd = blogPostEntry.data.teaser;
   } else {
     const content = blogPostEntry.body;
+
+    if (!content) {
+      throw Error("no content for entry");
+    }
+
     let teaserStart = content.indexOf("<!--more-->");
     /* Slightly different handling for MDX comments */
     if (teaserStart === -1) {
@@ -64,7 +69,7 @@ export const blogPostTeaser = async (
 // The entry name, i.e. basically the filename with date prepended
 export const blogEntryName = (blogPostEntry: CollectionEntry<"blog">) => {
   const pubDate = blogPostEntry.data.pubDate.toISOString().split("T")[0];
-  return `${pubDate}-${blogPostEntry.slug}`;
+  return `${pubDate}-${blogPostEntry.id}`;
 };
 
 // The URL/path for an entry, i.e. basically /posts/<name>
