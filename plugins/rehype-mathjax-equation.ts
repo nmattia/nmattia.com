@@ -26,7 +26,7 @@ export const rehypeMathjaxEquation: RehypePlugin = () => {
     if (
       !props ||
       !Array.isArray(props.className) ||
-      !props.className.includes("math-inline")
+      !props.className.includes("katex")
     ) {
       return;
     }

@@ -3,15 +3,16 @@
 
 import Default from "../../components/Default.astro";
 import { Image } from "astro:assets";
+import { render } from "astro:content";
 
-import type { Tag } from "../../content/config";
+import type { Tag } from "../../content.config";
 import {
   getBlogEntries,
   blogEntryTransitionName,
   blogEntryName,
   blogEntryPath,
 } from "../../blog";
-import { topics } from "../../content/config";
+import { topics } from "../../content.config";
 
 // Generate a new path for each article
 export async function getStaticPaths() {
@@ -25,7 +26,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 // Returns the date as "January 9, 2012", to be shown in articles
 const prettyDate = (d: Date) => {

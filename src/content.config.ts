@@ -1,6 +1,8 @@
 // Collections
 
-import { z, defineCollection } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
 
 // The blog collection with all articles
 
@@ -30,6 +32,7 @@ export const Tags = z.enum(tags);
 export type Tag = z.infer<typeof Tags>;
 
 const blogCollection = defineCollection({
+  loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
   schema: ({ image }) =>
     z.object({
       draft: z.boolean().optional(), // when true, the page is only built in dev mode
@@ -46,6 +49,7 @@ const blogCollection = defineCollection({
 // The projects
 
 const projectsCollection = defineCollection({
+  loader: glob({ base: "./src/content/projects", pattern: "**/*.{md,mdx}" }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
