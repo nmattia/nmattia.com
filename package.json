@@ -13,8 +13,8 @@
     "upgrade": "npx @astrojs/upgrade"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.3",
-    "astro": "^6.4.8",
+    "@astrojs/mdx": "^7.0.3",
+    "astro": "^7.0.9",
     "quad-shader": "^0.0.6",
     "the-new-css-reset": "1.11.3"
   },
