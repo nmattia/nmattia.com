@@ -21,7 +21,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
     "@astrojs/markdown-remark": "^7.1.0",
-    "@astrojs/rss": "^4.0.18",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.2",
     "@types/hast": "^3.0.4",
     "hast-util-classnames": "^3.0.0",
