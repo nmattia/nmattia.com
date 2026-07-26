@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import sitemap from "@astrojs/sitemap";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
@@ -20,14 +21,16 @@ export default defineConfig({
       theme:
         "dark-plus" /* NOTE: ensure this matches values used in <Code/> components */,
     },
-    remarkPlugins: [remarkMath, remarkGfmAdmonitions],
-    rehypePlugins: [
-      fixMdx,
-      rehypeKatex as any /* something is off in the types but everything works fine */,
-      rehypeRaw,
-      rehypeShikiCommands,
-      rehypeMathjaxEquation,
-    ],
+    processor: unified({
+      remarkPlugins: [remarkMath, remarkGfmAdmonitions],
+      rehypePlugins: [
+        fixMdx,
+        rehypeKatex as any /* something is off in the types but everything works fine */,
+        rehypeRaw,
+        rehypeShikiCommands,
+        rehypeMathjaxEquation,
+      ],
+    }),
   },
 
   prefetch: true /* enable prefetching */,
