@@ -100,7 +100,7 @@ export const remarkGfmAdmonitions: RemarkPlugin = () => {
       content.data = content.data ?? {};
       content.data.hProperties = content.data.hProperties ?? {};
 
-      content.data.hProperties.className = ADMONITION_CLASSNAME;
+      content.data.hProperties.className = [ADMONITION_CLASSNAME];
 
       const newChild: Mdast.Html = {
         type: "html",
