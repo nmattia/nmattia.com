@@ -13,16 +13,16 @@
     "upgrade": "npx @astrojs/upgrade"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.5",
-    "astro": "^7.2.2",
+    "@astrojs/mdx": "^8.0.1",
+    "astro": "^7.3.2",
     "quad-shader": "^0.0.6",
     "the-new-css-reset": "1.11.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@astrojs/markdown-remark": "^7.2.2",
+    "@astrojs/markdown-remark": "^7.3.1",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/sitemap": "^3.7.4",
     "@types/hast": "^3.0.4",
     "hast-util-classnames": "^3.0.0",
     "hast-util-from-html": "^2.0.3",
