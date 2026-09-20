@@ -12,6 +12,7 @@ import {
   blogEntryName,
   blogEntryPath,
   prettyDate,
+  dateToYYYYMMDD,
 } from "../../blog";
 import { topics } from "../../content.config";
 
@@ -57,7 +58,10 @@ const suggestedEntries = similarEntries.slice(0, 2);
   <div class="content-narrow">
     <article class="blog-article">
       <h1>{entry.data.title}</h1>
-      <time class="blog-publish-date">{prettyDate(entry.data.pubDate)}</time>
+      <time
+        datetime={dateToYYYYMMDD(entry.data.pubDate)}
+        class="blog-publish-date">{prettyDate(entry.data.pubDate)}</time
+      >
       <hr class="title-divider" />
 
       {

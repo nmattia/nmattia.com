@@ -14,7 +14,7 @@
   --col-9: f9f9f9;
 
   /* Max width for things like header, text content, etc to be readable */
-  /* at most 50em, though if the container/screen is very narrow, then leave 1rem on each side for text to breath */
+  /* at most 50em, though if the container/screen is very narrow, then leave 1rem on each side for text to breathe */
   --max-content-width: min(50em, calc(100% - 2rem));
 }
 
