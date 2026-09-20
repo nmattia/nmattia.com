@@ -88,5 +88,12 @@ export const prettyDate = (d: Date) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
+};
+
+// Returns the date as "2012-01-09"
+export const dateToYYYYMMDD = (d: Date) => {
+  const fullString = d.toISOString(); /* 2011-10-05T14:48:00.000Z */
+  return fullString.split("T")[0];
 };

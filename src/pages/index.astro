@@ -11,6 +11,7 @@ import {
   blogEntryPath,
   blogEntryTransitionName,
   prettyDate,
+  dateToYYYYMMDD,
 } from "../blog";
 import { getCollection } from "astro:content";
 
@@ -79,7 +80,9 @@ const description =
           >
             <div class="card">
               <div class="card-container">
-                <time>{prettyDate(entry.date)}</time>
+                <time datetime={dateToYYYYMMDD(entry.date)}>
+                  {prettyDate(entry.date)}
+                </time>
                 <div
                   class="card-container-article-image"
                   style={

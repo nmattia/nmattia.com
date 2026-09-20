@@ -328,7 +328,7 @@ figcaption {
 .blog-container {
   /* The minimum card width: hardcoded for big screens, and full width
      * on small screens. */
-  --min-card-width: 400px;
+  --min-card-width: min(400px, 100%);
   display: grid;
   /* Autofit cards, with a gap when there's 2+ columns */
   grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr));
@@ -473,7 +473,8 @@ footer a:hover {
 .card-container {
   padding: var(--card-container-abs-padding);
 
-  & * {
+  /* add some spacing between all direct children (all elements in the container) */
+  & > * {
     margin-top: var(--card-container-abs-padding);
   }
 
