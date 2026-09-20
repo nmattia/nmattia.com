@@ -13,10 +13,9 @@
   --col-8: hsl(227, 28.2%, 25.7%);
   --col-9: f9f9f9;
 
-  /* Max width for things like header, actual content, etc */
-  --max-content-width: min(60em, calc(100% - 2 * var(--max-content-gutter)));
-  /* the spacing on each side when max width is reached (in rem to ensure it is consistent across the page.) */
-  --max-content-gutter: 1rem;
+  /* Max width for things like header, text content, etc to be readable */
+  /* at most 50em, though if the container/screen is very narrow, then leave 1rem on each side for text to breathe */
+  --max-content-width: min(50em, calc(100% - 2rem));
 }
 
 html {
@@ -26,7 +25,6 @@ html {
   --col-quote: var(--col-4);
   --col-card: var(--col-6);
   --col-card-shadow: var(--col-7);
-  --col-card-hover: var(--col-9);
 
   --col-note: var(--col-5);
 }
@@ -39,7 +37,6 @@ html {
     --col-quote: var(--col-4);
     --col-card: var(--col-8);
     --col-card-shadow: transparent;
-    --col-card-hover: var(--col-1);
   }
 
   /* in dark mode, ensure that pictures that rely on transparency have a background
@@ -161,14 +158,7 @@ a:any-link {
   cursor: pointer;
 }
 
-p,
-ol,
-ul {
-  font-size: 1.2rem;
-}
-
 blockquote {
-  font-size: 1.4rem;
   border-left-style: solid;
   border-color: var(--col-quote);
   border-left-width: var(--blockquote-border-width);
@@ -240,7 +230,8 @@ figcaption {
   max-width: 40%;
 }
 
-.content {
+/* narrow content like a page of text (blog article) */
+.content-narrow {
   max-width: var(--max-content-width);
   margin-left: auto;
   margin-right: auto;
@@ -308,6 +299,7 @@ figcaption {
   margin-right: auto;
   margin-top: 8vh;
   margin-bottom: 8vh;
+  font-size: 1.2rem;
 }
 
 .intro p + p {
@@ -342,8 +334,22 @@ figcaption {
   grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr));
 
   /* the gap between cards, vertical & horizontal */
-  --blog-container-grid-gap: 1em;
+  --blog-container-grid-gap-large-screen: 1.5rem; /* default for large screens */
+  --blog-container-grid-gap: var(--blog-container-grid-gap-large-screen);
   gap: var(--blog-container-grid-gap);
+
+  /* absolute (i.e. rem or similar) padding for card container */
+  /* by default, matches the grid gap */
+  --card-container-abs-padding: var(--blog-container-grid-gap-large-screen);
+
+  /* let content grow wide up to 3 cards (and corresponding gap) */
+  --absolute-max-width: calc(
+    4 * var(--min-card-width) + 3 * var(--blog-container-grid-gap) - 1px
+  );
+
+  max-width: max(var(--max-content-width), min(80%, var(--absolute-max-width)));
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Break long words instead of creating horizontal scroll
@@ -437,8 +443,6 @@ footer a:hover {
   /* Add shadows to create the "card" effect */
   box-shadow: var(--shadow-baseline);
   transition: 0.3s;
-  font-size: 0.8rem;
-  border-radius: 0.5em;
   background-color: var(--col-card);
   border: 1px solid var(--col-card-shadow);
 
@@ -446,32 +450,13 @@ footer a:hover {
   height: 100%;
 }
 
-/* on very small screens, drop the gap and make the cards fill the screen */
 @media (max-width: 600px) {
-  .blog-container {
-    --blog-container-grid-gap: 0;
-  }
-
-  .card {
-    box-shadow: none;
-    margin-left: calc(-1 * var(--max-content-gutter));
-    margin-right: calc(-1 * var(--max-content-gutter));
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-radius: 0;
-  }
-
-  .card:hover {
-    background-color: var(--col-card-hover);
-  }
-
   canvas {
     aspect-ratio: 1; /* looks better on small screens */
   }
 }
 
 .card h3 {
-  text-align: center;
   margin-top: 1.5rem;
 }
 
@@ -479,11 +464,24 @@ footer a:hover {
 .card:hover {
   --shadow-baseline: var(--shadow-elevation-medium);
   cursor: pointer;
+  /* scale up the card on hover */
+  /* NOTE: should not exceed the gap so that cards don't overlap */
+  transform: scale(1.03);
 }
 
 /* Add some padding inside the card container */
 .card-container {
-  padding: 1em;
+  padding: var(--card-container-abs-padding);
+
+  /* add some spacing between all direct children (all elements in the container) */
+  & > * {
+    margin-top: var(--card-container-abs-padding);
+  }
+
+  & .card-container-article-image {
+    margin-left: calc(-1 * var(--card-container-abs-padding));
+    margin-right: calc(-1 * var(--card-container-abs-padding));
+  }
 }
 
 /* similar to article images, we fit the dimensions to match the aspect ratio */
@@ -499,16 +497,9 @@ footer a:hover {
   margin-right: auto;
 }
 
-.card-container .teaser {
-  padding: 0 2em;
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
 .card-container h3.card-title {
   --line-height: 1.4;
   line-height: var(--line-height);
-  min-height: calc(3 * var(--line-height) * 1em);
 }
 
 /* Code styling */
@@ -617,7 +608,6 @@ e we need
     --col-quote: var(--col-4);
     --col-card: var(--col-6);
     --col-card-shadow: var(--col-7);
-    --col-card-hover: var(--col-9);
 
     --col-note: var(--col-5);
   }
