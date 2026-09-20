@@ -110,20 +110,20 @@ bucket, fill it up with water, and throw our twelve thousand DNA strands in it.
 Let's get that straight, right now: **you won't be running Minecraft on it
 anytime soon**. But what exactly happens in the bucket? First of all, both
 strands contain complementary characters. The sequence **_TTT_** in **d** (our
-second strand) will tend to be attracted to any three **_A_**s in our first DNA
+second strand) will tend to be attracted to any three ***A***s in our first DNA
 strand **N**. Yet, it can do even better: the first four characters of **d**,
 namely **_CTTT_**, are a perfect complement to the first four characters of
 **N**: **_GAAA_**. They will clamp together, and leave out two tails: a simple
-**_G_** on one side, and **6** **_A_**s on the other side. Wait, **this looks
+**_G_** on one side, and **6** ***A***s on the other side. Wait, **this looks
 almost familiar...**
 
 Indeed, since DNA strands are flexible, the two tails will act as a new DNA
 strand **_GAAAAAA_**, which has the same structure as **N**, but with **6**
-**_A_**s instead of nine. You see where this is heading: **the process will
+***A***s instead of nine. You see where this is heading: **the process will
 repeat itself!** Another **d** strand will float by, and its leading **C**
 character will get hooked. Every time this happens, the number of **_A_**
 characters on our main string will be **reduced by three!** Eventually, there
-won't be any **_A_** left on our strand, all covered with **_T_**s.
+won't be any **_A_** left on our strand, all covered with ***T***s.
 
 What we just implemented is a division of **9** by **3**, effectively giving
 zero. The strand **N** encoded the number **9** with nine **_A_** characters,

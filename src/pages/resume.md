@@ -7,7 +7,7 @@ layout: ../ResumeLayout.astro
 ---
 
 > I am a software engineer with a passion for functional programming,\
->  correctness and robustness. I like simple solutions.
+> correctness and robustness. I like simple solutions.
 
 > <nicolas@nmattia.com>
 > • [github.com/nmattia](https://github.com/nmattia)
@@ -87,7 +87,7 @@ production-ready products. Consulting and development of Nix, Go, Haskell & C pr
 ## Academic & Speaking
 
 - **[Overview of Language Support in Nix](https://www.youtube.com/watch?v=nXDumHZI2zg)** -- Public Speaking, NixCon -- October 2019\
-   A comparison of the different approaches used in the Nix community today to
+  A comparison of the different approaches used in the Nix community today to
   package code.
 
 - **[Testing and Deploying to AWS: A Toolbox](https://www.youtube.com/watch?v=lHtIvsDnH0Q)** -- Public Speaking, NixCon -- October 2019\
