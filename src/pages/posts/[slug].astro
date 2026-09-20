@@ -11,6 +11,7 @@ import {
   blogEntryTransitionName,
   blogEntryName,
   blogEntryPath,
+  prettyDate,
 } from "../../blog";
 import { topics } from "../../content.config";
 
@@ -27,15 +28,6 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-
-// Returns the date as "January 9, 2012", to be shown in articles
-const prettyDate = (d: Date) => {
-  return d.toLocaleString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
 
 const tags: Tag[] = entry.data.tags?.slice(0, 2) ?? [];
 
@@ -62,61 +54,63 @@ const suggestedEntries = similarEntries.slice(0, 2);
   og_image={entry.data.og_image}
   path={blogEntryPath(entry)}
 >
-  <article class="blog-article">
-    <h1>{entry.data.title}</h1>
-    <h4 class="blog-publish-date">{prettyDate(entry.data.pubDate)}</h4>
-    <hr class="title-divider" />
+  <div class="content-narrow">
+    <article class="blog-article">
+      <h1>{entry.data.title}</h1>
+      <time class="blog-publish-date">{prettyDate(entry.data.pubDate)}</time>
+      <hr class="title-divider" />
 
-    {
-      entry.data.og_image ? (
-        <div
-          class="blog-article-header-image"
-          style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
-        >
-          <Image src={entry.data.og_image} alt="Blog post social card" />
-        </div>
-      ) : undefined
-    }
-    <Content />
-
-    <p class="nudge-feedback">
-      <em>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://bsky.app/profile/nmattia.bsky.social">Let me know</a
-        ></em
-      >
       {
-        discussion ? (
-          <>
-            or
-            { /* prettier-ignore */ }
-            <em>
+        entry.data.og_image ? (
+          <div
+            class="blog-article-header-image"
+            style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
+          >
+            <Image src={entry.data.og_image} alt="Blog post social card" />
+          </div>
+        ) : undefined
+      }
+      <Content />
+
+      <p class="nudge-feedback">
+        <em>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://bsky.app/profile/nmattia.bsky.social">Let me know</a
+          ></em
+        >
+        {
+          discussion ? (
+            <>
+              or
+              { /* prettier-ignore */ }
+              <em>
               <a target="_blank" rel="noopener noreferrer" href={discussion}>join the discussion</a></em>
+            </>
+          ) : undefined
+        }
+        &nbsp;if you enjoyed this article! You can also <a
+          href="https://buttondown.com/nmattia">subscribe</a
+        > to receive updates.
+      </p>
+
+      <hr class="bottom-divider" />
+
+      {
+        suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
+          <>
+            <p>Here's more on the topic of {suggestedTopics}:</p>
+            <ul>
+              {suggestedEntries.map((e) => (
+                <li>
+                  <a href={blogEntryPath(e)}> {e.data.title}</a>
+                </li>
+              ))}
+            </ul>
           </>
         ) : undefined
       }
-      if you enjoyed this article! You can also <a
-        href="https://buttondown.com/nmattia">subscribe</a
-      > to receive updates.
-    </p>
-
-    <hr class="bottom-divider" />
-
-    {
-      suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
-        <>
-          <p>Here's more on the topic of {suggestedTopics}:</p>
-          <ul>
-            {suggestedEntries.map((e) => (
-              <li>
-                <a href={blogEntryPath(e)}> {e.data.title}</a>
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : undefined
-    }
-  </article>
+    </article>
+  </div>
 </Default>
