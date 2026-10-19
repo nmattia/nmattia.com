@@ -49,7 +49,7 @@ From here on, SSH will know to use the identity from the Secure Enclave when con
 ssh-add -L # run when you need the public key
 ```
 
-If multiple identities are listed, use the line that starts with `sk-ecdsa-sha2-nistp256@openssh.com`. It's a shareable handle for the identity, and this is the SSH key that GitHub will ask about.
+If multiple identities are listed, use the line that starts with `sk-ecdsa-sha2-nistp256...`. It's a shareable handle for the identity, and this is the SSH key that GitHub will ask about.
 
 ![image](./images/github-and-public-keys.png)
 
