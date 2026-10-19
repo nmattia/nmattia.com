@@ -58,7 +58,7 @@ _The output of `ssh-add -L` can be added as a GitHub SSH Key_
 That's all you need for a super secure setup! The new identity can now be used with SSH, and you'll be prompted for Touch ID during authentication:
 
 ```bash
-git clone git@github.com:the-reader/some-repo # triggers Touch ID prompt
+git push # triggers Touch ID prompt
 ```
 
 No one can steal your identity (well, you can't even give it away willingly since it can't be extracted from the Secure Enclave), but with great powers etc: if your Mac dies, so does the identity, and you'll need to create a new one (and re-register it where necessary, like GitHub).
