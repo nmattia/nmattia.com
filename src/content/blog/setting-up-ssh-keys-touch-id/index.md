@@ -1,7 +1,7 @@
 ---
 title: Setting up SSH keys on macOS with Touch ID
 description: "A simple and secure way to create SSH keys on a Mac's Secure Enclave with Touch ID protection"
-og_image: ./images/nix-versions.jpg
+og_image: ./images/touch-id-button.png
 pubDate: 2026-10-17
 tags:
   - "macos"
