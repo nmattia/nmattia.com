@@ -11,21 +11,22 @@ In the first part of this post I'll show a simple, secure way to create an SSH k
 
 <!--more-->
 
-
 Macs have a built-in so-called [Secure Enclave](https://support.apple.com/en-gb/guide/security/sec59b0b31ff/web), where we can create identites that simply cannot be stolen (unless maybe you've made enemies with a nation state). Those "identities" are protected with Touch ID and can be used for SSH authentication. There's some great benefits about using this over traditional SSH key files:
 
-* The private material cannot be extracted, is never shown, cannot be stolen,
-* You get prompted whenever the identity is used,
-* No key files (like `~/.ssh/id_ed25519.pub` and friends) littering the file system; and there's no risk of mistakenly deleting them either.
+- The private material cannot be extracted, is never shown, cannot be stolen,
+- You get prompted whenever the identity is used,
+- No key files (like `~/.ssh/id_ed25519.pub` and friends) littering the file system; and there's no risk of mistakenly deleting them either.
 
 This extra security will be in effect whenever you use SSH, including git-over-ssh like GitHub. It's great that advanced security tech is available by default on some of the most widely distributed computers in the world! A few years ago stuff like this could only be found at CERN and/or in Dan Brown novels. Let's see how it can be set up on your consumer-grade Mac.
 
 > It is essential that the human interface be designed for ease of use, so that users routinely and automatically apply the protection mechanisms correctly.
+>
 > - Saltzer and Schroeder, "The Protection of Information in Computer Systems"
 
 ## Quick Setup
 
 We'll create a secure identity on the Secure Enclave, then tell SSH how to use it for authentication, and finally add the key to GitHub.
+
 ### Step 1: create the identity that you'll use on this Mac:
 
 ```bash
