@@ -11,7 +11,7 @@ In the first part of this post I'll show a simple, secure way to create an SSH k
 
 <!--more-->
 
-Macs have a built-in so-called [Secure Enclave](https://support.apple.com/en-gb/guide/security/sec59b0b31ff/web), where we can create identities that simply cannot be stolen (unless maybe you've made enemies with a nation state). Those "identities" are protected with Touch ID and can be used for SSH authentication. There are some great benefits about using this over traditional SSH key files:
+Macs have a built-in so-called [Secure Enclave](https://support.apple.com/en-gb/guide/security/sec59b0b31ff/web), where we can create "identities" that simply cannot be stolen (unless maybe you've made enemies with a nation state). Those identities are protected with Touch ID and can be used for SSH authentication. There are some great benefits about using this over traditional SSH key files:
 
 - The private material cannot be extracted, is never shown, cannot be stolen,
 - You get prompted whenever the identity is used,
