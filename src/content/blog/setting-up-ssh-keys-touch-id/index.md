@@ -5,6 +5,7 @@ og_image: ./images/touch-id-button.png
 pubDate: 2026-10-19
 tags:
   - "macos"
+discussion: https://lobste.rs/s/d7m5j1/setting_up_ssh_keys_on_macos_with_touch_id
 ---
 
 In the first part of this post I'll show a simple, secure way to create an SSH key on Mac (it's 3 commands, including support for GitHub). In the second part I'll dig deeper and explain what's actually happening for the curious reader.
