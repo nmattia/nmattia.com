@@ -22,20 +22,18 @@ gl_FragColor = uColor;
 `;
 ---
 
-{
-  color === "static" ? (
-    <Shader
-      fragShader={fragShader}
-      quadShaderSetup={(qs) => qs.uniform4f("uColor", [0, 0, 0, 1])}
-    />
-  ) : (
-    <Shader
-      fragShader={fragShader}
-      quadShaderSetup={(qs, utils) => {
-        qs.uniform4f("uColor", () =>
-          utils.getComputedStylePropRGBA(qs.canvas, "color"),
-        );
-      }}
-    />
-  )
-}
+{color === "static" ? (
+  <Shader
+    fragShader={fragShader}
+    quadShaderSetup={(qs) => qs.uniform4f("uColor", [0, 0, 0, 1])}
+  />
+) : (
+  <Shader
+    fragShader={fragShader}
+    quadShaderSetup={(qs, utils) => {
+      qs.uniform4f("uColor", () =>
+        utils.getComputedStylePropRGBA(qs.canvas, "color"),
+      );
+    }}
+  />
+)}

@@ -125,27 +125,25 @@ void main() {
     }}
   />
 
-  {
-    uniforms.map((uniform) => (
-      <div class="slider-wrapper">
-        <>
-          <label>
-            {uniform.name}
-            <input
-              data-quad-shader-uniform={uniform.name}
-              type="range"
-              min={uniform.min}
-              max={uniform.max}
-              value={uniform.value ?? (uniform.max - uniform.min) / 2}
-              step={uniform.step ?? 0.01}
-              value="0.5"
-            />
-          </label>
-          <output />
-        </>
-      </div>
-    ))
-  }
+  {uniforms.map((uniform) => (
+    <div class="slider-wrapper">
+      <>
+        <label>
+          {uniform.name}
+          <input
+            data-quad-shader-uniform={uniform.name}
+            type="range"
+            min={uniform.min}
+            max={uniform.max}
+            value={uniform.value ?? (uniform.max - uniform.min) / 2}
+            step={uniform.step ?? 0.01}
+            value="0.5"
+          />
+        </label>
+        <output />
+      </>
+    </div>
+  ))}
   <!-- NOTE: ensure matches the Astro config -->
   <Code code={main.trim()} lang="glsl" theme="dark-plus" />
 </div>

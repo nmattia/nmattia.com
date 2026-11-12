@@ -60,20 +60,20 @@ const suggestedEntries = similarEntries.slice(0, 2);
       <h1>{entry.data.title}</h1>
       <time
         datetime={dateToYYYYMMDD(entry.data.pubDate)}
-        class="blog-publish-date">{prettyDate(entry.data.pubDate)}</time
+        class="blog-publish-date"
       >
+        {prettyDate(entry.data.pubDate)}
+      </time>
       <hr class="title-divider" />
 
-      {
-        entry.data.og_image ? (
-          <div
-            class="blog-article-header-image"
-            style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
-          >
-            <Image src={entry.data.og_image} alt="Blog post social card" />
-          </div>
-        ) : undefined
-      }
+      {entry.data.og_image ? (
+        <div
+          class="blog-article-header-image"
+          style={`view-transition-name: ${blogEntryTransitionName(entry)};`}
+        >
+          <Image src={entry.data.og_image} alt="Blog post social card" />
+        </div>
+      ) : undefined}
       <Content />
 
       <p class="nudge-feedback">
@@ -81,40 +81,38 @@ const suggestedEntries = similarEntries.slice(0, 2);
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://bsky.app/profile/nmattia.bsky.social">Let me know</a
-          ></em
-        >
-        {
-          discussion ? (
-            <>
-              or
-              { /* prettier-ignore */ }
-              <em>
+            href="https://bsky.app/profile/nmattia.bsky.social"
+          >
+            Let me know
+          </a>
+        </em>
+        {discussion ? (
+          <>
+            or
+            { /* prettier-ignore */ }
+            <em>
               <a target="_blank" rel="noopener noreferrer" href={discussion}>join the discussion</a></em>
-            </>
-          ) : undefined
-        }
-        &nbsp;if you enjoyed this article! You can also <a
-          href="https://buttondown.com/nmattia">subscribe</a
-        > to receive updates.
+          </>
+        ) : undefined}
+        &nbsp;if you enjoyed this article! You can also{" "}
+        <a href="https://buttondown.com/nmattia">subscribe</a> to receive
+        updates.
       </p>
 
       <hr class="bottom-divider" />
 
-      {
-        suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
-          <>
-            <p>Here's more on the topic of {suggestedTopics}:</p>
-            <ul>
-              {suggestedEntries.map((e) => (
-                <li>
-                  <a href={blogEntryPath(e)}> {e.data.title}</a>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : undefined
-      }
+      {suggestedTopics?.length > 0 && suggestedEntries.length > 0 ? (
+        <>
+          <p>Here's more on the topic of {suggestedTopics}:</p>
+          <ul>
+            {suggestedEntries.map((e) => (
+              <li>
+                <a href={blogEntryPath(e)}> {e.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : undefined}
     </article>
   </div>
 </Default>
