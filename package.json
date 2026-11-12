@@ -37,5 +37,9 @@
     "remark-math": "^6.0.0",
     "typescript": "^5.8.3",
     "unist-util-visit": "^5.1.0"
+  },
+  "fix for https://github.com/remarkjs/remark-math/issues/121": { },
+  "overrides": {
+      "katex": "0.19.1"
   }
 }
