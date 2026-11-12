@@ -58,7 +58,8 @@ const description =
 
 <Default ogType="website" description={description} path="/">
   <div class="intro">
-    <p>I'm Nicolas, Software Engineer based in Zurich.</p><p>
+    <p>I'm Nicolas, Software Engineer based in Zurich.</p>
+    <p>
       Here you'll find some articles, videos and projects related to what I
       like: build systems, functional programming, making web apps, and more.
     </p>
@@ -68,40 +69,38 @@ const description =
 
   <div class="blog" id="blog">
     <div class="blog-container">
-      {
-        entries.map((entry) => (
-          <a
-            target={entry.target}
-            href={entry.link}
-            style="text-decoration: none;"
-            data-astro-prefetch={
-              "viewport" /* prefetch target when link enters viewport */
-            }
-          >
-            <div class="card">
-              <div class="card-container">
-                <time datetime={dateToYYYYMMDD(entry.date)}>
-                  {prettyDate(entry.date)}
-                </time>
-                <div
-                  class="card-container-article-image"
-                  style={
-                    entry.transitionName
-                      ? `view-transition-name: ${entry.transitionName};`
-                      : undefined
-                  }
-                >
-                  <Image alt="Blog post social card" src={entry.image} />
-                </div>
-                <h3 class="card-title">{entry.title}</h3>
-                <div class="teaser">
-                  <p set:html={entry.teaser} />
-                </div>
+      {entries.map((entry) => (
+        <a
+          target={entry.target}
+          href={entry.link}
+          style="text-decoration: none;"
+          data-astro-prefetch={
+            "viewport" /* prefetch target when link enters viewport */
+          }
+        >
+          <div class="card">
+            <div class="card-container">
+              <time datetime={dateToYYYYMMDD(entry.date)}>
+                {prettyDate(entry.date)}
+              </time>
+              <div
+                class="card-container-article-image"
+                style={
+                  entry.transitionName
+                    ? `view-transition-name: ${entry.transitionName};`
+                    : undefined
+                }
+              >
+                <Image alt="Blog post social card" src={entry.image} />
+              </div>
+              <h3 class="card-title">{entry.title}</h3>
+              <div class="teaser">
+                <p set:html={entry.teaser} />
               </div>
             </div>
-          </a>
-        ))
-      }
+          </div>
+        </a>
+      ))}
     </div>
   </div>
 </Default>

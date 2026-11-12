@@ -69,24 +69,15 @@ if (title !== undefined) {
   <!-- OG, favicons, etc -->
   <meta property="og:title" content={actualTitle} />
   <meta property="og:type" content={ogType} />
-  <meta name="description" content={description} /><meta
-    property="og:description"
-    content={description}
-  />
+  <meta name="description" content={description} />
+  <meta property="og:description" content={description} />
 
-  {
-    path !== undefined ? (
-      <meta property="og:url" content={`https://nmattia.com${path}`} />
-    ) : undefined
-  }
-  {
-    og_image !== undefined ? (
-      <meta
-        property="og:image"
-        content={`https://nmattia.com${og_image.src}`}
-      />
-    ) : undefined
-  }
+  {path !== undefined ? (
+    <meta property="og:url" content={`https://nmattia.com${path}`} />
+  ) : undefined}
+  {og_image !== undefined ? (
+    <meta property="og:image" content={`https://nmattia.com${og_image.src}`} />
+  ) : undefined}
   <link rel="icon" href="/icon.svg" type="image/svg+xml" />
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
